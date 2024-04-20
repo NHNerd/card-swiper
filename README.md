@@ -7,7 +7,7 @@ based on the spaced repetition system.
 
 ## app navigation scheme
 
-<img src="/temp/ref/app-navigation-scheme.jpg" width="600">
+<img src="./public/temp/app-navigation-scheme.jpg" width="600">
 
 ## data management in 3 steps ;)
 
