@@ -1,0 +1,86 @@
+:root {
+  --size: 90%;
+  --min-size: 164px;
+}
+
+#container {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: var(--size);
+  aspect-ratio: 1; /*! may not work everywhere */
+  /* min-height: var(--min-size); */
+  /* width: var(--size); */
+  /* min-width: var(--min-size); */
+  background-color: var(--main-color);
+  border-radius: 50%;
+  color: black;
+  font-size: 7vh;
+  animation: pulse0 1.6s infinite ease-in-out;
+  display: flex; /* Включаем Flexbox */
+  justify-content: center; /* Центрирование по горизонтали */
+  align-items: center;
+}
+
+@media (max-height: 529px) {
+  #container {
+    font-size: 37px;
+  }
+}
+
+#container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-color: inherit;
+  filter: blur(2vh);
+  z-index: -1;
+  animation: pulse1 2s infinite ease-in-out;
+}
+
+#container::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-color: inherit;
+  filter: blur(8vh);
+  z-index: -1;
+  animation: pulse2 2.4s infinite ease-in-out;
+}
+
+@keyframes pulse0 {
+  0% {
+    transform: translate(-50%, -50%) scale(0.99);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.013);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.99);
+  }
+}
+@keyframes pulse1 {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.022);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes pulse2 {
+  0% {
+    transform: scale(0.96);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.96);
+  }
+}

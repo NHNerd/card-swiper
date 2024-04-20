@@ -1,0 +1,35 @@
+.container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  /* border: dotted 1px red;
+  box-sizing: border-box; */
+}
+
+.h1 {
+  position: relative; /* to position child elements */
+  /* background-color: rgba(0, 128, 0, 0.3); */
+}
+.h2 {
+  /* background-color: rgba(237, 237, 38, 0.3); */
+}
+.h3 {
+  /* background-color: rgba(237, 81, 38, 0.3); */
+}
+
+.h1,
+.h2,
+.h3 {
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+}
+
+.h2Text,
+.h3Text {
+  margin-right: 8px;
+}
