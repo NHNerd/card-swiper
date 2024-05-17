@@ -1,5 +1,5 @@
 :root {
-  --size: 90%;
+  --size: 34dvh;
   --min-size: 164px;
 }
 
@@ -16,7 +16,7 @@
   background-color: var(--main-color);
   border-radius: 50%;
   color: black;
-  font-size: 7vh;
+  font-size: 7dvh;
   animation: pulse0 1.6s infinite ease-in-out;
   display: flex; /* Включаем Flexbox */
   justify-content: center; /* Центрирование по горизонтали */

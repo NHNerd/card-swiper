@@ -1,13 +1,35 @@
-.container {
+.menu {
   height: 100%;
+}
+
+.containerList {
+  margin-top: var(--list-top-fade-padding);
   width: 100%;
+  height: 11dvh; /*! Intention */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
+  scroll-snap-align: start;
   /* border: dotted 1px red;
   box-sizing: border-box; */
+  white-space: nowrap;
+}
+
+.flopOn {
+  transform: scale(1, 1);
+  opacity: 1;
+  transition: 0.15s;
+  transition-delay: 0.3s;
+}
+.flopOff {
+  transform: scale(1, 0);
+  transition: 0.3s;
+  filter: blur(60px);
+}
+/*! ISSUE */
+.flopOff::-webkit-scrollbar-thumb {
+  background: transparent;
 }
 
 .h1 {
@@ -32,4 +54,9 @@
 .h2Text,
 .h3Text {
   margin-right: 8px;
+}
+
+.lineMenu {
+  position: fixed;
+  bottom: 0;
 }

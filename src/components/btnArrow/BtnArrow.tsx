@@ -7,7 +7,7 @@ type Props = {
   direct: 'top' | 'left' | 'right' | 'bottom';
 };
 
-export default function ButtonArrow({ onClick, direct }: Props) {
+export default function BtnArrow({ onClick, direct }: Props) {
   return (
     <div onClick={onClick} className={cssBtnArrow.btnArrow + ' color3 ' + cssBtnArrow[direct]}>
       <button className={cssBtnArrow.actArea}></button>

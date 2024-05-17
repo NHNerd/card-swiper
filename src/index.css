@@ -2,21 +2,60 @@
   font-family: 'ShareTech-Regular';
   src: url('/fonts/ShareTech-Regular.ttf');
 }
+#root {
+  position: fixed;
+  inset: 0;
+  padding: 0;
+  margin: 0;
+}
 
 * {
   -webkit-tap-highlight-color: transparent; /* Для браузеров на основе WebKit, таких как Safari & Chrome */
   overscroll-behavior: none; /* off down swipe refrash */
 }
 
+/* flop animation */
+.flopOn {
+  transform: scale(1, 1);
+  transition: var(--flop-speed);
+  transition-delay: calc(var(--flop-speed) * 2);
+}
+.flopOff {
+  transform: scale(1.8, 0.25);
+  transition: calc(var(--flop-speed) * 2);
+  filter: blur(30px);
+}
+/*! ISSUE */
+.flopOff::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+/* scroll off delay */
+.scrollWrapOn {
+  opacity: 1;
+  visibility: visible;
+  transition: calc(var(--flop-speed) * 0.5);
+}
+.scrollWrapOff {
+  opacity: 0;
+  visibility: hidden;
+  transition-delay: calc(var(--flop-speed) * 2);
+}
+
 /* temp */
 .headerColor {
-  background-color: rgba(0, 128, 0, 0.08);
+  /* background-color: rgba(0, 128, 0, 0.08); */
+  border: dotted 1px rgba(0, 255, 0, 0.8);
+  box-sizing: border-box;
 }
 .mainColor {
-  background-color: rgba(255, 255, 0, 0.05);
+  /* background-color: rgba(255, 255, 0, 0.05); */
+  border: dotted 1px rgba(255, 255, 0, 0.8);
+  box-sizing: border-box;
 }
 .footerColor {
-  background-color: rgba(255, 0, 0, 0.06);
+  /* background-color: rgba(255, 0, 0, 0.06); */
+  border: dotted 1px rgba(255, 0, 0, 0.8);
+  box-sizing: border-box;
 }
 #figmaMenuRef {
   position: fixed;
@@ -47,6 +86,10 @@
   --color2: #d9d9d983;
   --main-color: #d9d9d9;
 
+  --list-top-fade-padding: 4vh;
+
+  --flop-speed: 0.075s;
+
   line-height: 1.5; /* it's standard settings in Chrome, we set just in case */
   font-weight: 400;
 
@@ -68,8 +111,8 @@ a:hover {
 }
 
 body {
+  user-select: none;
   position: fixed; /* off scrolling */
-
   /* place-items: center; */
   background-color: var(--bg-color);
 }
@@ -100,6 +143,42 @@ button {
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 } */
+
+/* Ширина и цвет фона скроллбара */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Цвет трека (фон за ползунком) */
+::-webkit-scrollbar-track {
+}
+/* Внешний вид ползунка */
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 40%,
+    rgba(255, 255, 255, 0.08) 60%,
+    transparent 100%
+  );
+  border-radius: 50%;
+}
+/* Изменение внешнего вида ползунка при наведении */
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 255, 255, 0.2) 40%,
+    rgba(255, 255, 255, 0.2) 60%,
+    transparent 100%
+  );
+}
+
+@media only screen and (max-width: 480px) {
+  ::-webkit-scrollbar {
+    width: 1px;
+  }
+}
 
 @media (prefers-color-scheme: light) {
   :root {

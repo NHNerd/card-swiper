@@ -1,6 +1,98 @@
-#container {
-  position: fixed;
+:root {
+  --top-fade-heght: 50px;
+}
+.scrollFade {
+  position: relative;
   width: 100%;
+  height: var(--list-top-fade-padding);
+  /* background-color: var(--bg-color); */
+  background: linear-gradient(
+    to bottom,
+    var(--bg-color) 0%,
+    rgba(35, 35, 35, 0.99) 6%,
+    rgba(35, 35, 35, 0.6) 60%,
+    transparent 100%
+  );
+  z-index: 1;
+  backdrop-filter: blur(0.4px);
+
+  /* border: dotted 1px rgb(157, 255, 0);
+  box-sizing: border-box; */
+}
+
+.containerLol {
+  position: absolute; /*! temp */
+  inset: 0;
+  min-width: 164px;
+}
+
+.le {
+  transform: translateY(83px); /*! (listName: height 53 + margin 30   */
+  transition: 0.2s;
+  transition-delay: calc(var(--flop-speed) * 4);
+}
+
+.lol {
+  transition: 0.2s;
+  transition-delay: calc(var(--flop-speed) * 4);
+}
+
+.scrollWrap {
+  position: relative;
+  margin-top: calc(var(--list-top-fade-padding) * -1);
+  padding-top: var(--list-top-fade-padding);
+  height: calc(90dvh - var(--list-top-fade-padding));
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: var(--list-top-fade-padding);
+
+  z-index: 4;
+}
+
+.scrollWrapOn {
+  /* opacity: 1;q
+  visibility: visible;
+  transition: 0.1s; */
+}
+.scrollWrapOff {
+  /* opacity: 0;
+  visibility: hidden;
+  transition-delay: 0.1s; */
+}
+
+/* .main::before {
+  content: '';
+  position: relative;
   height: 100%;
-  background-color: rgba(0, 255, 26, 0.15);
+  color: red;
+  overflow: visible scroll;
+} */
+.footer {
+  position: relative;
+  flex-grow: 1;
+}
+
+@media screen and (min-aspect-ratio: 0.75/1) {
+  /* .container {
+    max-width: calc(75vh - 72px); 
+    margin: 12px auto;
+  } */
+}
+@media screen and (max-aspect-ratio: 0.42/1) {
+  /* .container {
+    min-width: calc(42vh - 72px); 
+  } */
+}
+
+@media (max-height: 560px) {
+  /* .container {
+    min-height: 536px; 
+    min-width: 164px; 
+  }
+  .header {
+    height: 201px;
+  }
+  .footer {
+    height: 134px;
+  } */
 }

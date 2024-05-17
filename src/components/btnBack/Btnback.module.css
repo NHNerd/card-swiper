@@ -1,0 +1,16 @@
+.back {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 2dvh;
+  height: 2dvh;
+  border-top: solid 2px red;
+  border-left: solid 2px red;
+  transform: rotate(-45deg);
+  /* background-color: green; */
+  z-index: 1;
+}
+
+/* .back {
+  background-image: url('/public//buttons/edit.svg');
+} */

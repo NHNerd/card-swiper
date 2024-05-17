@@ -1,0 +1,34 @@
+.container {
+  margin: 12px 32px;
+  position: fixed;
+  inset: 0;
+  min-width: 164px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+@media screen and (min-aspect-ratio: 0.75/1) {
+  .container {
+    max-width: calc(75vh - 72px); /* margin 36+36=72? */
+    margin: 12px auto;
+  }
+}
+@media screen and (max-aspect-ratio: 0.42/1) {
+  .container {
+    min-width: calc(42vh - 72px); /* margin 36+36=72? */
+  }
+}
+
+@media (max-height: 560px) {
+  .container {
+    min-height: 536px; /* margin 560-(12+12)? */
+    min-width: 164px; /*! random num (need calc it on right way*/
+  }
+  .header {
+    height: 201px;
+  }
+  .footer {
+    height: 134px;
+  }
+}
