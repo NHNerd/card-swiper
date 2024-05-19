@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Lists from '../../components/listLol/ListLoL.tsx';
-import List from '../../components/listLol/ListLoL.tsx';
+import ListOfList from '../../components/listOfList/ListOfList.tsx';
+// import List from './components/listLol/ListLoL.tsx';
 import ForkLoL from './components/forkLol/ForkLoL.tsx';
 import Btnback from '../../components/btnBack/Btnback.tsx';
 
@@ -16,6 +16,25 @@ interface DataItem {
 }
 
 export default function LoL({}: Props) {
+  //Zustand
+  const { page } = useUiState();
+
+  console.log(page);
+
+  const [opacity, setOpacity] = React.useState(cssLoL.opacity1);
+
+  React.useEffect(() => {
+    if (page === 'menu') {
+      setOpacity(cssLoL.opacity0);
+      console.log('opacity0');
+    } else {
+      setTimeout(() => {
+        setOpacity(cssLoL.opacity1);
+        console.log('opacity1');
+      }, 250);
+    }
+  }, [page]);
+
   // console.log('Lol');
   const [data, setData] = React.useState<string[] | null>(null);
   const [listNames, setlistNames] = React.useState<string[] | null>(null);
@@ -31,11 +50,6 @@ export default function LoL({}: Props) {
       .catch((error) => console.error('Error loading the data:', error));
   }, []);
 
-  //Zustand
-  const { page } = useUiState();
-
-  console.log(page);
-
   if (!listNames) {
     return <div>Загрузка...</div>;
   }
@@ -43,15 +57,18 @@ export default function LoL({}: Props) {
   return (
     <>
       <Btnback />
-      <div className={cssLoL.containerLol + ' ' + (page == 'lol' ? cssLoL.lol : cssLoL.le)}>
+      <div className={cssLoL.containerLol + ' ' + (page !== 'le' ? cssLoL.lol : cssLoL.le)}>
         <ForkLoL />
 
         <div className={cssLoL.scrollFade}></div>
 
         <section
-          className={cssLoL.scrollWrap + ' ' + (page == 'lol' ? 'scrollWrapOn' : 'scrollWrapOff')}
+          className={
+            cssLoL.scrollWrap + ' ' + (page !== 'le' ? opacity + ' ' + 'scrollWrapOn' : 'scrollWrapOff')
+          }
         >
-          <List parrent={'lol'}></List>
+          <ListOfList parrent={'lol'}></ListOfList>
+          {/* <List parrent={'lol'}></List> */}
         </section>
         {/* <section className={cssLoL.footer + ' footerColor'}></section> */}
       </div>

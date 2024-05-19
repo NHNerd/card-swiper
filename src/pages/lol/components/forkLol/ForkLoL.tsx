@@ -14,7 +14,7 @@ export default function ForkLoL({}: Props) {
 
   return (
     <Fork
-      isOn={page == 'lol' ? true : false}
+      isOn={page !== 'le' ? true : false}
       leftChild={<div className={cssForkLoL.search}> </div>}
       rightChild={<div className={cssForkLoL.add}></div>}
     ></Fork>

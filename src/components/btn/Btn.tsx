@@ -1,20 +1,21 @@
 import React from 'react';
 
-import cssBtn from './Btn.module.css';
+import './Btn.css';
 
 import { useUiState } from '../../zustand';
 
 type Props = {
   parrent: 'lol' | 'le';
+  type: 'edit' | 'exit';
 };
 
-const Btn = ({ parrent }: Props) => {
+const Btn = ({ parrent, type }: Props) => {
   const { page, setPage } = useUiState();
 
   return parrent == 'lol' ? (
     // lol edit
     <button
-      className={cssBtn.edit}
+      className={type}
       onClick={() => {
         setPage('le');
       }}
@@ -22,7 +23,7 @@ const Btn = ({ parrent }: Props) => {
   ) : (
     // le edit
     <button
-      className={cssBtn.edit + ' ' + cssBtn.le}
+      className={'edit' + ' btnLe'}
       onClick={() => {
         'ce';
       }}

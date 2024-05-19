@@ -1,0 +1,51 @@
+.edit,
+.exit {
+  position: absolute;
+  /* top: 50%; */
+  width: 6dvh;
+  min-width: 30px;
+  height: 4dvh;
+  min-height: 20px;
+
+  /* transform: translate(0); */
+  background-repeat: no-repeat;
+  background-size: 32%;
+  background-position: center;
+  /* background-color: rgba(218, 165, 32, 0.548); */
+
+  border-left: 1px solid rgb(129, 129, 129);
+  border-right: 1px solid rgb(129, 129, 129);
+  border-radius: 8px;
+}
+
+.edit {
+  right: max(4dvw, 20px);
+  background-image: url('/public/buttons/edit.svg');
+}
+.exit {
+  left: max(4dvw, 20px);
+  background-image: url('/public//buttons/exit.svg');
+}
+
+.btnLe {
+  /* background-color: rgba(32, 141, 218, 0.548); */
+  transition-delay: calc(var(--flop-speed) * 2);
+}
+
+.bg-left,
+.bg-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 10px;
+  opacity: 0.34;
+}
+
+.bg-left {
+  border-left: 2px solid var(--text-color);
+}
+.bg-right {
+  border-right: 2px solid var(--text-color);
+}

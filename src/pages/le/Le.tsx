@@ -1,8 +1,6 @@
 import React from 'react';
 
-// import Lists from '../../components/list/List.tsx';
-import List from '../../components/listLol/ListLoL.tsx';
-import ListLe from '../../components/listLe/ListLe.tsx';
+import ListLe from './components/listLe/ListLe.tsx';
 import ForkLoL from './components/forkLe/ForkLe.tsx';
 import ListName from './components/listName/ListName.tsx';
 import Footer from './components/footer/Footer.tsx';

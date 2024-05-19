@@ -1,0 +1,46 @@
+/* .menu {
+  height: 100%;
+} */
+
+.containerList {
+  width: 100%;
+  display: flex;
+  margin-top: var(--list-top-fade-padding);
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  scroll-snap-align: start;
+  /* border: dotted 1px red;
+  box-sizing: border-box; */
+  white-space: nowrap;
+}
+
+.lineMenu {
+  position: fixed;
+  bottom: 0;
+}
+
+.menuHeight {
+  /*? may be it's broking pages buttons(edit, etc) between each other */
+
+  height: 11dvh; /*! Intention */
+  min-height: 72px;
+  transform: translateY(69dvh);
+  transition: 1s;
+}
+.lolHeight {
+  /* margin-top: var(--list-top-fade-padding); */
+  /*? may be it's broking pages buttons(edit, etc) between each other */
+
+  height: 11dvh; /*! Intention */
+  min-height: 72px;
+  transition: 1s;
+}
+.leHeight {
+  /* margin-top: var(--listLe-top-fade-padding); */
+
+  margin-top: 0;
+  height: 7dvh; /*! Intention */
+  min-height: 34px;
+  transition: 1s;
+}

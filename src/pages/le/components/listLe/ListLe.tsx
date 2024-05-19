@@ -4,9 +4,10 @@ import BtnArrow from '../btnArrow/BtnArrow.tsx';
 
 import { data, ListsTS, ListTS } from '/public/temp/data.ts';
 import btnArrowHndlr from './btnArrowHndlr.ts';
-import { useUiState } from '../../zustand.ts';
-import Btn from '../btn/Btn.tsx';
+import { useUiState } from '../../../../zustand.ts';
+import Btn from '../../../../components/btn/Btn.tsx';
 
+import cssList from '../../../../components/list/List.module.css';
 import cssListLe from './ListLe.module.css';
 
 type Props = {
@@ -21,12 +22,16 @@ export default function ListLe({ children, parrent }: Props) {
   return Object.entries(lists).map(([word, listDetails]: [string, ListTS], index: number) => (
     <section
       key={index}
-      className={cssListLe.containerList + (parrent === 'menu' ? ' ' + cssListLe.menu : '')}
+      className={
+        cssList.containerList +
+        (parrent === 'menu' ? ' ' + cssList.menu : '') +
+        ' ' +
+        (page === 'lol' ? cssList.lolHeight : cssList.leHeight)
+      }
     >
       <Btn parrent='le' />
-      <div className={cssListLe.flopWrap + ' ' + (page == 'le' ? 'flopOn' : 'flopOff')}>
-        {' '}
-        <h1 className={cssListLe.h1}>
+      <div className={page == 'le' ? 'flopOn' : 'flopOff'}>
+        <h1 className={cssListLe.fontSize}>
           {word}
           {children}
         </h1>

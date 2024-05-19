@@ -87,6 +87,7 @@
   --main-color: #d9d9d9;
 
   --list-top-fade-padding: 4vh;
+  --listLe-top-fade-padding: 2vh;
 
   --flop-speed: 0.075s;
 
@@ -122,16 +123,17 @@ h2,
 h3 {
   margin: 0;
   padding: 0;
-  line-height: 1.5;
+  /* min size in flex box ⬇️ */
+  line-height: 0.95;
 }
 h1 {
-  font-size: 2.125rem; /* 34px */
+  font-size: max(3.8dvh, 32px);
 }
 h2 {
-  font-size: 20px;
+  font-size: max(2.2dvh, 18px);
 }
 h3 {
-  font-size: 1rem; /* 16px */
+  font-size: max(1.8dvh, 14px);
 }
 
 button {

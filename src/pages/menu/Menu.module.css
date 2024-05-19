@@ -1,24 +1,35 @@
-.container {
-  margin: 12px 32px;
-  position: fixed;
-  inset: 0;
-  min-width: 164px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.header {
-  position: relative;
-  height: 38%;
-}
-.main {
-  position: relative;
-  flex-grow: 1;
-}
 .footer {
-  position: relative;
-  /* overflow-y: scroll; */
-  height: 24%;
+  bottom: 0;
+  position: fixed;
+  width: 100%;
+  /* background-color: pink; */
+}
+
+.lol {
+  height: 19dvh;
+  /*? (4 + 4 margin) + 11 (lestElement) + ( 10 fork )  */
+  /*! broking if window height is < 560px :) */
+  transform: translateY(-71dvh);
+  transition: transform 0.25s;
+}
+.menu {
+  height: 19dvh;
+  transform: translateY(0dvh);
+  transition: transform 0.25s;
+}
+
+/*? I would like to use a "display block",
+but if the element has a block properties it won't have a transition. */
+.opacity0 {
+  opacity: 0;
+  user-select: none;
+  pointer-events: none;
+  transition: transform 0.25s;
+}
+.opacity1 {
+  user-select: all;
+  pointer-events: all;
+  transition: transform 0.25s;
 }
 
 @media screen and (min-aspect-ratio: 0.75/1) {

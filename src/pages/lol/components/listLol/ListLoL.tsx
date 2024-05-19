@@ -1,12 +1,13 @@
 import React from 'react';
 
-import BtnArrow from '../btnArrow/BtnArrow.tsx';
-import Btn from '../btn/Btn.tsx';
+import BtnArrow from '../../../../components/btnArrow/BtnArrow.tsx';
+import Btn from '../../../../components/btn/Btn.tsx';
 
 import { data, ListsTS, ListTS } from '/public/temp/data.ts';
 import btnArrowHndlr from './btnArrowHndlr.ts';
-import { useUiState } from '../../zustand.ts';
+import { useUiState } from '../../../../zustand.ts';
 
+import cssList from '../../../../components/list/List.module.css';
 import cssListLoL from './ListLoL.module.css';
 
 type Props = {
@@ -23,10 +24,15 @@ export default function List({ children, parrent }: Props) {
   return Object.entries(lists).map(([listName, listDetails]: [string, ListTS], index: number) => (
     <section
       key={index}
-      className={cssListLoL.containerList + (parrent === 'menu' ? ' ' + cssListLoL.menu : '')}
+      className={
+        cssList.containerList +
+        (parrent === 'menu' ? ' ' + cssList.menu : '') +
+        ' ' +
+        (page !== 'le' ? cssList.lolHeight + ' ' + cssList.lolMinHeight : cssList.leHeight)
+      }
     >
       <Btn parrent='lol' />
-      <div className={cssListLoL.flopWrap + ' ' + (page == 'lol' ? 'flopOn' : 'flopOff')}>
+      <div className={cssListLoL.flopWrap + ' ' + (page !== 'le' ? 'flopOn' : 'flopOff')}>
         <h1 className={cssListLoL.h1}>
           {listName}
           {children}
@@ -40,9 +46,7 @@ export default function List({ children, parrent }: Props) {
           <div className={cssListLoL.h3Value}>{listDetails.gameCount}</div>
         </h3>
         <div
-          className={
-            cssListLoL.line + ' bg-color3' + (parrent === 'menu' ? ' ' + cssListLoL.lineMenu : '')
-          }
+          className={cssListLoL.line + ' bg-color3' + (parrent === 'menu' ? ' ' + cssList.lineMenu : '')}
         ></div>
       </div>
     </section>
