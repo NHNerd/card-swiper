@@ -1,0 +1,36 @@
+.card {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 54dvh;
+  line-height: 54dvh;
+  aspect-ratio: 0.64;
+  background-color: var(--main-color);
+  border-radius: 20px;
+  text-align: center;
+  color: black;
+  font-size: 36px;
+  border-left: solid 2px rgb(255, 255, 255);
+  border-right: solid 2px rgb(255, 255, 255);
+}
+
+/*TODO Надо сшить нормально перход из go в card и обратно */
+.on {
+  transition: 0.2s;
+}
+
+/*? For avoid freeze in draging time  */
+.card:active {
+  transition: transform 0s, top 0s, left 0s;
+}
+
+.off {
+  border-radius: 50%;
+  opacity: 0;
+  filter: blur(3px);
+  transition: 0.2s;
+  scale: 0.9;
+  cursor: none;
+  user-select: none;
+}

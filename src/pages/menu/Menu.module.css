@@ -17,6 +17,11 @@
   transform: translateY(0dvh);
   transition: transform 0.25s;
 }
+.session {
+  height: 19dvh;
+  transform: translateY(21dvh);
+  transition: transform 0.25s;
+}
 
 /*? I would like to use a "display block",
 but if the element has a block properties it won't have a transition. */

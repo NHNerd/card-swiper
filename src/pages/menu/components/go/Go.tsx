@@ -1,9 +1,19 @@
 import React from 'react';
 
+import { useUiState } from '../../../../zustand';
+
 import cssGo from './Go.module.css';
 
 type Props = {};
 
 export default function Go({}: Props) {
-  return <button id={cssGo.container}>go</button>;
+  const { page, setPage } = useUiState();
+
+  return (
+    <div className={cssGo.wrap + ' ' + (page === 'menu' ? cssGo.on : cssGo.off)}>
+      <button id={cssGo.container} onClick={() => setPage('session')}>
+        go
+      </button>
+    </div>
+  );
 }

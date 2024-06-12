@@ -37,7 +37,7 @@ export default function Menu({}: Props) {
   return (
     <>
       {/* <div id='figmaMenuRef'></div> */}
-
+      <Go />
       <div
         className={
           cssMenu.footer +
@@ -45,6 +45,8 @@ export default function Menu({}: Props) {
           // changong top to bottom returns ancorrect animation
           (page === 'menu'
             ? cssMenu.menu + ' ' + cssMenu.anchorMenu
+            : page === 'session'
+            ? cssMenu.session
             : cssMenu.lol + ' ' + cssMenu.anchorLol + ' ' + opacity)
         }
       >

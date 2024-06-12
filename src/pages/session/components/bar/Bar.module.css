@@ -1,0 +1,78 @@
+.bar {
+  position: fixed;
+  top: 10px;
+  height: 8px;
+  width: 90dvw;
+  left: 50%;
+  transform: translate(-50%);
+  border-radius: 10px;
+  border: solid 1px var(--main-color);
+  box-sizing: border-box;
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  /*! anima!!! */
+  right: 30%;
+  background-color: var(--main-color);
+}
+
+.point {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translate(50%, -50%);
+  height: 8px;
+  width: 8px;
+  background-color: white;
+  border-radius: 50%;
+  filter: blur(1px);
+}
+
+.point::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /*TODO Anima puls scale in combo time!  */
+  scale: 1.4 2;
+  background-color: rgb(255, 255, 255);
+  border-radius: 50%;
+  filter: blur(3px);
+}
+
+.point::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  /*TODO Anima puls scale in combo time!  */
+  scale: 10 1.4;
+  background-color: rgb(255, 255, 255);
+  border-radius: 50%;
+  filter: blur(1px);
+}
+
+.on {
+  translate: 0;
+  transition: 0.25s;
+  transition-delay: 0.2s;
+}
+
+.off {
+  translate: 0 -50px;
+  transition: 0.25s;
+}
+
+/* .on {
+  transform: translateX(-50%) scaleX(1);
+  opacity: 1;
+  filter: blur(0);
+  transition: 0.25s;
+  transition-delay: 0.2s;
+}
+.off {
+  transform: translateX(-50%) scaleX(0.4);
+  opacity: 0;
+  /* filter: blur(8px);
+  transition: 0.25s;
+} */

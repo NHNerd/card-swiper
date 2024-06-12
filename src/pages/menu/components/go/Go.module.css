@@ -51,6 +51,29 @@
   animation: pulse2 2.4s infinite ease-in-out;
 }
 
+.wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+  background-color: aqua;
+}
+.off {
+  /*TODO increase glow, gain off "list text" in 70% animation time  */
+  transform: translate(-50%, -50%) scale(0, 3);
+  filter: blur(46px);
+  opacity: 0;
+  transition: 0.4s;
+}
+.on {
+  transform: translate(-50%, -50%) scale(1);
+  filter: blur(0px);
+  opacity: 1;
+  transition: 0.25s;
+}
+
 @keyframes pulse0 {
   0% {
     transform: translate(-50%, -50%) scale(0.99);

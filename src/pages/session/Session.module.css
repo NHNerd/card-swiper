@@ -1,0 +1,13 @@
+#session {
+  position: fixed;
+  inset: 0;
+}
+
+/* .on {
+  opacity: 1;
+  transition: 1s;
+}
+.off {
+  opacity: 0;
+  transition: 1s;
+} */
