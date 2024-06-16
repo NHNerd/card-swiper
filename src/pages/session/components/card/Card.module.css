@@ -13,6 +13,7 @@
   font-size: 36px;
   border-left: solid 2px rgb(255, 255, 255);
   border-right: solid 2px rgb(255, 255, 255);
+  transform-origin: 0% 0%;
 }
 
 /*TODO Надо сшить нормально перход из go в card и обратно */
