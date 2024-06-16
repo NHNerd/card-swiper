@@ -30,7 +30,12 @@ export default function ListLe({ children, parrent }: Props) {
       }
     >
       <Btn parrent='le' />
-      <div className={page == 'le' ? 'flopOn' : 'flopOff'}>
+      <div
+        onClick={() => {
+          console.log(word);
+        }}
+        className={page == 'le' ? 'flopOn' : 'flopOff'}
+      >
         <h1 className={cssListLe.fontSize}>
           {word}
           {children}

@@ -19,18 +19,14 @@ export default function LoL({}: Props) {
   //Zustand
   const { page } = useUiState();
 
-  console.log(page);
-
   const [opacity, setOpacity] = React.useState(cssLoL.opacity1);
 
   React.useEffect(() => {
     if (page === 'menu') {
       setOpacity(cssLoL.opacity0);
-      console.log('opacity0');
     } else {
       setTimeout(() => {
         setOpacity(cssLoL.opacity1);
-        console.log('opacity1');
       }, 250);
     }
   }, [page]);
@@ -68,6 +64,7 @@ export default function LoL({}: Props) {
           }
         >
           <ListOfList parrent={'lol'}></ListOfList>
+
           {/* <List parrent={'lol'}></List> */}
         </section>
         {/* <section className={cssLoL.footer + ' footerColor'}></section> */}

@@ -5,6 +5,7 @@
   align-items: center;
   /*? min space = content = font-size + p(1) */
   justify-content: space-between;
+  cursor: pointer;
 }
 
 .h1 {

@@ -2,7 +2,7 @@ import React from 'react';
 
 import Btn from '../btn/Btn.tsx';
 
-import { data, ListsTS, ListTS } from '../../../public/temp/data.ts';
+import { ListTS } from '../../../public/temp/data.ts';
 
 import { useUiState } from '../../zustand.ts';
 
@@ -14,13 +14,27 @@ type Props = {
   parrent: 'menu' | 'lol' | 'le';
 };
 
-const lists: ListsTS = data.lists;
+// console.log(Object.entries(lists)[0]);
 
 export default function ListOfList({ children, parrent }: Props) {
   //Zustand
-  const { page } = useUiState();
+  const { page, dataZus } = useUiState();
+  const [dataFresh, setDataFresh] = React.useState(dataZus);
+  // console.log(dataNew[0]);
 
-  return Object.entries(lists).map(([listName, listDetails]: [string, ListTS], index: number) => (
+  const selectList = (listName, listDetails) => {
+    // console.log(listName);
+    // console.log(listDetails.order);
+    //TODO add changing for order
+    //TODO refresh zustand, in the end
+    const delited = dataFresh.splice(listDetails.order, 1);
+    const dataNew = [...dataFresh];
+    dataNew.unshift(...delited);
+
+    setDataFresh(dataNew);
+  };
+
+  return dataFresh.map(([listName, listDetails]: [string, ListTS], index: number) => (
     <section
       key={index}
       className={
@@ -31,7 +45,10 @@ export default function ListOfList({ children, parrent }: Props) {
     >
       <Btn parrent='lol' type='exit' />
       <Btn parrent='lol' type='edit' />
-      <div className={cssListOfList.flopWrap + ' ' + (page !== 'le' ? 'flopOn' : 'flopOff')}>
+      <div
+        onClick={() => selectList(listName, listDetails)}
+        className={cssListOfList.flopWrap + ' ' + (page !== 'le' ? 'flopOn' : 'flopOff')}
+      >
         <h1 className={cssListOfList.h1}>
           {listName}
           {children}
