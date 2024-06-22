@@ -1,10 +1,9 @@
 import React from 'react';
 
 import Btn from '../btn/Btn.tsx';
-
 import { ListTS } from '../../../public/temp/data.ts';
-
-import { useUiState } from '../../zustand.ts';
+import { useUiState, zustandData } from '../../zustand.ts';
+import { changeOrderHndlr } from './changeOrderHndlr.ts';
 
 import cssList from '../list/List.module.css';
 import cssListOfList from './ListOfList.module.css';
@@ -14,27 +13,16 @@ type Props = {
   parrent: 'menu' | 'lol' | 'le';
 };
 
-// console.log(Object.entries(lists)[0]);
-
 export default function ListOfList({ children, parrent }: Props) {
   //Zustand
-  const { page, dataZus } = useUiState();
-  const [dataFresh, setDataFresh] = React.useState(dataZus);
-  // console.log(dataNew[0]);
+  const { page, setPage } = useUiState();
+  const { dataZus, setDataZus } = zustandData();
 
-  const selectList = (listName, listDetails) => {
-    // console.log(listName);
-    // console.log(listDetails.order);
-    //TODO add changing for order
-    //TODO refresh zustand, in the end
-    const delited = dataFresh.splice(listDetails.order, 1);
-    const dataNew = [...dataFresh];
-    dataNew.unshift(...delited);
+  React.useEffect(() => {
+    setDataZus(dataZus);
+  }, [dataZus]);
 
-    setDataFresh(dataNew);
-  };
-
-  return dataFresh.map(([listName, listDetails]: [string, ListTS], index: number) => (
+  return dataZus.map(([listName, listDetails]: [string, ListTS], index: number) => (
     <section
       key={index}
       className={
@@ -46,7 +34,9 @@ export default function ListOfList({ children, parrent }: Props) {
       <Btn parrent='lol' type='exit' />
       <Btn parrent='lol' type='edit' />
       <div
-        onClick={() => selectList(listName, listDetails)}
+        onClick={() => {
+          if (page === 'lol') changeOrderHndlr({ dataZus, setDataZus, listDetails }), setPage('menu');
+        }}
         className={cssListOfList.flopWrap + ' ' + (page !== 'le' ? 'flopOn' : 'flopOff')}
       >
         <h1 className={cssListOfList.h1}>

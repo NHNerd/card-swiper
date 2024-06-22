@@ -2,7 +2,7 @@ import React from 'react';
 
 import Statistic from './components/statistic/Statistic.tsx';
 import Go from './components/go/Go.tsx';
-import List from '../lol/components/listLol/ListLoL.tsx';
+
 import ListOfList from '../../components/listOfList/ListOfList.tsx';
 import BtnArrow from '../../components/btnArrow/BtnArrow.tsx';
 import { useUiState } from '../../zustand.ts';

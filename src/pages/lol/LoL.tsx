@@ -1,7 +1,6 @@
 import React from 'react';
 
 import ListOfList from '../../components/listOfList/ListOfList.tsx';
-// import List from './components/listLol/ListLoL.tsx';
 import ForkLoL from './components/forkLol/ForkLoL.tsx';
 import Btnback from '../../components/btnBack/Btnback.tsx';
 
