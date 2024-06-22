@@ -5,23 +5,42 @@ import Go from './components/go/Go.tsx';
 
 import ListOfList from '../../components/listOfList/ListOfList.tsx';
 import BtnArrow from '../../components/btnArrow/BtnArrow.tsx';
-import { useUiState } from '../../zustand.ts';
+import { useUiState, zustandData } from '../../zustand.ts';
 
 import '../../components/container.css';
 import cssMenu from './Menu.module.css';
 
 type Props = {};
 
-function btnArrowHndlr() {
-  console.log('click: btnArrow');
-}
-
 export default function Menu({}: Props) {
   const { page, setPage } = useUiState();
+  const { dataZus, setDataZus } = zustandData();
   const [opacity, setOpacity] = React.useState('');
 
   function btnArrowTopHndlr() {
     setPage('lol');
+  }
+  function btnArrowLeftHndlr() {
+    const delited = dataZus.splice(dataZus.length - 1, 1);
+    delited[0][1].order = 0;
+    const newData = [];
+    for (let i = 0; i < dataZus.length; i++) {
+      newData.push(dataZus[i]);
+      dataZus[i][1].order = i + 1;
+    }
+    newData.unshift(...delited);
+    setDataZus(newData);
+  }
+  function btnArrowRightHndlr() {
+    const delited = dataZus.splice(0, 1);
+    delited[0][1].order = dataZus.length;
+    const newData = [];
+    for (let i = 0; i < dataZus.length; i++) {
+      newData.push(dataZus[i]);
+      dataZus[i][1].order = i;
+    }
+    newData.push(...delited);
+    setDataZus(newData);
   }
 
   React.useEffect(() => {
@@ -52,8 +71,8 @@ export default function Menu({}: Props) {
       >
         <ListOfList parrent='menu'>
           <BtnArrow onClick={btnArrowTopHndlr} direct='top' />
-          <BtnArrow onClick={btnArrowHndlr} direct='left' />
-          <BtnArrow onClick={btnArrowHndlr} direct='right' />
+          <BtnArrow onClick={btnArrowLeftHndlr} direct='left' />
+          <BtnArrow onClick={btnArrowRightHndlr} direct='right' />
         </ListOfList>
       </div>
     </>
