@@ -15,6 +15,6 @@ export const changeOrderHndlr = (props: any) => {
 
   // Add choisen element to start
   dataNew.unshift(...delited);
-
+  
   props.setDataZus(dataNew);
 };
