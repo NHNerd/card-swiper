@@ -1,8 +1,7 @@
 import React from 'react';
 
 import Btn from '../btn/Btn.tsx';
-import { ListTS } from '../../../public/temp/data.ts';
-import { useUiState, zustandData } from '../../zustand.ts';
+import { useUiState, zustandData, zustandOrderListEdit } from '../../zustand.ts';
 import { changeOrderHndlr } from './changeOrderHndlr.ts';
 
 import cssList from '../list/List.module.css';
@@ -17,12 +16,19 @@ export default function ListOfList({ children, parrent }: Props) {
   //Zustand
   const { page, setPage } = useUiState();
   const { dataZus, setDataZus } = zustandData();
+  const { setOrderListEditZus } = zustandOrderListEdit();
 
+  const toEdit = (order) => {
+    setPage('le');
+    setOrderListEditZus(order);
+  };
+
+  //! What is it?
   React.useEffect(() => {
     setDataZus(dataZus);
   }, [dataZus]);
 
-  return dataZus.map(([listName, listDetails]: [string, ListTS], index: number) => (
+  return dataZus.map((list: object, index: number) => (
     <section
       key={index}
       className={
@@ -32,24 +38,24 @@ export default function ListOfList({ children, parrent }: Props) {
       }
     >
       <Btn parrent='lol' type='exit' />
-      <Btn parrent='lol' type='edit' />
+      <Btn parrent='lol' type='edit' hndlr={() => toEdit(list.order)} />
       <div
         onClick={() => {
-          if (page === 'lol') changeOrderHndlr({ dataZus, setDataZus, listDetails }), setPage('menu');
+          // if (page === 'lol') changeOrderHndlr({ dataZus, setDataZus, listDetails }), setPage('menu');
         }}
         className={cssListOfList.flopWrap + ' ' + (page !== 'le' ? 'flopOn' : 'flopOff')}
       >
         <h1 className={cssListOfList.h1}>
-          {listName}
+          {list.listName}
           {children}
         </h1>
         <h2 className={cssListOfList.h2}>
           <div className={cssListOfList.h2Text + ' color2'}>word count:</div>
-          <div className={cssListOfList.h3Value}>{Object.keys(listDetails.words).length}</div>
+          <div className={cssListOfList.h3Value}>{21}</div>
         </h2>
         <h3 className={cssListOfList.h3}>
           <div className={cssListOfList.h3Text + ' color2'}>game count:</div>
-          <div className={cssListOfList.h3Value}>{listDetails.gameCount}</div>
+          <div className={cssListOfList.h3Value}>{list.gameCount}</div>
         </h3>
         {/* <div
           className={
