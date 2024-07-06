@@ -1,54 +1,17 @@
 import { create } from 'zustand';
-import { getUserId } from './axios/user.ts';
-import { getAllLists } from './axios/list.ts';
-import { getAllWords } from './axios/words.ts';
+import data from './business/dataCreate.ts';
 
-const email = 'froger';
-getUserId(email);
-getAllLists(localStorage.getItem('userId'));
-const allLists = JSON.parse(localStorage.getItem('allLists'));
+console.log('Z U S T A N D');
 
-const data: [] = [];
-const allListsId: [] = [];
-allLists.map((list) => {
-  const listId = list._id;
-  const listName = list.listName;
-  const order = list.order;
-  const wordCount = 0;
-  const gameCount = list.gameCount;
-  const words: [] = [];
-
-  // const order = list.order;
-  data.push({ listId, listName, order, wordCount, gameCount, words });
-  allListsId.push(listId);
-});
-
-getAllWords(allListsId);
-
-// Write words in lists
-const Allwords = JSON.parse(localStorage.getItem('Allwords'));
-Object.keys(Allwords).forEach((piece) => {
-  let currentList = data.find((obj) => obj.listId === piece);
-  currentList.words = Allwords[piece];
-});
-
-const noData = [{ _id: 0, userId: 1, listName: 'noData', createdDate: 'xxxx.xx.xx', order: 99 }];
-
-// SORT
-const dataSort: any = [];
-for (let i = 0; i < data.length; i++) {
-  dataSort.push(data[i]);
-}
-
-// console.log(dataNew);
 export const useUiState = create((set) => ({
   // page: 'lol',
   page: 'menu',
   setPage: (value) => set((state) => ({ page: value })),
 }));
 
+const noData = [{ listId: 0, listName: 'noData', order: 0, wordCount: 0, gameCount: 0, words: [] }];
 export const zustandData = create((set) => ({
-  dataZus: dataSort || noData,
+  dataZus: data || noData,
   setDataZus: (value) => set((state) => ({ dataZus: value })),
 }));
 

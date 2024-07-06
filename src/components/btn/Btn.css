@@ -20,11 +20,11 @@
 
 .edit {
   right: max(4dvw, 20px);
-  background-image: url('/public/buttons/edit.svg');
+  background-image: url('/buttons/edit.svg');
 }
 .exit {
   left: max(4dvw, 20px);
-  background-image: url('/public//buttons/exit.svg');
+  background-image: url('/buttons/exit.svg');
 }
 
 .btnLe {

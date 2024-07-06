@@ -41,17 +41,19 @@ export default function ListOfList({ children, parrent }: Props) {
       <Btn parrent='lol' type='edit' hndlr={() => toEdit(list.order)} />
       <div
         onClick={() => {
-          // if (page === 'lol') changeOrderHndlr({ dataZus, setDataZus, listDetails }), setPage('menu');
+          if (page === 'lol')
+            changeOrderHndlr({ dataZus, setDataZus, order: list.order }), setPage('menu');
         }}
         className={cssListOfList.flopWrap + ' ' + (page !== 'le' ? 'flopOn' : 'flopOff')}
       >
         <h1 className={cssListOfList.h1}>
           {list.listName}
-          {children}
+          {/* arrow buttons */}
+          {index === 0 ? children : null}
         </h1>
         <h2 className={cssListOfList.h2}>
           <div className={cssListOfList.h2Text + ' color2'}>word count:</div>
-          <div className={cssListOfList.h3Value}>{21}</div>
+          <div className={cssListOfList.h3Value}>{list.wordCount}</div>
         </h2>
         <h3 className={cssListOfList.h3}>
           <div className={cssListOfList.h3Text + ' color2'}>game count:</div>

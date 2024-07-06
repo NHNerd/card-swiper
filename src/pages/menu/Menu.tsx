@@ -22,22 +22,22 @@ export default function Menu({}: Props) {
   }
   function btnArrowLeftHndlr() {
     const delited = dataZus.splice(dataZus.length - 1, 1);
-    delited[0][1].order = 0;
+    delited[0].order = 0;
     const newData = [];
     for (let i = 0; i < dataZus.length; i++) {
       newData.push(dataZus[i]);
-      dataZus[i][1].order = i + 1;
+      dataZus[i].order = i + 1;
     }
     newData.unshift(...delited);
     setDataZus(newData);
   }
   function btnArrowRightHndlr() {
     const delited = dataZus.splice(0, 1);
-    delited[0][1].order = dataZus.length;
+    delited[0].order = dataZus.length;
     const newData = [];
     for (let i = 0; i < dataZus.length; i++) {
       newData.push(dataZus[i]);
-      dataZus[i][1].order = i;
+      dataZus[i].order = i;
     }
     newData.push(...delited);
     setDataZus(newData);
