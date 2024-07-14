@@ -1,73 +1,68 @@
 import React from 'react';
-import { useUiState } from '../../../../zustand';
-import {
-  onMouseDownDragLogic,
-  onMouseUpDragLogic,
-  onMouseMoveDragLogic,
-  cardEventAddListners,
-  cardEventCleanupListners,
-} from './handlers/cardMoveLogic';
+import { useUiState, zustandData } from '../../../../zustand';
+import { useScreenSize } from './hooks/screenSize';
+import DnD from './hooks/dnd/dnd';
+
 import cssCard from './Card.module.css';
 
 type Props = {
   //! надо задать точнее (may be...)
-  ContainerSessionRef: object;
+  ContainerSessionRef: HTMLDivElement;
 };
 
 export default function Card({ ContainerSessionRef }: Props) {
   const { page, setPage } = useUiState();
+  const { dataZus } = zustandData((state) => state); // Получаем состояние zustandData
+  // const { dataZus } = zustandData();
 
-  const cardRef = React.useRef<HTMLButtonElement>(null);
-  const isClicked = React.useRef<boolean>(false);
+  const cardRef0 = React.useRef<HTMLButtonElement>(null);
+  const cardRef1 = React.useRef<HTMLButtonElement>(null);
 
-  const [coordsDown, setCoordsDown] = React.useState<{ x: number; y: number }>({ x: 0, y: 0 });
-  const [cardCurrentPos, setCardCurrentPos] = React.useState<{ x: number; y: number }>({ x: 0, y: 0 });
-  const [cardCurrentPosPrev, setCardCurrentPosPrev] = React.useState<{ x: number; y: number }>({
-    x: 0,
-    y: 0,
-  });
+  // const [gameWords, setGameWords] = React.useState(dataZus[0].words) || [];
+  const [gameWords, setGameWords] = React.useState<any[]>([]); // Начальное значение пустой массив
 
+  // refresh gameWords
   React.useEffect(() => {
-    if (!cardRef.current && !ContainerSessionRef.current) return;
+    if (dataZus && dataZus.length > 0 && dataZus[0].words) {
+      setGameWords(dataZus[0].words);
+    }
+  }, [dataZus]);
 
-    const card = cardRef.current;
-    const containerSession = ContainerSessionRef.current;
-
-    const onMouseDown = (e: MouseEvent) => {
-      onMouseDownDragLogic(e, isClicked, setCoordsDown);
-    };
-    const onMouseUp = (e: MouseEvent) => {
-      onMouseUpDragLogic(e, isClicked, setCardCurrentPosPrev, cardCurrentPos);
-    };
-    const onMouseMove = (e: MouseEvent) => {
-      onMouseMoveDragLogic(
-        e,
-        isClicked,
-        coordsDown,
-        cardCurrentPos,
-        setCardCurrentPos,
-        cardCurrentPosPrev,
-        card
-      );
-    };
-
-    const cardProps = { card, containerSession, onMouseDown, onMouseUp, onMouseMove };
-    // Here is avoiding listers & cleanup
-    cardEventAddListners({ ...cardProps });
-
-    return () => cardEventCleanupListners({ ...cardProps });
-  }, [coordsDown, cardCurrentPos]);
+  // refresh screen size
+  const screenSize = useScreenSize(ContainerSessionRef);
 
   return (
     <>
-      <div className='testContainer'>
+      {/* word3  */}
+
+      {/* word1 dnd */}
+      <button
+        className={
+          cssCard.card +
+          ' ' +
+          ' ' +
+          cssCard.card1 +
+          ' ' +
+          (page === 'session' ? cssCard.on : cssCard.off)
+        }
+      >
+        {gameWords[1] ? gameWords[1].word + ' | card1' : 'nothing | card1'}
+      </button>
+      {/* word0 dnd */}
+      <DnD ContainerSessionRef={ContainerSessionRef}>
         <button
-          ref={cardRef}
-          className={cssCard.card + ' ' + (page === 'session' ? cssCard.on : cssCard.off)}
+          className={
+            cssCard.card +
+            ' ' +
+            ' ' +
+            cssCard.card0 +
+            ' ' +
+            (page === 'session' ? cssCard.on : cssCard.off)
+          }
         >
-          thought
+          {gameWords[0] ? gameWords[0].word + ' | card0' : 'nothing | card0'}
         </button>
-      </div>
+      </DnD>
     </>
   );
 }

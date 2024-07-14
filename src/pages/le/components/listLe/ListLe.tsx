@@ -21,6 +21,15 @@ export default function ListLe({ children, parrent }: Props) {
   const { dataZus, setDataZus } = zustandData();
   const { orderListEditZus } = zustandOrderListEdit();
 
+  if (
+    !dataZus ||
+    dataZus.length === 0 ||
+    !dataZus[orderListEditZus] ||
+    !dataZus[orderListEditZus].words
+  ) {
+    return null; // Можно вернуть заглушку или пустой контент в случае отсутствия данных
+  }
+
   return dataZus[orderListEditZus].words.map((word: [string, ListTS], index: number) => (
     <section
       key={index}

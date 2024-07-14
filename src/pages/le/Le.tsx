@@ -1,5 +1,3 @@
-import React from 'react';
-
 import ListLe from './components/listLe/ListLe.tsx';
 import ForkLoL from './components/forkLe/ForkLe.tsx';
 import ListName from './components/listName/ListName.tsx';
@@ -17,7 +15,7 @@ export default function Le({}: Props) {
 
   return (
     <>
-      <div className={cssLe.warpLe}>
+      <div className={cssLe.warpLe + (page === 'le' || page === 'lol' ? null : ' ' + cssLe.opacity0)}>
         <ListName />
         <ForkLoL />
 

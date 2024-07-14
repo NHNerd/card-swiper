@@ -11,9 +11,9 @@
   background-position: center;
 }
 .search {
-  background-image: url('/public//buttons/search.svg');
+  background-image: url('/buttons/search.svg');
 }
 
 .add {
-  background-image: url('/public//buttons/add.svg');
+  background-image: url('/buttons/add.svg');
 }

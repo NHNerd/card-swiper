@@ -14,7 +14,7 @@
   position: absolute;
   inset: 0;
   /*! anima!!! */
-  right: 30%;
+  right: 100%;
   background-color: var(--main-color);
 }
 
@@ -46,7 +46,7 @@
   position: absolute;
   inset: 0;
   /*TODO Anima puls scale in combo time!  */
-  scale: 10 1.4;
+  /* scale: 10 1.4; */
   background-color: rgb(255, 255, 255);
   border-radius: 50%;
   filter: blur(1px);

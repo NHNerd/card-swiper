@@ -7,12 +7,15 @@ export const getAllWords = (allListsId: []) => {
     allListsId,
   };
 
-  axios
+  return axios
     .get(src, { params })
     .then((data) => {
       const Allwords = data.data.Allwords;
       //? convert object to string: JSON.stringify
+
       localStorage.setItem('Allwords', JSON.stringify(Allwords));
+
+      return Allwords;
     })
     .catch((error) => {
       console.error('Error fetching data (getAllListWords):', error);

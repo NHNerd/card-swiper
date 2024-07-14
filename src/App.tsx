@@ -15,12 +15,13 @@ function App() {
   return (
     <>
       <Session />
-      {page === 'session' ? null : (
+      {/*   {page === 'session' ? null : (
         <>
           <LoL /> <Le />
         </>
-      )}
-
+      )} */}
+      <LoL />
+      <Le />
       <Menu />
       <Burger />
     </>

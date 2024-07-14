@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { useUiState } from '../../zustand';
 
 import cssBurger from './Burger.module.css';

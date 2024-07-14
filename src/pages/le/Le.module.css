@@ -2,6 +2,14 @@
   position: absolute; /*! temp */
   inset: 0;
   min-width: 164px;
+
+  background-color: red;
+}
+
+.opacity0 {
+  display: none;
+  user-select: none;
+  pointer-events: none;
 }
 
 .scrollFade {

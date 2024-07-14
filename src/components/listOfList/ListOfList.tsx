@@ -12,10 +12,11 @@ type Props = {
   parrent: 'menu' | 'lol' | 'le';
 };
 
+let fetchDataZusFlag = false;
 export default function ListOfList({ children, parrent }: Props) {
   //Zustand
   const { page, setPage } = useUiState();
-  const { dataZus, setDataZus } = zustandData();
+  const { dataZus, setDataZus, fetchDataZus } = zustandData();
   const { setOrderListEditZus } = zustandOrderListEdit();
 
   const toEdit = (order) => {
@@ -23,10 +24,12 @@ export default function ListOfList({ children, parrent }: Props) {
     setOrderListEditZus(order);
   };
 
-  //! What is it?
+  //! wrong way!
+
   React.useEffect(() => {
-    setDataZus(dataZus);
-  }, [dataZus]);
+    if (!fetchDataZusFlag) fetchDataZus();
+    fetchDataZusFlag = true;
+  }, [fetchDataZus]);
 
   return dataZus.map((list: object, index: number) => (
     <section

@@ -15,6 +15,12 @@
   border-right: solid 2px rgb(255, 255, 255);
   transform-origin: 0% 0%;
 }
+.card0 {
+  translate: -200px;
+}
+.card1 {
+  translate: 200px;
+}
 
 /*TODO Надо сшить нормально перход из go в card и обратно */
 .on {

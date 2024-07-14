@@ -21,7 +21,7 @@ export default function LoL({}: Props) {
   const [opacity, setOpacity] = React.useState(cssLoL.opacity1);
 
   React.useEffect(() => {
-    if (page === 'menu') {
+    if (page === 'menu' || page === 'session') {
       setOpacity(cssLoL.opacity0);
     } else {
       setTimeout(() => {
@@ -30,7 +30,6 @@ export default function LoL({}: Props) {
     }
   }, [page]);
 
-  // console.log('Lol');
   const [data, setData] = React.useState<string[] | null>(null);
   const [listNames, setlistNames] = React.useState<string[] | null>(null);
   React.useEffect(() => {
@@ -52,15 +51,15 @@ export default function LoL({}: Props) {
   return (
     <>
       <Btnback />
-      <div className={cssLoL.containerLol + ' ' + (page !== 'le' ? cssLoL.lol : cssLoL.le)}>
+      <div
+        className={cssLoL.containerLol + ' ' + (page !== 'le' ? cssLoL.lol : cssLoL.le) + ' ' + opacity}
+      >
         <ForkLoL />
 
         <div className={cssLoL.scrollFade}></div>
 
         <section
-          className={
-            cssLoL.scrollWrap + ' ' + (page !== 'le' ? opacity + ' ' + 'scrollWrapOn' : 'scrollWrapOff')
-          }
+          className={cssLoL.scrollWrap + ' ' + (page !== 'le' ? 'scrollWrapOn' : 'scrollWrapOff')}
         >
           <ListOfList parrent={'lol'}></ListOfList>
 

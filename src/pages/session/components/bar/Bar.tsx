@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useUiState } from '../../../../zustand';
+import { useUiState, zustandData } from '../../../../zustand';
 
 import cssBar from './Bar.module.css';
 
@@ -8,6 +8,8 @@ type Props = {};
 
 export default function Bar({}: Props) {
   const { page, setPage } = useUiState();
+  const { dataZus } = zustandData();
+  // console.log(dataZus[0].words.length);
 
   return (
     <>

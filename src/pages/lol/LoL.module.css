@@ -41,9 +41,13 @@
 
 .opacity0 {
   display: none;
+  user-select: none;
+  pointer-events: none;
 }
 .opacity1 {
   display: block;
+  user-select: all;
+  pointer-events: all;
 }
 
 .scrollWrap {
