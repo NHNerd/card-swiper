@@ -6,11 +6,16 @@ import Go from './components/go/Go.tsx';
 import ListOfList from '../../components/listOfList/ListOfList.tsx';
 import BtnArrow from '../../components/btnArrow/BtnArrow.tsx';
 import { useUiState, zustandData } from '../../zustand.ts';
+import listsOrderRefresh from '../../business/listsRefresh.ts';
+import debounce from '../../handlers/throttle.ts';
 
 import '../../components/container.css';
 import cssMenu from './Menu.module.css';
 
 type Props = {};
+
+// wrapping "refreshing allLists in localstorage" into debounce
+const debounceListsOrderRefresh = debounce(listsOrderRefresh, 500);
 
 export default function Menu({}: Props) {
   const { page, setPage } = useUiState();
@@ -30,6 +35,9 @@ export default function Menu({}: Props) {
     }
     newData.unshift(...delited);
     setDataZus(newData);
+
+    //refreshing allLists in localstorage & MD
+    debounceListsOrderRefresh(newData);
   }
   function btnArrowRightHndlr() {
     const delited = dataZus.splice(0, 1);
@@ -41,6 +49,9 @@ export default function Menu({}: Props) {
     }
     newData.push(...delited);
     setDataZus(newData);
+
+    //refreshing allLists in localstorage & MD
+    debounceListsOrderRefresh(newData);
   }
 
   React.useEffect(() => {
@@ -72,6 +83,7 @@ export default function Menu({}: Props) {
         <ListOfList parrent='menu'>
           <BtnArrow onClick={btnArrowTopHndlr} direct='top' />
           <BtnArrow onClick={btnArrowLeftHndlr} direct='left' />
+          {/* <BtnArrow onClick={debounce(testtt, 1000)} direct='left' /> */}
           <BtnArrow onClick={btnArrowRightHndlr} direct='right' />
         </ListOfList>
       </div>

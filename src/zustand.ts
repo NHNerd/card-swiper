@@ -18,8 +18,8 @@ const noData = [
       {
         _id: '668054375c25ed492d736ff1',
         listId: '668053cf5c25ed492d736fee',
-        word: 'ampersand',
-        translate: '&',
+        word: 'Empty word 0',
+        translate: 'пустое слово 0',
         createdDate: '2024-06-29T18:36:39.278Z',
         correct: 0,
         wrong: 0,
@@ -29,8 +29,8 @@ const noData = [
       {
         _id: '6681a0a9ac0e7df8d0815c68',
         listId: '668053cf5c25ed492d736fee',
-        word: 'comma',
-        translate: 'запятая',
+        word: 'Empty word 1',
+        translate: 'пустое слово 1',
         createdDate: '2024-06-30T18:15:05.537Z',
         correct: 0,
         wrong: 0,
@@ -49,7 +49,6 @@ const noData = [
 //     set({ dataZus: data });
 //   },
 // }));
-console.log();
 
 export const zustandData = create((set) => ({
   dataZus: noData, // Изначально данные отсутствуют

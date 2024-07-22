@@ -1,3 +1,5 @@
+import listsRefresh from '../../business/listsRefresh';
+
 export const changeOrderHndlr = (props: any) => {
   if (props.order === 0) return;
 
@@ -17,4 +19,7 @@ export const changeOrderHndlr = (props: any) => {
   // Add choisen element to start
   dataNew.unshift(...delited);
   props.setDataZus(dataNew);
+
+  //refreshing allLists in localstorage & MD
+  listsRefresh(dataNew);
 };

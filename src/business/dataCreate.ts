@@ -37,7 +37,7 @@ async function dataCrate(email: string) {
     currentList.words = Allwords[piece];
   });
 
-  console.log('B U S I N E S S');
+  console.log('B U S I N E S S: data create');
   return data;
 }
 
