@@ -12,6 +12,12 @@
 * {
   -webkit-tap-highlight-color: transparent; /* Для браузеров на основе WebKit, таких как Safari & Chrome */
   overscroll-behavior: none; /* off down swipe refrash */
+
+  /*disable text highlighting */
+  user-select: none; /* modern browsers */
+  -webkit-user-select: none; /*  Safari */
+  -moz-user-select: none; /*  Firefox */
+  -ms-user-select: none; /*  IE/Edge */
 }
 
 /* flop animation */
