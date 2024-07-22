@@ -33,21 +33,38 @@ export default function Card({ ContainerSessionRef }: Props) {
 
   return (
     <>
-      {/* word3  */}
+      {/* word2  */}
+      <DnD ContainerSessionRef={ContainerSessionRef}>
+        <button
+          className={
+            cssCard.card +
+            ' ' +
+            ' ' +
+            cssCard.card2 +
+            ' ' +
+            (page === 'session' ? cssCard.on : cssCard.off)
+          }
+        >
+          {'statistic statistic'}
+        </button>
+      </DnD>
 
       {/* word1 dnd */}
-      <button
-        className={
-          cssCard.card +
-          ' ' +
-          ' ' +
-          cssCard.card1 +
-          ' ' +
-          (page === 'session' ? cssCard.on : cssCard.off)
-        }
-      >
-        {gameWords[1] ? gameWords[1].word + ' | card1' : 'nothing | card1'}
-      </button>
+      <DnD ContainerSessionRef={ContainerSessionRef}>
+        <button
+          className={
+            cssCard.card +
+            ' ' +
+            ' ' +
+            cssCard.card1 +
+            ' ' +
+            (page === 'session' ? cssCard.on : cssCard.off)
+          }
+        >
+          {gameWords[1] ? gameWords[1].word + ' | card1' : 'nothing | card1'}
+        </button>
+      </DnD>
+
       {/* word0 dnd */}
       <DnD ContainerSessionRef={ContainerSessionRef}>
         <button

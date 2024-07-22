@@ -11,10 +11,10 @@ type Props = {
 export default function Fork({ isOn, leftChild, rightChild }: Props) {
   return (
     <section className={cssFork.container + ' ' + (isOn ? cssFork.on : cssFork.off)}>
-      <div className={cssFork.left}> {leftChild}</div>
+      <button className={cssFork.left}> {leftChild}</button>
 
       <div className={cssFork.line} />
-      <div className={cssFork.right}>{rightChild}</div>
+      <button className={cssFork.right}>{rightChild}</button>
     </section>
   );
 }

@@ -16,10 +16,14 @@
   transform-origin: 0% 0%;
 }
 .card0 {
-  translate: -200px;
+  /* translate: 150px 50px; */
+  rotate: 15deg;
+  opacity: 0.9;
 }
 .card1 {
-  translate: 200px;
+  /* translate: 75px 25px; */
+  rotate: 5deg;
+  opacity: 0.9;
 }
 
 /*TODO Надо сшить нормально перход из go в card и обратно */

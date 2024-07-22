@@ -100,11 +100,15 @@
   line-height: 1.5; /* it's standard settings in Chrome, we set just in case */
   font-weight: 400;
 
-  color-scheme: light dark;
+  /* color-scheme: light dark; */
+  /* color-scheme: dark; */
 
+  /* turn off auto text weight  */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+  /* antialiasing  */
   -webkit-font-smoothing: antialiased;
+  /* like antialiasing  */
   -moz-osx-font-smoothing: grayscale;
 }
 
@@ -142,9 +146,16 @@ h3 {
   font-size: max(1.8dvh, 14px);
 }
 
+div {
+  color: #d9d9d9;
+}
+
 button {
   all: unset;
   cursor: pointer;
+}
+button:hover {
+  background-color: rgba(255, 0, 0, 0.3);
 }
 
 /* button:focus,

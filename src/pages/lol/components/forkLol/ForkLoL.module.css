@@ -9,6 +9,7 @@
   background-repeat: no-repeat;
   background-size: 32%;
   background-position: center;
+  z-index: 1;
 }
 .search {
   background-image: url('/buttons/search.svg');

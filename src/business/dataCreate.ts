@@ -9,6 +9,7 @@ const data: [] = [];
 async function dataCrate(email: string) {
   // get user Id by email
   const userId = localStorage.getItem('userId') || (await getUserId(email));
+
   // get all lists Id by user Id
   const allLists = JSON.parse(localStorage.getItem('allLists')) || (await getAllLists(userId));
 
