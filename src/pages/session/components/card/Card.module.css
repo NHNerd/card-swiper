@@ -15,16 +15,14 @@
   border-right: solid 2px rgb(255, 255, 255);
   transform-origin: 0% 0%;
 }
-.card0 {
-  /* translate: 150px 50px; */
-  rotate: 15deg;
+/* .card0 {
+  rotate: -3deg;
   opacity: 0.9;
 }
 .card1 {
-  /* translate: 75px 25px; */
   rotate: 5deg;
   opacity: 0.9;
-}
+} */
 
 /*TODO Надо сшить нормально перход из go в card и обратно */
 .on {

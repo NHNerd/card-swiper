@@ -1,77 +1,73 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { DnDProps, posType } from './dndProps';
-// import { onMouseDown, onMouseUp, onMouseMove } from './pcEvents';
 
 const DnD: React.FC<DnDProps> = ({ children, ContainerSessionRef }) => {
-  const dndRef = React.useRef<HTMLDivElement>(null);
-  const isClicked = React.useRef<boolean>(false);
-  const [coordsDown, setCoordsDown] = React.useState<posType>({ x: 0, y: 0 });
-  const [cardCurrentPos, setCardCurrentPos] = React.useState<posType>({ x: 0, y: 0 });
-  const [cardDiffPrev, setCardDiffPrev] = React.useState<posType>({ x: 0, y: 0 });
+  const dndRef = React.useRef<HTMLDivElement | null>(null);
+  const isClicked = React.useRef<boolean | null>(false);
+  const coordsDown = React.useRef<posType>({ x: 0, y: 0 });
+  const croodsPrevSum = React.useRef<posType>({ x: 0, y: 0 });
 
-  //! Stupid
-  let card = dndRef.current;
-  let containerSession = ContainerSessionRef.current;
-  React.useEffect(() => {
-    card = dndRef.current;
-    containerSession = ContainerSessionRef.current;
-
-    card.addEventListener('mousedown', handleMouseDown);
-  }, []);
-
+  // ⬆️ down ⬇️
   const handleMouseDown = (e: MouseEvent) => {
+    e.preventDefault();
     isClicked.current = true;
-
-    setCoordsDown({ x: e.clientX, y: e.clientY });
-    setCardCurrentPos({ x: e.clientX, y: e.clientY });
+    coordsDown.current = { x: e.clientX, y: e.clientY };
   };
+  // ⬆️ up ⬆️
   const handleMouseUp = (e: MouseEvent) => {
+    e.preventDefault();
     isClicked.current = false;
-
-    const diff = { x: cardCurrentPos.x - coordsDown.x, y: cardCurrentPos.y - coordsDown.y };
-    setCardDiffPrev((prev) => ({ x: prev.x + diff.x, y: prev.y + diff.y }));
+    const croodsFromZero = { x: e.clientX - coordsDown.current.x, y: e.clientY - coordsDown.current.y };
+    croodsPrevSum.current = {
+      x: croodsPrevSum.current.x + croodsFromZero.x,
+      y: croodsPrevSum.current.y + croodsFromZero.y,
+    };
   };
+  // ⬅️➡️  move ⬅️➡️
   const handleMouseMove = (e: MouseEvent) => {
+    e.preventDefault();
     if (!isClicked.current) return;
+    const croodsFromZero = { x: e.clientX - coordsDown.current.x, y: e.clientY - coordsDown.current.y };
+    const result = {
+      x: croodsFromZero.x + croodsPrevSum.current.x,
+      y: croodsFromZero.y + croodsPrevSum.current.y,
+    };
 
-    setCardCurrentPos({ x: e.clientX, y: e.clientY });
+    // Style
+    //! problem with Y element pos
+    const issueCorrectY = ContainerSessionRef.current?.clientHeight * 0.5;
+    dndRef.current.style.transform = `translate(${result.x}px, ${issueCorrectY + result.y}px)`;
   };
+  //  ❌  move leave ❌
   const handleMouseLeave = (e: MouseEvent) => {
+    e.preventDefault();
     if (!isClicked.current) return;
-
     isClicked.current = false;
-    const diff = { x: cardCurrentPos.x - coordsDown.x, y: cardCurrentPos.y - coordsDown.y };
-    setCardDiffPrev((prev) => ({ x: prev.x + diff.x, y: prev.y + diff.y }));
+    const croodsFromZero = { x: e.clientX - coordsDown.current.x, y: e.clientY - coordsDown.current.y };
+    croodsPrevSum.current = {
+      x: croodsPrevSum.current.x + croodsFromZero.x,
+      y: croodsPrevSum.current.y + croodsFromZero.y,
+    };
   };
 
   React.useEffect(() => {
-    if (!card || !containerSession) return;
+    if (!dndRef.current || !ContainerSessionRef.current) return;
 
-    const diff = { x: cardCurrentPos.x - coordsDown.x, y: cardCurrentPos.y - coordsDown.y };
-    const result = { x: diff.x + cardDiffPrev.x, y: diff.y + cardDiffPrev.y };
+    // add listers
+    dndRef.current.addEventListener('mousedown', handleMouseDown);
+    dndRef.current.addEventListener('mouseup', handleMouseUp);
+    ContainerSessionRef.current.addEventListener('mousemove', handleMouseMove);
+    dndRef.current.addEventListener('mouseleave', handleMouseLeave);
 
-    //! problem with Y (without: translate(-50%, -50%))
-    card.style.transform = `translate(-50%, -50%) translate(${
-      containerSession?.clientWidth * 0.5 + result.x
-    }px, ${containerSession?.clientHeight * 0.5 + result.y}px)`;
-
-    //! SUPER PROBLEM
-    //! listners adds evry "move time"
-    // listers
-    card.addEventListener('mousedown', handleMouseDown);
-    card.addEventListener('mouseup', handleMouseUp);
-    card.addEventListener('mousemove', handleMouseMove);
-    containerSession?.addEventListener('mouseleave', handleMouseLeave);
-
-    // clearing listers
+    // remove listers
     return () => {
-      card.removeEventListener('mousedown', handleMouseDown);
-      card.removeEventListener('mouseup', handleMouseUp);
-      card.removeEventListener('mousemove', handleMouseMove);
-      containerSession?.removeEventListener('mouseleave', handleMouseLeave);
+      dndRef.current?.removeEventListener('mousedown', handleMouseDown);
+      dndRef.current?.removeEventListener('mouseup', handleMouseUp);
+      ContainerSessionRef.current?.removeEventListener('mousemove', handleMouseMove);
+      dndRef.current?.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, [cardCurrentPos]);
+  }, []);
 
   return <div ref={dndRef}>{children}</div>;
 };
