@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { DnDProps, posType } from './dndProps';
 
-const DnD: React.FC<DnDProps> = ({ children, ContainerSessionRef }) => {
+const DnD: React.FC<DnDProps> = ({ children, ContainerSessionRef, gameWords, setGameWords }) => {
   const dndRef = React.useRef<HTMLDivElement | null>(null);
   const isClicked = React.useRef<boolean | null>(false);
 
@@ -11,8 +11,29 @@ const DnD: React.FC<DnDProps> = ({ children, ContainerSessionRef }) => {
 
   const [autoCloser, setAutoCloser] = React.useState<posType>({ x: 0, y: 0 });
   const RAFid = React.useRef<number | null>(null);
+  const isAnswer = React.useRef<string>('return');
 
   const [result, setResult] = React.useState<posType>({ x: 0, y: 0 });
+
+  React.useEffect(() => {
+    if (!dndRef.current || !ContainerSessionRef.current) return;
+
+    // add listers
+    dndRef.current.addEventListener('mousedown', handleMouseDown);
+    dndRef.current.addEventListener('mouseup', handleMouseUp);
+    ContainerSessionRef.current.addEventListener('mousemove', handleMouseMove);
+    dndRef.current.addEventListener('mouseleave', handleMouseLeave);
+
+    // remove listers
+    return () => {
+      dndRef.current?.removeEventListener('mousedown', handleMouseDown);
+      dndRef.current?.removeEventListener('mouseup', handleMouseUp);
+      ContainerSessionRef.current?.removeEventListener('mousemove', handleMouseMove);
+      dndRef.current?.removeEventListener('mouseleave', handleMouseLeave);
+
+      cancelAnimationFrame(RAFid.current);
+    };
+  }, []);
 
   // ⬆️ down ⬇️
   const handleMouseDown = (e: MouseEvent) => {
@@ -73,63 +94,71 @@ const DnD: React.FC<DnDProps> = ({ children, ContainerSessionRef }) => {
     RAFid.current = requestAnimationFrame(loop);
   };
 
+  // 🎮🕹️🎯
   const loop = () => {
     if (croodsPrevSum.current.x !== 0) {
-      const step: number = 0.01;
+      const step: number = 0.1;
 
       // console.log('autoCloser = ' + autoCloser.x + ' | ' + 'prev = ' + croodsPrevSum.current.x);
+      if (
+        Math.max(ContainerSessionRef.current?.clientWidth * 0.15, 50) < Math.abs(croodsPrevSum.current.x)
+      ) {
+        setAutoCloser((prev) => ({
+          x: prev.x + croodsPrevSum.current.x * step,
+          y: prev.y + croodsPrevSum.current.y * step,
+        }));
 
-      setAutoCloser((prev) => ({
-        x: prev.x - croodsPrevSum.current.x * step,
-        y: prev.y - croodsPrevSum.current.y * step,
-      }));
+        if (Math.max(croodsPrevSum.current.x, 0)) {
+          isAnswer.current = 'yes';
+        } else {
+          isAnswer.current = 'no';
+        }
+      } else {
+        isAnswer.current = 'return';
+        setAutoCloser((prev) => ({
+          x: prev.x - croodsPrevSum.current.x * step,
+          y: prev.y - croodsPrevSum.current.y * step,
+        }));
+      }
     }
-
     RAFid.current = requestAnimationFrame(loop);
   };
 
-  //* remove
-  //! 1.02 it's way around :)
-  if (Math.abs(croodsPrevSum.current.x) / Math.abs(autoCloser.x) <= 1.02) {
-    cancelAnimationFrame(RAFid.current);
-
-    // Clear Full
-    coordsDown.current = { x: 0, y: 0 };
-    croodsPrevSum.current = {
-      x: 0,
-      y: 0,
-    };
-    setAutoCloser({ x: 0, y: 0 });
-    setResult({ x: 0, y: 0 });
-  }
-
   React.useEffect(() => {
-    if (!dndRef.current || !ContainerSessionRef.current) return;
-
-    // add listers
-    dndRef.current.addEventListener('mousedown', handleMouseDown);
-    dndRef.current.addEventListener('mouseup', handleMouseUp);
-    ContainerSessionRef.current.addEventListener('mousemove', handleMouseMove);
-    dndRef.current.addEventListener('mouseleave', handleMouseLeave);
-
-    // remove listers
-    return () => {
-      dndRef.current?.removeEventListener('mousedown', handleMouseDown);
-      dndRef.current?.removeEventListener('mouseup', handleMouseUp);
-      ContainerSessionRef.current?.removeEventListener('mousemove', handleMouseMove);
-      dndRef.current?.removeEventListener('mouseleave', handleMouseLeave);
-
-      cancelAnimationFrame(RAFid.current);
-    };
-  }, []);
-
-  React.useEffect(() => {
-    // Style
+    //* Style
     //! problem with Y element pos(0 = top(0))
     const issueCorrectY = ContainerSessionRef.current?.clientHeight * 0.5;
     dndRef.current.style.transform = `translate(${result.x + autoCloser.x}px, ${
       issueCorrectY + result.y + autoCloser.y
     }px)`;
+
+    //*  Clear Full
+    //! 1.02 it's way around :)
+    if (
+      (isAnswer.current === 'return' &&
+        Math.abs(croodsPrevSum.current.x) / Math.abs(autoCloser.x) <= 1.02) ||
+      (isAnswer.current !== 'return' &&
+        Math.abs(autoCloser.x) > ContainerSessionRef.current?.clientWidth * 0.5)
+    ) {
+      if (isAnswer.current === 'yes') {
+        console.log('Y E S');
+
+        const newGameWords = gameWords.slice(1);
+        setGameWords(newGameWords);
+      } else if (isAnswer.current === 'no') {
+        console.log('N O');
+      }
+
+      cancelAnimationFrame(RAFid.current);
+
+      coordsDown.current = { x: 0, y: 0 };
+      croodsPrevSum.current = {
+        x: 0,
+        y: 0,
+      };
+      setAutoCloser({ x: 0, y: 0 });
+      setResult({ x: 0, y: 0 });
+    }
   }, [result, autoCloser]);
 
   return <div ref={dndRef}>{children}</div>;

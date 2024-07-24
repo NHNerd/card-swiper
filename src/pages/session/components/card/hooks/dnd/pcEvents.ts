@@ -1,3 +1,5 @@
+//? Trash
+
 export const onMouseDown = (e: MouseEvent, isClicked, setCoordsDown) => {
   isClicked.current = true;
 

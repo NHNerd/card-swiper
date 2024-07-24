@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import Menu from './pages/menu/Menu.tsx';
 import LoL from './pages/lol/LoL.tsx';

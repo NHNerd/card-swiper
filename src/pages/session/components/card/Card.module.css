@@ -4,7 +4,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   height: 54dvh;
-  line-height: 54dvh;
+  /* line-height: 54dvh; */
   aspect-ratio: 0.64;
   background-color: var(--main-color);
   border-radius: 20px;
@@ -14,6 +14,7 @@
   border-left: solid 2px rgb(255, 255, 255);
   border-right: solid 2px rgb(255, 255, 255);
   transform-origin: 0% 0%;
+  white-space: pre-line;
 }
 /* .card0 {
   rotate: -3deg;
