@@ -173,6 +173,7 @@ input {
   outline: none; /* Удаление обводки при фокусе */
   appearance: none; /* Удаление стандартных стилей браузера для input */
   color: var(--main-color);
+  text-align: center;
   /* filter: drop-shadow(rgba(255, 255, 255, 1) 0 0 6px); */
 }
 
