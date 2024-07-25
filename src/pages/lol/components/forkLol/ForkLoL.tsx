@@ -12,11 +12,24 @@ export default function ForkLoL({}: Props) {
 
   const { page } = useUiState();
 
+  const addHndlr = () => {
+    console.log('LoL Add');
+  };
+
+  const searchHndlr = () => {
+    console.log('LoL search');
+  };
+
+  // console.log(`lol: ${page == 'lol' ? true : false}`);
+
   return (
     <Fork
-      isOn={page !== 'le' ? true : false}
+      isOn={page == 'lol' ? true : false}
       leftChild={<div className={cssForkLoL.search}> </div>}
-      rightChild={<div className={cssForkLoL.add}></div>}
+      rightChild={<div className={cssForkLoL.add}>{/* <input className='test'></input> */}</div>}
+      addHndlr={addHndlr}
+      searchHndlr={searchHndlr}
+      parrent={'lol'}
     ></Fork>
   );
 }

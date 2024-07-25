@@ -16,11 +16,16 @@
 .container {
   position: relative;
   height: 10dvh;
-  width: 100%;
+  width: 70%;
+  min-width: 200px;
+  max-width: 600px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   justify-content: end;
   align-items: center;
+  /* background-color: rgba(255, 192, 203, 0.416); */
 }
 
 .containerFooter {
@@ -66,6 +71,40 @@
   /* background-color: rgba(0, 128, 0, 0.329); */
 }
 
+.focus {
+  width: 84%;
+  transform: scale(1);
+  transition: transform 0.5s, width 0.5s, opacity 0.5s;
+}
+
+.defocus {
+  width: 12%;
+  transform: scale(0.8);
+  opacity: 0.7;
+  transition: transform 0.5s, width 0.5s, opacity 0.5s;
+}
+.blur {
+  transition: transform 0.5s, width 0.5s, opacity 0.5s;
+}
+
+.inputButton {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  font-size: 32px;
+  text-align: center;
+
+  transition: opacity 0.45s, transform 0.45s;
+}
+
+.inputButtonOff {
+  user-select: none;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.45s, transform 0.45s;
+}
+
 .line {
   padding: 1dvh 0;
   position: absolute;
@@ -78,4 +117,20 @@
   background: linear-gradient(to bottom, transparent 0%, #ffffff59 50%, transparent 100%);
   /* background-color: red; */
   z-index: 2;
+}
+
+.lineL {
+  left: 86.6%;
+  transform: translate(0, 1dvh) scaleY(0.6);
+  opacity: 0.7;
+  transition: 0.5s;
+}
+.lineR {
+  left: 13.4%;
+  transform: translate(0, 1dvh) scaleY(0.6);
+  opacity: 0.4;
+  transition: 0.5s;
+}
+.lineCenter {
+  transition: 0.5s;
 }

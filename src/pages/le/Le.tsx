@@ -15,7 +15,9 @@ export default function Le({}: Props) {
 
   return (
     <>
-      <div className={cssLe.warpLe + (page === 'le' || page === 'lol' ? null : ' ' + cssLe.opacity0)}>
+      {/* <div className={cssLe.warpLe}> */}
+      {/* <div className={cssLe.warpLe + ' ' + cssLe.opacity0}> */}
+      <div className={cssLe.warpLe + ' ' + (page === 'le' ? cssLe.opacity1 : cssLe.opacity0)}>
         <ListName />
         <ForkLoL />
 

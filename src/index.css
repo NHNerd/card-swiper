@@ -163,6 +163,19 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 } */
 
+input {
+  border: none; /* Удаление границы */
+  background: none; /* Удаление фонового цвета */
+  padding: 0; /* Удаление отступов */
+  margin: 0; /* Удаление внешних отступов */
+  font: inherit; /* Унаследование шрифта родительского элемента */
+  box-shadow: none; /* Удаление теней */
+  outline: none; /* Удаление обводки при фокусе */
+  appearance: none; /* Удаление стандартных стилей браузера для input */
+  color: var(--main-color);
+  /* filter: drop-shadow(rgba(255, 255, 255, 1) 0 0 6px); */
+}
+
 /* Ширина и цвет фона скроллбара */
 ::-webkit-scrollbar {
   width: 6px;
