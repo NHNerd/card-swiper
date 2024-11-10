@@ -1,14 +1,31 @@
 .back {
+  padding: var(--btn-overscan);
   position: fixed;
   top: 20px;
   left: 20px;
   width: 2dvh;
   height: 2dvh;
-  border-top: solid 2px red;
-  border-left: solid 2px red;
+  /* background-color: rgba(172, 255, 47, 0.219); */
   transform: rotate(-45deg);
-  /* background-color: green; */
+
   z-index: 1;
+  transition: scale 0.5s, opacity 0.5s, transform 0.5s;
+}
+
+.off {
+  scale: 0.2;
+  opacity: 0;
+  transform: rotate(-700deg);
+}
+
+.image {
+  position: fixed;
+  inset: var(--btn-overscan);
+  border-top: solid 2px var(--main-color);
+  border-left: solid 2px var(--main-color);
+  border-radius: 10%;
+  pointer-events: none;
+  user-select: none;
 }
 
 /* .back {

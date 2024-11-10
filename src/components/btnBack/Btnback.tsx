@@ -11,11 +11,13 @@ const Btnback = (props: Props) => {
 
   return (
     <button
-      className={sccBtnback.back}
+      className={`${sccBtnback.back} ${page === 'le' || page === 'edit' ? '' : sccBtnback.off}`}
       onClick={() => {
         setPage('lol');
       }}
-    ></button>
+    >
+      <div className={sccBtnback.image}></div>
+    </button>
   );
 };
 

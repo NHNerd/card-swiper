@@ -1,0 +1,11 @@
+.btn {
+  /* position: fixed; */
+  padding: 10px 30px;
+  width: fit-content;
+  height: fit-content;
+  background-color: rgba(245, 0, 0, 0);
+
+  border-left: 1px solid rgb(129, 129, 129);
+  border-right: 1px solid rgb(129, 129, 129);
+  border-radius: 8px;
+}

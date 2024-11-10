@@ -5,7 +5,7 @@
   right: 20px;
   height: 30px;
   width: 30px;
-  background-color: black;
+  /* background-color: black; */
 }
 
 .line,
@@ -13,7 +13,7 @@
 .line::after {
   position: absolute;
   height: 2px;
-  width: 30px;
+  width: 22px;
   background-color: #d9d9d9;
   border-radius: 4px;
   border-radius: 50%;
@@ -24,7 +24,7 @@
   transition: all 0.25s linear;
 }
 
-.line::after {
+.line:not(.menu)::after {
   transform: translateY(0) rotate(-90deg);
 }
 .line:not(.menu)::before {
@@ -35,9 +35,9 @@
   transform: translateY(0) rotate(-45deg);
 }
 
-/* .line.Menu::after {
-  transform: translateY(-7px) rotate(0);
+.line.menu::after {
+  transform: translateY(-7px) rotate(180deg);
 }
-.line.Menu::before {
+.line.menu::before {
   transform: translateY(7px) rotate(0);
-} */
+}

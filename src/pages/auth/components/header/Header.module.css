@@ -1,0 +1,34 @@
+.text {
+  padding-top: 3.2dvh;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) rotate(-10deg);
+  white-space: nowrap;
+}
+.stroke1 {
+  position: relative;
+  width: fit-content;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.5;
+  font-size: 3dvh;
+  transition: 1s;
+}
+
+.stroke2 {
+  position: relative;
+  width: fit-content;
+  display: flex;
+  flex-direction: stroke;
+  font-size: 4dvh;
+}
+
+.icon {
+  height: fit-content;
+  width: fit-content;
+  color: rgba(0, 0, 0, 0);
+  background-image: url('/icons/icon-16x16.svg');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: center;
+}

@@ -1,3 +1,14 @@
 .fontSize {
   font-size: max(3.2dvh, 26px);
 }
+
+.empty {
+  position: fixed;
+  height: fit-content;
+  width: fit-content;
+  font-size: 36px;
+  opacity: 0.5;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}

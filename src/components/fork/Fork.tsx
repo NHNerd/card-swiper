@@ -2,6 +2,11 @@ import React, { useEffect } from 'react';
 
 import cssFork from './Fork.module.css';
 
+import { putNewList } from '../../axios/list';
+import addList from '../../business/list/addList.ts';
+import dataCrate from '../../business/buildClientDate.ts';
+import { zustandData } from '../../zustand.ts';
+
 type Props = {
   isOn: boolean;
   leftChild?: React.ReactNode;
@@ -11,6 +16,9 @@ type Props = {
 };
 
 export default function Fork({ isOn, leftChild, rightChild, actionStatus, setActionStatus }: Props) {
+  const { dataZus, setDataZus } = zustandData();
+  const dataZusRef = React.useRef(dataZus);
+
   const pevButton = React.useRef<'non' | 'r' | 'l'>('non');
 
   const buttonRightRef = React.useRef<HTMLButtonElement>(null);
@@ -27,12 +35,6 @@ export default function Fork({ isOn, leftChild, rightChild, actionStatus, setAct
   const hndlrSetInpurR = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValueR(event.target.value);
   };
-
-  // useEffect(() => {
-  //   if (inputValueL && actionStatus.l) {
-  //     console.log('LLLLLLLLLLLLL');
-  //   }
-  // }, [inputValueL]);
 
   const clickHndlr = (e: Event) => {
     if (buttonRightRef.current?.contains(e.target)) {
@@ -51,7 +53,26 @@ export default function Fork({ isOn, leftChild, rightChild, actionStatus, setAct
     } else if (buttonLeftRef.current?.contains(e.target)) {
       if (pevButton.current === 'l') return;
       if (inputRightRef.current?.value && pevButton.current !== 'non') {
-        console.log('Add list');
+        //! DB and LS is correct!
+        // DB
+        putNewList(inputRightRef.current?.value);
+        // LS
+        addList(inputRightRef.current?.value);
+
+        //TODO 11.10.2024 i need get data only from LS
+        // dataZusRef.current.map((item) => {
+        //   item.order = item.order + 1;
+        // });
+        // dataZusRef.current.unshift({
+        //   gameCount: 12,
+        //   listName: inputRightRef.current?.value,
+        //   order: 0,
+        //   wordCount: 0,
+        // });
+
+        // State
+        setDataZus(dataZusRef.current);
+
         return;
       }
       setActionStatus({ l: true, r: false });

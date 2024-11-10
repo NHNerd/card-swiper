@@ -92,6 +92,8 @@
   --color2: #d9d9d983;
   --main-color: #d9d9d9;
 
+  --btn-overscan: 10px;
+
   --list-top-fade-padding: 4vh;
   --listLe-top-fade-padding: 2vh;
 
@@ -155,7 +157,7 @@ button {
   cursor: pointer;
 }
 /* button:hover {
-  background-color: rgba(255, 0, 0, 0.3);
+  animation: jetter-buttom 0.4s linear infinite;
 } */
 
 /* button:focus,
@@ -207,6 +209,12 @@ input {
   );
 }
 
+.off {
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
 @media only screen and (max-width: 480px) {
   ::-webkit-scrollbar {
     width: 1px;
@@ -223,5 +231,59 @@ input {
   }
   button {
     background-color: #f9f9f9;
+  }
+}
+
+.jetter-attntion {
+  animation: jetter-attntion 0.5s ease-out 1;
+}
+@keyframes jetter-attntion {
+  0% {
+    scale: 1;
+  }
+  20% {
+    rotate: -15deg;
+  }
+  40% {
+    rotate: 20deg;
+  }
+  50% {
+    scale: 1.4;
+  }
+  60% {
+    rotate: -20deg;
+  }
+  80% {
+    rotate: 15deg;
+  }
+  100% {
+    scale: 1;
+  }
+}
+.buttom-jitter:hover {
+  animation: jetter-buttom 0.4s linear infinite;
+}
+@keyframes jetter-buttom {
+  0% {
+    scale: 1;
+  }
+  20% {
+    rotate: -2deg;
+  }
+  40% {
+    rotate: 1deg;
+  }
+  50% {
+    opacity: 0.94;
+    scale: 1.02;
+  }
+  60% {
+    rotate: -1deg;
+  }
+  80% {
+    rotate: 2deg;
+  }
+  100% {
+    scale: 1;
   }
 }

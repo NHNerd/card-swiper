@@ -16,7 +16,7 @@ export default function Bar({ gameWords }: Props) {
 
   React.useEffect(() => {
     // setBarProcent();
-    barFillRef.current.style.right = `${(100 / dataZus[0].words.length) * gameWords.length}%`;
+    barFillRef.current.style.right = `${(100 / dataZus[0].words?.length) * gameWords.length}%`;
   }, [gameWords]);
 
   // console.log(dataZus[0].words.length);
@@ -25,7 +25,7 @@ export default function Bar({ gameWords }: Props) {
     <>
       <div className={cssBar.bar + ' ' + (page === 'session' ? cssBar.on : cssBar.off)}>
         <div className={cssBar.percent}>
-          {dataZus[0].words.length - gameWords.length + '/' + dataZus[0].words.length}
+          {dataZus[0]?.words?.length - gameWords?.length + '/' + dataZus[0]?.words?.length}
         </div>
         <div ref={barFillRef} className={cssBar.fill}>
           <div className={cssBar.point}></div>

@@ -1,7 +1,11 @@
-import { putRefreshOrders } from '../axios/list';
+import { putRefreshOrders } from '../../axios/list';
 
 async function listsOrderRefresh(data) {
   const allListsOld = JSON.parse(localStorage.getItem('allLists'));
+  if (!allListsOld) {
+    console.log(`You don't have lsits`);
+    return;
+  }
   const allListsNew = [];
 
   let lstsLength: number = data.length - 1;
@@ -21,7 +25,7 @@ async function listsOrderRefresh(data) {
   // refresh localstorage
   localStorage.setItem('allLists', JSON.stringify(allListsNew));
 
-  // refresh BD
+  // refresh DB
   putRefreshOrders(allListsNew);
 }
 

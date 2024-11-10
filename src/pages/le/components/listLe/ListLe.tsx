@@ -30,6 +30,11 @@ export default function ListLe({ children, parrent }: Props) {
     return null; // Можно вернуть заглушку или пустой контент в случае отсутствия данных
   }
 
+  //TODO что это за залупа?
+  if (dataZus[0]?.words[0]?.word === 'Empty word 0') {
+    return <div className={cssListLe.empty}>Empty :(</div>;
+  }
+
   return dataZus[orderListEditZus].words.map((word: [string, ListTS], index: number) => (
     <section
       key={index}

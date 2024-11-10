@@ -1,0 +1,13 @@
+.settingsBg {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(12px);
+  transition: 0.5s;
+}
+
+.off {
+  opacity: 0;
+  user-select: none;
+  pointer-events: none;
+}

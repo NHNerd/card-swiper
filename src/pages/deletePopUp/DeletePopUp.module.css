@@ -1,0 +1,74 @@
+.blurBG {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(21px);
+  transition: opacity 0.5s;
+  z-index: 5;
+
+  white-space: pre-line;
+  text-align: center;
+}
+
+.blurBGOff {
+  opacity: 0;
+  user-select: none;
+  pointer-events: none;
+}
+
+.main {
+  position: fixed;
+  height: inherit;
+  width: inherit;
+  padding: 10px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* background-color: rgba(255, 255, 0, 0.288); */
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 76dvh;
+  width: 100dvw;
+  /* background-color: rgba(255, 192, 203, 0.082); */
+}
+
+.text {
+  opacity: 70%;
+}
+.wordsNum {
+  padding-left: 10px;
+}
+.textHorizont {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.leftBtn {
+  position: fixed;
+  left: 20dvw;
+  width: fit-content;
+  height: fit-content;
+}
+
+.rightBtn {
+  position: fixed;
+  right: 20dvw;
+  width: fit-content;
+  height: fit-content;
+}
+.centerBtn {
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: fit-content;
+  height: fit-content;
+}

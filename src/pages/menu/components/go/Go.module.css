@@ -3,7 +3,7 @@
   --min-size: 164px;
 }
 
-#container {
+.container {
   position: relative;
   top: 50%;
   left: 50%;
@@ -24,12 +24,12 @@
 }
 
 @media (max-height: 529px) {
-  #container {
+  .container {
     font-size: 37px;
   }
 }
 
-#container::before {
+.container::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -40,7 +40,7 @@
   animation: pulse1 2s infinite ease-in-out;
 }
 
-#container::after {
+.container::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -58,7 +58,7 @@
   transform: translate(-50%, -50%);
   width: 100px;
   height: 100px;
-  background-color: aqua;
+  /* background-color: aqua; */
 }
 .off {
   /*TODO increase glow, gain off "list text" in 70% animation time  */
@@ -72,6 +72,19 @@
   filter: blur(0px);
   opacity: 1;
   transition: 0.25s;
+}
+
+.noWords {
+  animation: none;
+  opacity: 0.5;
+}
+.noWords::before {
+  animation: none;
+  opacity: 0;
+}
+.noWords::after {
+  animation: none;
+  opacity: 0;
 }
 
 @keyframes pulse0 {

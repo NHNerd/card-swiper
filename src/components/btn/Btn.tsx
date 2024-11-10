@@ -6,17 +6,17 @@ type Props = {
   parrent: 'lol' | 'le';
   type: 'edit' | 'exit';
   hndlr: any;
-  listOrder: any;
+  listOrder: number;
   setorderListEdit: any;
 };
 
-const Btn = ({ parrent, type, hndlr }: Props) => {
+const Btn = ({ parrent, type, hndlr, listOrder }: Props) => {
   return parrent == 'lol' ? (
     // lol edit
     <button
       className={type}
       onClick={() => {
-        hndlr();
+        hndlr(listOrder);
       }}
     ></button>
   ) : (

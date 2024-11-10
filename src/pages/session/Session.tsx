@@ -33,7 +33,7 @@ export default function Session({}: Props) {
   }, [dataZus]);
 
   React.useEffect(() => {
-    if (gameWords.length === 0 && page == 'session') {
+    if (gameWords?.length === 0 && page == 'session') {
       if (flagExite) {
         flagExite = false;
         setEnd(false);
@@ -43,6 +43,8 @@ export default function Session({}: Props) {
       }
     }
   }, [gameWords]);
+
+  if (!gameWords || !dataZus[0]?.words || gameWords?.length === 0) return null;
 
   return (
     <>

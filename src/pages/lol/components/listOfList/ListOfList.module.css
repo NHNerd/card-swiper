@@ -32,3 +32,18 @@
 .h3Text {
   margin-right: 8px;
 }
+
+.attention {
+  animation: attention 1s 1 ease-in-out;
+}
+@keyframes attention {
+  0% {
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.1), 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    text-shadow: 0 0 80px rgba(255, 255, 255, 1), 0 0 20px rgba(255, 255, 255, 1);
+  }
+  100% {
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.1), 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+}

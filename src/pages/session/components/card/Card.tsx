@@ -8,7 +8,7 @@ import cssCard from './Card.module.css';
 type Props = {
   //! надо задать точнее (may be...)
   ContainerSessionRef: HTMLDivElement;
-  gameWords: any;
+  gameWords: [];
   setGameWords: any;
   time: number;
 };

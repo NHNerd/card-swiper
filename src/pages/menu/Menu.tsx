@@ -3,10 +3,10 @@ import React from 'react';
 import Statistic from './components/statistic/Statistic.tsx';
 import Go from './components/go/Go.tsx';
 
-import ListOfList from '../../components/listOfList/ListOfList.tsx';
+import ListOfList from '../lol/components/listOfList/ListOfList.tsx';
 import BtnArrow from '../../components/btnArrow/BtnArrow.tsx';
 import { useUiState, zustandData } from '../../zustand.ts';
-import listsOrderRefresh from '../../business/listsRefresh.ts';
+import listsOrderRefresh from '../../business/list/listsRefresh.ts';
 import debounce from '../../handlers/throttle.ts';
 
 import '../../components/container.css';
@@ -63,17 +63,17 @@ export default function Menu({}: Props) {
       }
     }, 250);
   }, [page]);
-
+  // if (!dataZus[0].words) return null;
   return (
     <>
       {/* <div id='figmaMenuRef'></div> */}
-      <Go />
+      <Go isWords={Array.isArray(dataZus[0]?.words) && dataZus[0].words.length > 0} />
       <div
         className={
           cssMenu.footer +
           ' ' +
           // changong top to bottom returns ancorrect animation
-          (page === 'menu'
+          (page === 'menu' || page === 'settings'
             ? cssMenu.menu + ' ' + cssMenu.anchorMenu
             : page === 'session'
             ? cssMenu.session
