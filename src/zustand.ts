@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import buildClientDate from './business/buildClientDate.ts';
 import { noData, phrasalVerbs, phrasalVerbsWords } from '../src/hardCodeDateObj/hardCodeDateObj.js';
 
 const email = localStorage.getItem('email');
@@ -12,11 +11,7 @@ export const useUiState = create((set) => ({
 
 export const zustandData = create((set) => ({
   dataZus: noData, // Изначально данные отсутствуют
-  setDataZus: (value) => set({ dataZus: value }), // Функция для установки данных
-  fetchDataZus: async () => {
-    const data = (await buildClientDate(email)) || noData;
-    set({ dataZus: Array.isArray(data) && data.length === 0 ? noData : data });
-  },
+  setDataZus: (value: any) => set({ dataZus: value }), // Функция для установки данных
 }));
 
 export const zustandOrderListEdit = create((set) => ({

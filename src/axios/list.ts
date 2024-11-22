@@ -14,8 +14,8 @@ interface List {
 const axiosList = axios.create({
   baseURL: `${API_URL}/apiList`,
 });
-
-export const getAllLists = async (userId: string): Promise<List[] | void> => {
+//? second argumet is optional (ts optional - "?"")
+export const getAllLists = async (userId: string, setLS?: boolean): Promise<List[] | void> => {
   const src = '/getAll';
   const params = { userId };
 
@@ -25,7 +25,8 @@ export const getAllLists = async (userId: string): Promise<List[] | void> => {
       const allLists = data.data.allLists;
 
       //? convert object to string: JSON.stringify
-      localStorage.setItem('allLists', JSON.stringify(allLists));
+      if (setLS) localStorage.setItem('allLists', JSON.stringify(allLists));
+
       return allLists;
     })
     .catch((error) => {
@@ -42,11 +43,11 @@ export const getAllLists = async (userId: string): Promise<List[] | void> => {
     });
 };
 
-export const putRefreshOrders = (lists, removedListLS) => {
+export const putRefreshOrders = (lists: any) => {
   const src = '/refreshOrders';
 
   axiosList
-    .put(src, { lists, removedListLS })
+    .put(src, lists)
     .then((response) => {
       console.log(response.data.message);
     })
@@ -55,7 +56,36 @@ export const putRefreshOrders = (lists, removedListLS) => {
     });
 };
 
-export const putNewList = async (listName) => {
+export const refreshOrdersSync = async (DTOupdateDB_allOrder: any) => {
+  const src = '/refreshOrdersSync';
+
+  return axiosList
+    .put(src, DTOupdateDB_allOrder)
+    .then((response) => {
+      console.log(response.data.message);
+      return true;
+    })
+    .catch((error) => {
+      console.error('Error fetching data (postRefresh):', error);
+      return false;
+    });
+};
+export const refreshFieldsSync = async (lists: any) => {
+  const src = '/refreshFieldsSync';
+
+  return axiosList
+    .put(src, lists)
+    .then((response) => {
+      console.log(response.data.message);
+      return true;
+    })
+    .catch((error) => {
+      console.error('Error fetching data (postRefresh):', error);
+      return false;
+    });
+};
+
+export const putNewList = async (listName: string) => {
   const src = '/add';
   const userId = localStorage.getItem('userId');
 
@@ -66,18 +96,86 @@ export const putNewList = async (listName) => {
       //TODO it's will throw an error, couse now I put list in start of array
       //TODO NEED: check new list order by listName
 
-      // change new list in LS on right version from DB
-      // const allLists = JSON.parse(localStorage.getItem('allLists'));
-      // allLists.shift();
-      // allLists.unshift(response.data.list[0]);
-
-      //? convert object to string: JSON.stringify
-      // localStorage.setItem('allLists', JSON.stringify(allLists));
-
-      console.log(response.data.message);
-      return response.data.list[0];
+      return response.data.listDTO;
     })
     .catch((error) => {
+      const statusCode = error.response.status;
+      if (statusCode === 409) {
+        console.log(error.response?.data.message);
+        return statusCode;
+      }
       console.error('Error fetching data (postRefresh):', error);
+    });
+};
+export const addSync = async (lists: any[]) => {
+  const src = '/addSync';
+  const userId = localStorage.getItem('userId');
+
+  return axiosList
+    .post(src, { userId, lists })
+    .then((response) => {
+      return response.data.addedListsDTO;
+    })
+    .catch((error) => {
+      const statusCode = error.response.status;
+      if (statusCode === 409) {
+        console.log(error.response?.data.message);
+        return statusCode;
+      }
+      console.error('Error fetching data (postRefresh):', error);
+    });
+};
+
+export const remove = async (_id: any, updateOrder: any) => {
+  const userId = localStorage.getItem('userId');
+
+  const src = `/delete/${userId}/${_id}/${updateOrder}`;
+
+  return axiosList
+    .delete(src)
+    .then((response) => {
+      console.log(response.data.message);
+
+      const removedLists = JSON.parse(localStorage.getItem('removedLists')) || [];
+      const removedListsUpdate = removedLists.filter((item: any) => item._id !== _id);
+      if (removedListsUpdate.length === 0) {
+        localStorage.removeItem('removedLists');
+      } else {
+        localStorage.setItem('removedLists', JSON.stringify(removedListsUpdate));
+      }
+
+      return true;
+    })
+    .catch((error) => {
+      const statusCode = error.response.status;
+      if (statusCode === 404) {
+        console.log(error.response?.data.message);
+        return false;
+      }
+      console.error('Error fetching data (list remove):', error);
+      return false;
+    });
+};
+
+export const removeMany = async (_id: any[]) => {
+  const userId = localStorage.getItem('userId');
+  const src = `/deleteMany`;
+
+  return axiosList
+
+    .post(src, { _id, userId })
+    .then((response) => {
+      console.log(response.data.message);
+      return true;
+    })
+    .catch((error) => {
+      const statusCode = error.response.status;
+      if (statusCode === 409) {
+        console.log(error.response?.data.message);
+        localStorage.removeItem('removedLists');
+        return false;
+      }
+      console.error('Error fetching data (list remove):', error);
+      return false;
     });
 };

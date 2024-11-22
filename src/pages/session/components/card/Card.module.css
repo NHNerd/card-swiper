@@ -41,6 +41,6 @@
   filter: blur(3px);
   transition: 0.2s;
   scale: 0.9;
-  cursor: none;
+  cursor: default;
   user-select: none;
 }

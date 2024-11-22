@@ -52,19 +52,3 @@ async function buildClientDateFirstTime(data: []) {
 }
 
 export default buildClientDateFirstTime;
-
-// // Add list
-// const list = await putNewList('phrasalVerbs');
-// list.wordCount = phrasalVerbs_words.length;
-// data.push(list);
-// localStorage.setItem('allLists', JSON.stringify([list]));
-
-// // Add word
-// const newBulkWord = await putNewBulkWord(list._id, phrasalVerbs_words);
-// data[0].words = newBulkWord;
-// localStorage.setItem('Allwords', JSON.stringify(newBulkWord));
-
-// // Clean
-// localStorage.removeItem('registration');
-// console.log('bild client registration date 100%: _id, list, word :)');
-// return data;

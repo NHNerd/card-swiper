@@ -13,12 +13,11 @@ type Props = {
   hndlrButton: () => void;
 };
 
-let fetchDataZusFlag = false;
 export default function ListOfList({ children, parrent, hndlrButton }: Props) {
   //Zustand
 
   const { page, setPage } = useUiState();
-  const { dataZus, setDataZus, fetchDataZus } = zustandData();
+  const { dataZus, setDataZus } = zustandData();
   const { setOrderListEditZus } = zustandOrderListEdit();
   const [attention, setAttention] = React.useState<string>('');
 
@@ -26,12 +25,6 @@ export default function ListOfList({ children, parrent, hndlrButton }: Props) {
     setPage('le');
     setOrderListEditZus(order);
   };
-
-  //! wrong way!
-  React.useEffect(() => {
-    if (!fetchDataZusFlag) fetchDataZus();
-    fetchDataZusFlag = true;
-  }, [fetchDataZus]);
 
   // ckick on "go" makes attention to empty list
   //TODO change to shaking

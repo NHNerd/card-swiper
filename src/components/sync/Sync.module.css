@@ -1,0 +1,97 @@
+.wraper {
+  padding: 6px;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  height: 30px;
+  width: 30px;
+  transition: scale 0.25s, opacity 0.25s, transform 0.4s;
+}
+.off {
+  transform: rotate(360deg);
+  scale: 0.3;
+  opacity: 0;
+  user-select: none;
+  pointer-events: none;
+}
+
+.btn {
+  position: absolute;
+  inset: 8px;
+  background-image: url('/buttons/sync.svg');
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+.not {
+  opacity: 0.7;
+  filter: grayscale(100%);
+  /* filter: grayscale(0) hue-rotate(270deg) saturate(600%); */
+  animation: not 20s 1 ease-in-out;
+}
+
+.loading {
+  filter: grayscale(100%);
+  animation: rotation 0.5s infinite linear;
+}
+
+.sync {
+  animation: sync 20s 1 ease-in-out;
+  filter: grayscale(100%);
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes not {
+  0% {
+    filter: grayscale(100%) hue-rotate(270deg) saturate(600%);
+  }
+  1% {
+    opacity: 1;
+    scale: 1.16;
+    /*? When brightness changes its has strong affect on stauration(by visual)   */
+    filter: grayscale(0) brightness(1.2) hue-rotate(270deg) saturate(900%);
+  }
+  2% {
+    scale: 1;
+    filter: grayscale(0) hue-rotate(270deg) saturate(600%);
+  }
+  5% {
+    filter: grayscale(0) hue-rotate(270deg) saturate(600%);
+  }
+
+  100% {
+    filter: grayscale(100%) hue-rotate(270deg) saturate(600%);
+  }
+}
+
+@keyframes sync {
+  0% {
+    filter: grayscale(100%);
+  }
+
+  1% {
+    scale: 1.16;
+    filter: grayscale(0) brightness(1.2);
+  }
+  2% {
+    scale: 1;
+  }
+  5% {
+    filter: grayscale(0);
+  }
+
+  100% {
+    filter: grayscale(100%);
+  }
+}

@@ -16,6 +16,8 @@
   scale: 0.2;
   opacity: 0;
   transform: rotate(-700deg);
+  user-select: none;
+  pointer-events: none;
 }
 
 .image {

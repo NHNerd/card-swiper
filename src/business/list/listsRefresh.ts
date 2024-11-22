@@ -13,6 +13,9 @@ async function listsOrderRefresh(data) {
     for (let ii = 0; ii <= lstsLength; ii++) {
       if (data[i].listName === allListsOld[ii].listName) {
         allListsOld[ii].order = i;
+        //? ISO 8601 (0 UTC - Z)
+        allListsOld[ii].updateOrder = new Date().toISOString();
+
         allListsNew.push(allListsOld[ii]);
         allListsOld.splice(ii, 1);
         lstsLength -= 1;
@@ -24,7 +27,6 @@ async function listsOrderRefresh(data) {
 
   // refresh localstorage
   localStorage.setItem('allLists', JSON.stringify(allListsNew));
-
   // refresh DB
   putRefreshOrders(allListsNew);
 }

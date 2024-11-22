@@ -5,6 +5,7 @@ import Go from './components/go/Go.tsx';
 
 import ListOfList from '../lol/components/listOfList/ListOfList.tsx';
 import BtnArrow from '../../components/btnArrow/BtnArrow.tsx';
+import Sync from '../../components/sync/Sync.tsx';
 import { useUiState, zustandData } from '../../zustand.ts';
 import listsOrderRefresh from '../../business/list/listsRefresh.ts';
 import debounce from '../../handlers/throttle.ts';
@@ -63,10 +64,11 @@ export default function Menu({}: Props) {
       }
     }, 250);
   }, [page]);
-  // if (!dataZus[0].words) return null;
+
   return (
     <>
       {/* <div id='figmaMenuRef'></div> */}
+      <Sync />
       <Go isWords={Array.isArray(dataZus[0]?.words) && dataZus[0].words.length > 0} />
       <div
         className={

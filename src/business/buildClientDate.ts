@@ -16,8 +16,8 @@ type ListData = {
   words: any[];
 };
 
-const data: ListData[] = [];
 async function buildClientDate(email: string): Promise<ListData[]> {
+  const data: ListData[] = [];
   const dateStart = Date.now();
 
   //email is delited
@@ -36,7 +36,7 @@ async function buildClientDate(email: string): Promise<ListData[]> {
   if (isFirstTime) return await buildClientDateFirstTime(data);
 
   // get all lists Id by user Id
-  const allLists = JSON.parse(localStorage.getItem('allLists')) || (await getAllLists(userId));
+  const allLists = JSON.parse(localStorage.getItem('allLists')) || (await getAllLists(userId, true));
   if (!allLists) {
     console.log('bild client date 33%: _id :(');
     return data;
@@ -46,10 +46,10 @@ async function buildClientDate(email: string): Promise<ListData[]> {
   const allListsId: [] = [];
   allLists.map((list) => {
     const listId = list._id;
-    const listName = list.listName;
-    const order = list.order;
-    const wordCount = 0;
-    const gameCount = list.gameCount;
+    const listName: '' = list.listName;
+    const order: number = list.order;
+    const wordCount: number = 0;
+    const gameCount: number = list.gameCount;
     const words: [] = [];
 
     data.push({ listId, listName, order, wordCount, gameCount, words });

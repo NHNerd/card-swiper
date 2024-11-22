@@ -11,9 +11,9 @@ import { useUiState } from './zustand.ts';
 import cssAppTest from './AppTest.module.css';
 
 function App() {
-  const { page, setPage } = useUiState();
+  const { page } = useUiState();
 
-  console.log(page);
+  console.log('page: ', page);
 
   if (page === 'auth') return <Auth />;
   return (

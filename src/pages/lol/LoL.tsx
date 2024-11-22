@@ -8,7 +8,7 @@ import DeletePopUp from '../deletePopUp/DeletePopUp.tsx';
 
 import { useUiState, zustandData } from '../../zustand.ts';
 import hndlrRemoveList from './hndlrs/hndlrRemoveList.ts';
-import { putRefreshOrders } from '../../axios/list.ts';
+import { remove } from '../../axios/list.ts';
 import debounce from '../../handlers/throttle.ts';
 
 import '../../components/container.css';
@@ -21,7 +21,7 @@ interface DataItem {
 }
 
 // wrapping "refreshing allLists in localstorage" into debounce
-const debounceListsRefresh = debounce(putRefreshOrders, 500);
+const debouncePutRefreshOrders = debounce(remove, 500);
 
 export default function LoL({}: Props) {
   //Zustand
@@ -58,22 +58,32 @@ export default function LoL({}: Props) {
   }, []);
 
   const hndlrDeleteList = (listOrder: number) => {
+    const listId = dataZus[listOrder]?.listId;
     setDeletedListOrder(listOrder);
 
-    if (dataZus[listOrder].wordCount) {
+    if (dataZus[listOrder]?.wordCount > 0) {
+      // if list have words open popup
       setIsDeletePopUp(true);
     } else {
+      // else immediately delete
+
       // state
-
-      const [dataZusNew, removedListDZ] = hndlrRemoveList(dataZus, listOrder);
+      const [dataZusNew] = hndlrRemoveList(dataZus, listOrder);
       setDataZus(dataZusNew);
-
-      const dataLS = JSON.parse(localStorage.getItem('allLists'));
-      const [dataLSNew, removedListLS] = hndlrRemoveList(dataLS, listOrder);
       // LS
+      const dataLS = JSON.parse(localStorage.getItem('allLists'));
+      const [dataLSNew, removedListLS, updateOrder] = hndlrRemoveList(dataLS, listOrder);
       localStorage.setItem('allLists', JSON.stringify(dataLSNew));
+      // LS Flag - not apdated(DB)
+      const removedLists = JSON.parse(localStorage.getItem('removedLists')) || [];
+      // Chek doublicats(only unique _id)
+      if (!removedLists.some((item) => item._id === removedListLS._id)) {
+        removedLists.push({ _id: removedListLS._id });
+      }
+      localStorage.setItem('removedLists', JSON.stringify(removedLists));
       // DB
-      debounceListsRefresh(dataLSNew, removedListLS);
+
+      debouncePutRefreshOrders(removedListLS._id, updateOrder, removedLists);
     }
   };
 

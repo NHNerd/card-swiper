@@ -3,8 +3,7 @@ import React, { useEffect } from 'react';
 import cssFork from './Fork.module.css';
 
 import { putNewList } from '../../axios/list';
-import addList from '../../business/list/addList.ts';
-import dataCrate from '../../business/buildClientDate.ts';
+import { addList, refreshLSAterDB } from '../../business/list/addList.ts';
 import { zustandData } from '../../zustand.ts';
 
 type Props = {
@@ -54,23 +53,36 @@ export default function Fork({ isOn, leftChild, rightChild, actionStatus, setAct
       if (pevButton.current === 'l') return;
       if (inputRightRef.current?.value && pevButton.current !== 'non') {
         //! DB and LS is correct!
-        // DB
-        putNewList(inputRightRef.current?.value);
+
         // LS
-        addList(inputRightRef.current?.value);
+        const addLs = addList(inputRightRef.current?.value);
+
+        if (!addLs) return;
+        // DB
+        putNewList(inputRightRef.current?.value)
+          .then((newListFromDB) => {
+            // refresh LS
+            refreshLSAterDB(newListFromDB, addLs);
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
 
         //TODO 11.10.2024 i need get data only from LS
-        // dataZusRef.current.map((item) => {
-        //   item.order = item.order + 1;
-        // });
-        // dataZusRef.current.unshift({
-        //   gameCount: 12,
-        //   listName: inputRightRef.current?.value,
-        //   order: 0,
-        //   wordCount: 0,
-        // });
-
-        // State
+        //State
+        dataZusRef.current.map((item) => {
+          item.order = item.order + 1;
+        });
+        const newList = {
+          //! listId ???
+          listName: inputRightRef.current?.value,
+          order: 0,
+          wordCount: 0,
+          gameCount: 12,
+          words: [],
+        };
+        dataZusRef.current.unshift(newList);
+        console.log(dataZusRef.current);
         setDataZus(dataZusRef.current);
 
         return;
