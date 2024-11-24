@@ -83,7 +83,7 @@ export default function LoL({}: Props) {
       localStorage.setItem('removedLists', JSON.stringify(removedLists));
       // DB
 
-      debouncePutRefreshOrders(removedListLS._id, updateOrder, removedLists);
+      debouncePutRefreshOrders(removedListLS._id, updateOrder);
     }
   };
 

@@ -158,6 +158,7 @@ export default function Fork({ isOn, leftChild, rightChild, actionStatus, setAct
           value={inputValueL}
           onChange={hndlrSetInpurL}
           className={actionStatus.l ? cssFork.inputButton : cssFork.inputButtonOff}
+          maxLength={20}
         />
       </button>
 
@@ -211,6 +212,7 @@ export default function Fork({ isOn, leftChild, rightChild, actionStatus, setAct
           value={inputValueR}
           onChange={hndlrSetInpurR}
           className={actionStatus.r ? cssFork.inputButton : cssFork.inputButtonOff}
+          maxLength={20}
         />
       </button>
     </section>

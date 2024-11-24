@@ -99,6 +99,7 @@
   z-index: 1;
   transition: 0.25s;
 }
+
 .inputButtonOff {
   user-select: none;
   pointer-events: none;

@@ -1,9 +1,22 @@
-.listName {
-  position: relative;
+.container {
   margin-top: 30px;
-  height: 53px;
+  display: flex;
+  justify-content: center;
+  height: fit-content;
+  width: 100dvw;
+  /* background-color: black; */
+}
+
+.listName {
+  margin: 0 26px;
+  position: relative;
+  height: fit-content;
+  width: fit-content;
   font-size: 36px;
   text-align: center;
+  display: inline-block;
+
+  /* background-color: rgb(165, 108, 157); */
 }
 
 .listNameOn {
@@ -23,4 +36,19 @@
   transform: translateY(-83px);
   transition: 0.2s;
   transition-delay: calc(var(--flop-speed) * 4);
+}
+
+.btnContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+  transition: transform 0.2s, opacity 0.4s;
+  transition-delay: calc(var(--flop-speed) * 4);
+}
+
+.btnOff {
+  opacity: 0;
+  transform: translate(-256px) scale(0.3, 0.5);
 }

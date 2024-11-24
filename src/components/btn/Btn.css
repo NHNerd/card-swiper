@@ -1,5 +1,7 @@
 .edit,
-.exit {
+.exit,
+.editListName,
+.tick {
   position: absolute;
   /* top: 50%; */
   width: 6dvh;
@@ -25,6 +27,16 @@
 .exit {
   left: max(4dvw, 20px);
   background-image: url('/buttons/exit.svg');
+}
+.editListName {
+  background-image: url('/buttons/edit.svg');
+}
+.tick {
+  position: absolute;
+  background-repeat: no-repeat;
+  background-size: 32%;
+  background-position: center;
+  background-image: url('/buttons/tick.svg');
 }
 
 .btnLe {

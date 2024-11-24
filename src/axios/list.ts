@@ -50,9 +50,24 @@ export const putRefreshOrders = (lists: any) => {
     .put(src, lists)
     .then((response) => {
       console.log(response.data.message);
+      return true;
     })
     .catch((error) => {
-      console.error('Error fetching data (postRefresh):', error);
+      console.error('Error fetching data:', error);
+    });
+};
+
+export const patchListField = async (_id: any, field: string | number, updateTime: any) => {
+  const src = '/patchListField';
+
+  return axiosList
+    .patch(src, { _id, field, updateTime })
+    .then((response) => {
+      console.log(response.data.message);
+    })
+    .catch((error) => {
+      console.error('Error patch data:', error);
+      return true;
     });
 };
 

@@ -57,7 +57,14 @@
 .gameCountButton {
   position: absolute;
   width: 50%;
+  min-width: 80px;
+  max-width: 100px;
   height: 40%;
-  border: solid 1px red;
+  transform: translateY(6px);
+  /* border: solid 1px red; */
   border-radius: 50%;
+}
+
+.wordText {
+  opacity: 0.7;
 }
