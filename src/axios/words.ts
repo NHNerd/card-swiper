@@ -5,7 +5,7 @@ const axiosWord = axios.create({
   baseURL: `${API_URL}/apiWord`,
 });
 
-export const getAllWords = (userId) => {
+export const getAllWords = async (userId) => {
   const src = '/getAll';
 
   const params = { userId };
@@ -14,6 +14,7 @@ export const getAllWords = (userId) => {
     .get(src, { params })
     .then((data) => {
       const Allwords = data.data.allWords;
+      console.log(Allwords);
       //? convert object to string: JSON.stringify
       localStorage.setItem('Allwords', JSON.stringify(Allwords));
       return Allwords;
@@ -36,24 +37,49 @@ export const putNewWord = async (listId, word: string, translate: string) => {
   return axiosWord
     .post(src, { userId, listId, word, translate })
     .then((response) => {
-      //TODO user can to change lsits order after crating new lsit,
-      //TODO it's will throw an error, couse now I put list in start of array
-      //TODO NEED: check new list order by listName
-
-      // change new list in LS on right version from DB
-      // const allLists = JSON.parse(localStorage.getItem('allLists'));
-      // allLists.shift();
-      // allLists.unshift(response.data.list[0]);
-
-      //? convert object to string: JSON.stringify
-      // localStorage.setItem('allLists', JSON.stringify(allLists));
-
       console.log(response.data.message);
       return response.data.newWord;
     })
     .catch((error) => {
       const statusCode = error.response.status;
       if (statusCode === 409) {
+        console.log(error.response?.data.message);
+        return statusCode;
+      }
+    });
+};
+
+export const patchWordField = async (
+  _id: any,
+  word: string,
+  translate: string,
+  updateWord: any,
+  updateTranslate: any
+) => {
+  const src = '/patchWordField';
+
+  const userId = localStorage.getItem('userId');
+
+  return axiosWord
+    .patch(src, {
+      userId,
+      _id,
+      word,
+      translate,
+      updateWord,
+      updateTranslate,
+    })
+    .then((response) => {
+      console.log(response.data.message);
+      return true;
+    })
+    .catch((error) => {
+      const statusCode = error.response.status;
+      if (statusCode === 409) {
+        console.log(error.response?.data.message);
+        return statusCode;
+      }
+      if (statusCode === 404) {
         console.log(error.response?.data.message);
         return statusCode;
       }

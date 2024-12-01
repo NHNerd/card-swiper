@@ -1,7 +1,9 @@
 .edit,
 .exit,
 .editListName,
-.tick {
+.tick,
+.word,
+.translate {
   position: absolute;
   /* top: 50%; */
   width: 6dvh;
@@ -18,6 +20,7 @@
   border-left: 1px solid rgb(129, 129, 129);
   border-right: 1px solid rgb(129, 129, 129);
   border-radius: 8px;
+  text-align: center;
 }
 
 .edit {
@@ -31,6 +34,31 @@
 .editListName {
   background-image: url('/buttons/edit.svg');
 }
+
+.word,
+.translate {
+  position: fixed;
+  top: min(-22dvh, -18ch);
+  width: 100px;
+}
+
+.word::before,
+.translate::before {
+  content: '';
+  position: absolute;
+  left: inherit;
+  inset: -16px;
+  bottom: -22px;
+  /* background-color: rgba(255, 0, 0, 0.274); */
+}
+.word {
+  left: 0;
+}
+
+.translate {
+  right: 0;
+}
+
 .tick {
   position: absolute;
   background-repeat: no-repeat;

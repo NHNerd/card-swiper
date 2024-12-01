@@ -34,6 +34,12 @@ export const addList = (listName: string) => {
 
 export const refreshLSAterDB = (newList: any, allLists: any[]) => {
   delete newList.notUpdated;
+
+  // const allListsNew = allLists.map(item =>
+  //   item._id === newList._id ? newList : item
+  // );
+
+  //! 0 - wrong!
   allLists[0] = newList;
 
   localStorage.setItem('allLists', JSON.stringify(allLists));

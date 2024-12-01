@@ -1,0 +1,47 @@
+.textarea {
+  all: unset;
+  position: fixed;
+  top: -10ch;
+  bottom: -10ch;
+  width: 100%;
+  font-size: max(2.2dvh, 18px);
+  border-left: solid 1px var(--color2);
+  border-right: solid 1px var(--color2);
+  border-radius: 10px;
+  text-align: center;
+  color: var(--color1);
+  overflow-y: hidden;
+  transition: 1s;
+}
+.emptyInputWarningOff::placeholder {
+  transition: 1s;
+}
+.emptyInputWarning::placeholder {
+  color: white;
+  transition: 1s;
+}
+
+.on {
+  opacity: 1;
+  pointer-events: all;
+  user-select: all;
+  transition: 0.5s;
+  transition-delay: 0.25s;
+}
+.off {
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  transition: 0.5s;
+}
+
+.btnOn,
+.btnOff {
+  transition: 0.5s;
+}
+.btnOn {
+  opacity: 1;
+}
+.btnOff {
+  opacity: 0.6;
+}

@@ -1,10 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import cssFork from './Fork.module.css';
-
-import { putNewList } from '../../axios/list';
-import { addList, refreshLSAterDB } from '../../business/list/addList.ts';
-import { zustandData } from '../../zustand.ts';
 
 type Props = {
   isOn: boolean;
@@ -12,12 +8,17 @@ type Props = {
   rightChild?: React.ReactNode;
   actionStatus;
   setActionStatus;
+  addLogic;
 };
 
-export default function Fork({ isOn, leftChild, rightChild, actionStatus, setActionStatus }: Props) {
-  const { dataZus, setDataZus } = zustandData();
-  const dataZusRef = React.useRef(dataZus);
-
+export default function Fork({
+  isOn,
+  leftChild,
+  rightChild,
+  actionStatus,
+  setActionStatus,
+  addLogic,
+}: Props) {
   const pevButton = React.useRef<'non' | 'r' | 'l'>('non');
 
   const buttonRightRef = React.useRef<HTMLButtonElement>(null);
@@ -40,6 +41,7 @@ export default function Fork({ isOn, leftChild, rightChild, actionStatus, setAct
       if (pevButton.current === 'r') return;
       if (inputLeftRef.current?.value && pevButton.current !== 'non') {
         console.log('Search list');
+        //* Logic Saerch from child
         return;
       }
       setActionStatus({ l: false, r: true });
@@ -52,41 +54,11 @@ export default function Fork({ isOn, leftChild, rightChild, actionStatus, setAct
     } else if (buttonLeftRef.current?.contains(e.target)) {
       if (pevButton.current === 'l') return;
       if (inputRightRef.current?.value && pevButton.current !== 'non') {
-        //! DB and LS is correct!
-
-        // LS
-        const addLs = addList(inputRightRef.current?.value);
-
-        if (!addLs) return;
-        // DB
-        putNewList(inputRightRef.current?.value)
-          .then((newListFromDB) => {
-            // refresh LS
-            refreshLSAterDB(newListFromDB, addLs);
-          })
-          .catch((error) => {
-            console.error('Error:', error);
-          });
-
-        //TODO 11.10.2024 i need get data only from LS
-        //State
-        dataZusRef.current.map((item) => {
-          item.order = item.order + 1;
-        });
-        const newList = {
-          //! listId ???
-          listName: inputRightRef.current?.value,
-          order: 0,
-          wordCount: 0,
-          gameCount: 12,
-          words: [],
-        };
-        dataZusRef.current.unshift(newList);
-        console.log(dataZusRef.current);
-        setDataZus(dataZusRef.current);
-
+        //* Logic Add from child
+        addLogic(inputRightRef?.current);
         return;
       }
+
       setActionStatus({ l: true, r: false });
       pevButton.current = 'l';
 

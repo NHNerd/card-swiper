@@ -165,9 +165,6 @@ const compare = async (getAllLists, removeMany, refreshOrdersSync, addSync, refr
 
     freshFields.push(...lsAddToDB);
   }
-  if (lsDelete.length > 0) {
-    console.log('Object(s): To Delete in LS:', lsDelete);
-  }
 
   if (lsAddToDB_success || updateDB_allOrders_success) {
     freshFields.map((list) => {
@@ -179,65 +176,26 @@ const compare = async (getAllLists, removeMany, refreshOrdersSync, addSync, refr
   // After all conditons 1 LS update
   if (fresh_orders_LS_or_DB || lsAddToDB_success || dbAddToLS) {
     freshFields.sort((a, b) => a.order - b.order);
-    // console.log(freshFields);
-    //!
+    freshFields.map((list, i) => {
+      list.order = i;
+      // Fresh order for db after delete list(s)
+      DTOupdateDB_allOrder.push({
+        _id: LS_sameDB[i]._id,
+        order: LS_sameDB[i].order,
+        updateOrder: LS_sameDB[i].updateOrder,
+      });
+    });
     localStorage.setItem('allLists', JSON.stringify(freshFields));
+  }
+
+  if (lsDelete.length > 0) {
+    console.log('Object(s): To Delete in LS:', lsDelete);
+    // Fresh order for db after delete list(s)
+    await refreshOrdersSync(DTOupdateDB_allOrder);
   }
 
   const dateEnd = Date.now();
   console.log('-_'.repeat(5), ' sync end ', (dateEnd - dateStart) / 1000, 's.', '-_'.repeat(5));
-
-  const testNewLS = [
-    {
-      listName: 'idioms',
-      order: 0,
-      gameCount: 12,
-      _id: '673f0661918ae9ddffaa0de5',
-      updateListName: '3024-11-21T10:07:29.097Z',
-      updateOrder: '2025-11-21T10:07:29.097Z',
-      updateGameCount: '2024-11-21T10:07:29.097Z',
-    },
-    {
-      listName: 'LSnew',
-      order: 1,
-      gameCount: 12,
-      _id: '111f0676918ae9ddffaa0df4',
-      updateListName: '2024-11-21T10:07:50.996Z',
-      updateOrder: '2024-11-21T10:07:50.996Z',
-      updateGameCount: '2024-11-21T10:07:50.996Z',
-      notUpdated: true,
-    },
-    {
-      listName: 'phrasalVerbs',
-      order: 2,
-      gameCount: 12,
-      _id: '673f0660918ae9ddffaa0de1',
-      updateListName: '2026-11-21T10:07:28.526Z',
-      updateOrder: '2024-11-21T10:07:28.526Z',
-      updateGameCount: '2024-11-21T10:07:28.526Z',
-      wordCount: 3,
-    },
-    {
-      listName: '4',
-      order: 3,
-      gameCount: 12,
-      _id: '673f067b918ae9ddffaa0dfc',
-      updateListName: '2024-11-21T10:07:55.244Z',
-      updateOrder: '2024-11-21T10:07:55.244Z',
-      updateGameCount: '2024-11-21T10:07:55.244Z',
-    },
-    {
-      listName: '2',
-      order: 4,
-      gameCount: 12,
-      _id: '673f0676918ae9ddffaa0df4',
-      updateListName: '2024-11-21T10:07:50.996Z',
-      updateOrder: '2024-11-21T10:07:50.996Z',
-      updateGameCount: '2024-11-21T10:07:50.996Z',
-    },
-  ];
-
-  // localStorage.setItem('allLists', JSON.stringify(testNewLS));
 
   return true;
 };

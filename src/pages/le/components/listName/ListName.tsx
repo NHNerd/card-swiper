@@ -30,11 +30,21 @@ export default function ListName({}: Props) {
       return;
     }
 
-    const listsLS = JSON.parse(localStorage.getItem('allLists'));
-    const isNameTaken = listsLS.some((item: { listName: string }) => item.listName === newInputVal);
-    if (isNameTaken) {
-      console.log('name: ', isNameTaken, ' alrady exist :(');
+    if (dataZus[orderListEditZus].listName === newInputVal) {
+      console.log(newInputVal, "- it's old name");
+
+      setIsOpen(false);
+      setTrySubmitEmpty(false);
+      inputRef.current?.setSelectionRange(0, 0);
+      inputRef.current?.blur();
       return;
+    } else {
+      const listsLS = JSON.parse(localStorage.getItem('allLists'));
+      const isNameTaken = listsLS.some((item: { listName: string }) => item.listName === newInputVal);
+      if (isNameTaken) {
+        console.log('name: ', newInputVal, ' alrady exist :(');
+        return;
+      }
     }
 
     //? ISO 8601 (0 UTC - Z)

@@ -1,5 +1,6 @@
 .fontSize {
   font-size: max(3.2dvh, 26px);
+  opacity: 0.7;
 }
 
 .empty {
@@ -11,4 +12,24 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+
+.progressBar {
+  position: absolute;
+  height: 22px;
+  width: 56%;
+  max-width: 480px;
+  border-radius: 100px;
+  overflow: hidden;
+  /* background-color: rgba(255, 255, 255, 0.01); */
+}
+
+.progressBar::before {
+  content: '';
+  position: inherit;
+  inset: 0;
+  /*! anime  */
+  transform: translateX(var(--translateX, 0%));
+  border-radius: inherit;
+  background-color: rgba(255, 255, 255, 0.05);
 }

@@ -44,10 +44,10 @@ export default function Sync() {
 
   const refresh = async () => {
     setStatus('loading');
-    if (await compare(getAllLists, removeMany, refreshOrdersSync, addSync, refreshFieldsSync)) {
-      const DZ_refresh = await buildClientDate(localStorage.getItem('email'));
-
-      // setDataZus(DZ_refresh);
+    const syncOk = await compare(getAllLists, removeMany, refreshOrdersSync, addSync, refreshFieldsSync);
+    if (syncOk) {
+      // const DZ_refresh = await buildClientDate(localStorage.getItem('email'));
+      // console.log(DZ_refresh);
       setStatus('sync');
     } else {
       setStatus('not');

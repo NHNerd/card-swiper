@@ -38,7 +38,14 @@ async function buildClientDate(email: string): Promise<ListData[]> {
   // get all lists Id by user Id
   const allLists = JSON.parse(localStorage.getItem('allLists')) || (await getAllLists(userId, true));
   if (!allLists) {
-    console.log('bild client date 33%: _id :(');
+    const dateEnd = Date.now();
+    console.log(
+      'bild client date 33%: _id :(',
+      '|',
+      'Building time:',
+      (dateEnd - dateStart) / 1000,
+      's.'
+    );
     return data;
   }
 
@@ -61,7 +68,14 @@ async function buildClientDate(email: string): Promise<ListData[]> {
   // Write words and gameCount in lists
   const Allwords = JSON.parse(localStorage.getItem('Allwords')) || (await getAllWords(userId));
   if (!Allwords) {
-    console.log('B U S I N E S S: data created: _id, list :|');
+    const dateEnd = Date.now();
+    console.log(
+      'B U S I N E S S: data created: _id, list :|',
+      '|',
+      'Building time:',
+      (dateEnd - dateStart) / 1000,
+      's.'
+    );
     return data;
   }
 
@@ -87,9 +101,13 @@ async function buildClientDate(email: string): Promise<ListData[]> {
   //? O(n+m) - liner
 
   const dateEnd = Date.now();
-  console.log('Building time:', (dateEnd - dateStart) / 1000, 's.');
-
-  console.log('bild client date 100%: _id, list,  :)');
+  console.log(
+    'bild client date 100%: _id, list, words :)',
+    '|',
+    'Building time:',
+    (dateEnd - dateStart) / 1000,
+    's.'
+  );
   return data;
 }
 

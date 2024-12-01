@@ -7,18 +7,20 @@
   transition: 0.5s;
 }
 .inputContainer {
-  position: relative;
-  /* display: flex; */
-  /* align-items: center; */
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-
   height: 48px;
   width: 70%;
   min-width: 100px;
   max-width: 300px;
+}
+/*? "margin" for click on BG  */
+.inputContainer::before {
+  content: '';
+  position: absolute;
+  inset: -30px;
 }
 
 .input {
@@ -29,7 +31,9 @@
   border-left: solid 1px var(--color2);
   border-right: solid 1px var(--color2);
   border-radius: 10px;
+  /* background-color: aqua; */
 }
+
 .emptyInputWarningOff::placeholder {
   transition: 1s;
 }
@@ -74,4 +78,18 @@
   .inputContainer {
     translate: -28px;
   }
+}
+
+.inputOn {
+  opacity: 1;
+  pointer-events: all;
+  user-select: all;
+  transition: 0.5s;
+  transition-delay: 0.25s;
+}
+.inputOff {
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  transition: 0.5s;
 }

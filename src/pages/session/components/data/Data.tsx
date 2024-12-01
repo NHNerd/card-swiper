@@ -1,7 +1,7 @@
 import React from 'react';
 
 import timer from './busines/timer.ts';
-import { useUiState, zustandData } from '../../../../zustand.ts';
+import { useUiState } from '../../../../zustand.ts';
 
 import cssData from './Data.module.css';
 
@@ -16,7 +16,6 @@ type Props = {
 export default function DataSession({ gameWords, time, setTime, end, setEnd }: Props) {
   const { page, setPage } = useUiState();
   //   const [end, setEnd] = React.useState(false);
-  //   const { dataZus } = zustandData();
 
   React.useEffect(() => {
     if (gameWords.length === 0 && page === 'session' && !end) {
