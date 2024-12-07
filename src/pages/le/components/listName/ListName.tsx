@@ -30,6 +30,7 @@ export default function ListName({}: Props) {
       return;
     }
 
+    let listsLS: any[] = [];
     if (dataZus[orderListEditZus].listName === newInputVal) {
       console.log(newInputVal, "- it's old name");
 
@@ -39,7 +40,7 @@ export default function ListName({}: Props) {
       inputRef.current?.blur();
       return;
     } else {
-      const listsLS = JSON.parse(localStorage.getItem('allLists'));
+      listsLS = JSON.parse(localStorage.getItem('allLists'));
       const isNameTaken = listsLS.some((item: { listName: string }) => item.listName === newInputVal);
       if (isNameTaken) {
         console.log('name: ', newInputVal, ' alrady exist :(');

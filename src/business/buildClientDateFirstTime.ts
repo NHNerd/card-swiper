@@ -19,10 +19,6 @@ async function buildClientDateFirstTime(data: []) {
   phrasalVerbs.order = 1;
   phrasalVerbs.wordCount = phrasalVerbs_words.length;
 
-  setTimeout(() => {
-    console.log('time out');
-  }, 6000);
-
   // Add list 2
   const idioms = await putNewList('idioms');
   idioms.wordCount = idioms.length;
