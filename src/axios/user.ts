@@ -1,5 +1,10 @@
 import axios from 'axios';
-import API_URL from './_urls';
+
+const API_URL = import.meta.env.VITE_API_URL;
+
+console.log('API_URL:', API_URL);
+
+export default API_URL;
 
 const axiosUser = axios.create({
   baseURL: `${API_URL}/apiUser`,
