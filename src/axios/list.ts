@@ -25,7 +25,7 @@ export const getAllLists = async (userId: string, setLS?: boolean): Promise<List
       const allLists = data.data.allLists;
 
       //? convert object to string: JSON.stringify
-      if (setLS) localStorage.setItem('allLists', JSON.stringify(allLists));
+      if (setLS) localStorage.setItem('card-swiper:allLists', JSON.stringify(allLists));
 
       return allLists;
     })
@@ -102,7 +102,7 @@ export const refreshFieldsSync = async (lists: any) => {
 
 export const putNewList = async (listName: string) => {
   const src = '/add';
-  const userId = localStorage.getItem('userId');
+  const userId = localStorage.getItem('card-swiper:userId');
 
   return axiosList
     .post(src, { userId, listName })
@@ -124,7 +124,7 @@ export const putNewList = async (listName: string) => {
 };
 export const addSync = async (lists: any[]) => {
   const src = '/addSync';
-  const userId = localStorage.getItem('userId');
+  const userId = localStorage.getItem('card-swiper:userId');
 
   return axiosList
     .post(src, { userId, lists })
@@ -142,7 +142,7 @@ export const addSync = async (lists: any[]) => {
 };
 
 export const remove = async (_id: any, updateOrder: any) => {
-  const userId = localStorage.getItem('userId');
+  const userId = localStorage.getItem('card-swiper:userId');
 
   const src = `/delete/${userId}/${_id}/${updateOrder}`;
 
@@ -151,12 +151,12 @@ export const remove = async (_id: any, updateOrder: any) => {
     .then((response) => {
       console.log(response.data.message);
 
-      const removedLists = JSON.parse(localStorage.getItem('removedLists')) || [];
+      const removedLists = JSON.parse(localStorage.getItem('card-swiper:removedLists')) || [];
       const removedListsUpdate = removedLists.filter((item: any) => item._id !== _id);
       if (removedListsUpdate.length === 0) {
-        localStorage.removeItem('removedLists');
+        localStorage.removeItem('card-swiper:removedLists');
       } else {
-        localStorage.setItem('removedLists', JSON.stringify(removedListsUpdate));
+        localStorage.setItem('card-swiper:removedLists', JSON.stringify(removedListsUpdate));
       }
 
       return true;
@@ -173,7 +173,7 @@ export const remove = async (_id: any, updateOrder: any) => {
 };
 
 export const removeMany = async (_id: any[]) => {
-  const userId = localStorage.getItem('userId');
+  const userId = localStorage.getItem('card-swiper:userId');
   const src = `/deleteMany`;
 
   return axiosList
@@ -187,7 +187,7 @@ export const removeMany = async (_id: any[]) => {
       const statusCode = error.response.status;
       if (statusCode === 409) {
         console.log(error.response?.data.message);
-        localStorage.removeItem('removedLists');
+        localStorage.removeItem('card-swiper:removedLists');
         return false;
       }
       console.error('Error fetching data (list remove):', error);

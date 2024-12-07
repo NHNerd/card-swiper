@@ -40,7 +40,7 @@ export default function ListName({}: Props) {
       inputRef.current?.blur();
       return;
     } else {
-      listsLS = JSON.parse(localStorage.getItem('allLists'));
+      listsLS = JSON.parse(localStorage.getItem('card-swiper:allLists'));
       const isNameTaken = listsLS.some((item: { listName: string }) => item.listName === newInputVal);
       if (isNameTaken) {
         console.log('name: ', newInputVal, ' alrady exist :(');
@@ -57,7 +57,7 @@ export default function ListName({}: Props) {
     // LS
     listsLS[orderListEditZus].listName = newInputVal;
     listsLS[orderListEditZus].updateListName = newTime;
-    localStorage.setItem('allLists', JSON.stringify(listsLS));
+    localStorage.setItem('card-swiper:allLists', JSON.stringify(listsLS));
     // DB
     patchListField(listsLS[orderListEditZus]._id, newInputVal, newTime);
 

@@ -3,13 +3,13 @@ import addList from '../../../business/list/addList';
 
 const createFirstTimedata = async (email: string, id: any) => {
   //save user
-  localStorage.setItem('userId', id);
-  localStorage.setItem('email', email);
+  localStorage.setItem('card-swiper:userId', id);
+  localStorage.setItem('card-swiper:email', email);
 
   // Temp Flag for detrmine it's first time user sessin
   //? Needs for bilding first time data
   // After first data bilds this LS Item will be delted forever
-  localStorage.setItem('registration', 'true');
+  localStorage.setItem('card-swiper:registration', 'true');
 
   // List
   // const phrasalVerbs: string = 'phrasalVerbs';

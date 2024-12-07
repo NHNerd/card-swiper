@@ -43,22 +43,7 @@ export default function LoL({}: Props) {
     }
   }, [page]);
 
-  const [data, setData] = React.useState<string[] | null>(null);
-  const [listNames, setlistNames] = React.useState<string[] | null>(null);
-  React.useEffect(() => {
-    fetch('/temp/data-example/data.json')
-      .then((response) => response.json())
-      .then((fetchedData) => {
-        if (JSON.stringify(fetchedData) !== JSON.stringify(data)) {
-          setData(fetchedData);
-          setlistNames(Object.keys(fetchedData.lists));
-        }
-      })
-      .catch((error) => console.error('Error loading the data:', error));
-  }, []);
-
   const hndlrDeleteList = (listOrder: number) => {
-    const listId = dataZus[listOrder]?.listId;
     setDeletedListOrder(listOrder);
 
     if (dataZus[listOrder]?.wordCount > 0) {
@@ -71,16 +56,16 @@ export default function LoL({}: Props) {
       const [dataZusNew] = hndlrRemoveList(dataZus, listOrder);
       setDataZus(dataZusNew);
       // LS
-      const dataLS = JSON.parse(localStorage.getItem('allLists'));
+      const dataLS = JSON.parse(localStorage.getItem('card-swiper:allLists'));
       const [dataLSNew, removedListLS, updateOrder] = hndlrRemoveList(dataLS, listOrder);
-      localStorage.setItem('allLists', JSON.stringify(dataLSNew));
+      localStorage.setItem('card-swiper:allLists', JSON.stringify(dataLSNew));
       // LS Flag - not apdated(DB)
-      const removedLists = JSON.parse(localStorage.getItem('removedLists')) || [];
+      const removedLists = JSON.parse(localStorage.getItem('card-swiper:removedLists')) || [];
       // Chek doublicats(only unique _id)
       if (!removedLists.some((item) => item._id === removedListLS._id)) {
         removedLists.push({ _id: removedListLS._id });
       }
-      localStorage.setItem('removedLists', JSON.stringify(removedLists));
+      localStorage.setItem('card-swiper:removedLists', JSON.stringify(removedLists));
       // DB
 
       debouncePutRefreshOrders(removedListLS._id, updateOrder);
@@ -89,8 +74,8 @@ export default function LoL({}: Props) {
 
   if (page === 'auth') {
     return null;
-  } else if (!listNames) {
-    return <div>Загрузка...</div>;
+    // } else if (!listNames) {
+    //   return <div>Загрузка...</div>;
   } else {
     return (
       <>

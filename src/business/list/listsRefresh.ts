@@ -1,7 +1,7 @@
 import { putRefreshOrders } from '../../axios/list';
 
 async function listsOrderRefresh(data) {
-  const allListsOld = JSON.parse(localStorage.getItem('allLists'));
+  const allListsOld = JSON.parse(localStorage.getItem('card-swiper:allLists'));
   if (!allListsOld) {
     console.log(`You don't have lsits`);
     return;
@@ -26,7 +26,7 @@ async function listsOrderRefresh(data) {
   }
 
   // refresh localstorage
-  localStorage.setItem('allLists', JSON.stringify(allListsNew));
+  localStorage.setItem('card-swiper:allLists', JSON.stringify(allListsNew));
   // refresh DB
   putRefreshOrders(allListsNew);
 }

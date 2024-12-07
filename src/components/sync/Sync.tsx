@@ -15,7 +15,7 @@ let onMountFlag = true;
 export default function Sync() {
   const { dataZus, setDataZus } = zustandData();
   const { page, setPage } = useUiState();
-  const email: string = localStorage.getItem('email');
+  const email: string = localStorage.getItem('card-swiper:email');
 
   const [status, setStatus] = React.useState<'not' | 'sync' | 'loading'>('not');
 
@@ -46,7 +46,7 @@ export default function Sync() {
     setStatus('loading');
     const syncOk = await compare(getAllLists, removeMany, refreshOrdersSync, addSync, refreshFieldsSync);
     if (syncOk) {
-      // const DZ_refresh = await buildClientDate(localStorage.getItem('email'));
+      // const DZ_refresh = await buildClientDate(localStorage.getItem('card-swiper:email') );
       // console.log(DZ_refresh);
       setStatus('sync');
     } else {

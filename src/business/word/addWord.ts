@@ -2,7 +2,7 @@
 //TODO set correct value in client - change creating logic in server
 
 export const addWord = (listId: any, word: string, translate: string) => {
-  const allWords = JSON.parse(localStorage.getItem('Allwords'));
+  const allWords = JSON.parse(localStorage.getItem('card-swiper:allWords'));
   const otherWords: any[] = [];
   const listWords: any[] = [];
   allWords.forEach((word: any) => {
@@ -36,18 +36,18 @@ export const addWord = (listId: any, word: string, translate: string) => {
 
   listWords.unshift(newWord);
 
-  localStorage.setItem('Allwords', JSON.stringify([...listWords, ...otherWords]));
+  localStorage.setItem('card-swiper:allWords', JSON.stringify([...listWords, ...otherWords]));
 
   return [newWord, listWords, otherWords];
 };
 
 export const wordRefreshLSAfterDB = (wordFresh: any, newListWords: any[], otherWords: any[]) => {
   newListWords[0] = wordFresh;
-  localStorage.setItem('Allwords', JSON.stringify([...newListWords, ...otherWords]));
+  localStorage.setItem('card-swiper:allWords', JSON.stringify([...newListWords, ...otherWords]));
 };
 
 export const editWord = (word: string, oldWord: string, translate: string, newTime: any) => {
-  const allWords = JSON.parse(localStorage.getItem('Allwords'));
+  const allWords = JSON.parse(localStorage.getItem('card-swiper:allWords'));
   console.log(word);
   allWords.forEach((item: any) => {
     if (item.word === oldWord) {
@@ -60,7 +60,7 @@ export const editWord = (word: string, oldWord: string, translate: string, newTi
       }
     }
   });
-  localStorage.setItem('Allwords', JSON.stringify(allWords));
+  localStorage.setItem('card-swiper:allWords', JSON.stringify(allWords));
 
   return;
 };

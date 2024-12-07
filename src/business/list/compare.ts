@@ -7,9 +7,9 @@
 
 const compare = async (getAllLists, removeMany, refreshOrdersSync, addSync, refreshFieldsSync) => {
   const dateStart = Date.now();
-  const listsLS = await JSON.parse(localStorage.getItem('allLists'));
-  const listsDB = await getAllLists(localStorage.getItem('userId'));
-  const removedLists: any[] | null = JSON.parse(localStorage.getItem('removedLists'));
+  const listsLS = await JSON.parse(localStorage.getItem('card-swiper:allLists'));
+  const listsDB = await getAllLists(localStorage.getItem('card-swiper:userId'));
+  const removedLists: any[] | null = JSON.parse(localStorage.getItem('card-swiper:removedLists'));
 
   console.log('-_'.repeat(6), ' sync start ', '-_'.repeat(6));
 
@@ -185,7 +185,7 @@ const compare = async (getAllLists, removeMany, refreshOrdersSync, addSync, refr
         updateOrder: LS_sameDB[i].updateOrder,
       });
     });
-    localStorage.setItem('allLists', JSON.stringify(freshFields));
+    localStorage.setItem('card-swiper:allLists', JSON.stringify(freshFields));
   }
 
   if (lsDelete.length > 0) {

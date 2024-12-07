@@ -28,21 +28,21 @@ async function buildClientDateFirstTime(data: []) {
   console.log(data);
   //TODO order change work only aftere delete LS and refresh
   //TODO I gues it's backand problem
-  localStorage.setItem('allLists', JSON.stringify([idioms, phrasalVerbs]));
+  localStorage.setItem('card-swiper:allLists', JSON.stringify([idioms, phrasalVerbs]));
 
   // Add word
   const newBulkWord1 = await putNewBulkWord(phrasalVerbs._id, phrasalVerbs_words);
   data[1].words = newBulkWord1;
-  localStorage.setItem('Allwords', JSON.stringify(newBulkWord1));
+  localStorage.setItem('card-swiper:allWords', JSON.stringify(newBulkWord1));
   console.log(data);
 
   // Add word 2
   const newBulkWord2 = await putNewBulkWord(idioms._id, idioms_words);
   data[0].words = newBulkWord2;
-  localStorage.setItem('Allwords', JSON.stringify(newBulkWord2));
+  localStorage.setItem('card-swiper:allWords', JSON.stringify(newBulkWord2));
   console.log(data);
   // Clean
-  localStorage.removeItem('registration');
+  localStorage.removeItem('card-swiper:registration');
   console.log('bild client registration date 100%: _id, list, word :)');
   return data;
 }

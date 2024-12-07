@@ -24,19 +24,20 @@ async function buildClientDate(email: string): Promise<ListData[]> {
   // or in time sign-in email = null
   if (!email) {
     //email && userId is delited
-    const userId = localStorage.getItem('userId');
-    email = localStorage.getItem('email') || (await emailById(userId));
+    const userId = localStorage.getItem('card-swiper:userId');
+    email = localStorage.getItem('card-swiper:email') || (await emailById(userId));
   }
 
   // get user Id by email
-  const userId = localStorage.getItem('userId') || (await getUserId(email));
+  const userId = localStorage.getItem('card-swiper:userId') || (await getUserId(email));
 
   // FIRST time scenario
-  const isFirstTime = JSON.parse(localStorage.getItem('registration')) || false;
+  const isFirstTime = JSON.parse(localStorage.getItem('card-swiper:registration')) || false;
   if (isFirstTime) return await buildClientDateFirstTime(data);
 
   // get all lists Id by user Id
-  const allLists = JSON.parse(localStorage.getItem('allLists')) || (await getAllLists(userId, true));
+  const allLists =
+    JSON.parse(localStorage.getItem('card-swiper:allLists')) || (await getAllLists(userId, true));
   if (!allLists) {
     const dateEnd = Date.now();
     console.log(
@@ -66,7 +67,8 @@ async function buildClientDate(email: string): Promise<ListData[]> {
   });
 
   // Write words and gameCount in lists
-  const Allwords = JSON.parse(localStorage.getItem('Allwords')) || (await getAllWords(userId));
+  const Allwords =
+    JSON.parse(localStorage.getItem('card-swiper:allWords')) || (await getAllWords(userId));
   if (!Allwords) {
     const dateEnd = Date.now();
     console.log(

@@ -49,7 +49,7 @@ export default function Footer({}: Props) {
     }
 
     if (dataZus[orderListEditZus].gameCount !== newInputVal) {
-      const listsLS = JSON.parse(localStorage.getItem('allLists'));
+      const listsLS = JSON.parse(localStorage.getItem('card-swiper:allLists'));
 
       //? ISO 8601 (0 UTC - Z)
       const newTime = new Date().toISOString();
@@ -60,7 +60,7 @@ export default function Footer({}: Props) {
       // LS
       listsLS[orderListEditZus].gameCount = newInputVal;
       listsLS[orderListEditZus].updateGameCount = newTime;
-      localStorage.setItem('allLists', JSON.stringify(listsLS));
+      localStorage.setItem('card-swiper:allLists', JSON.stringify(listsLS));
       // DB
       patchListField(listsLS[orderListEditZus]._id, newInputVal, newTime);
     }

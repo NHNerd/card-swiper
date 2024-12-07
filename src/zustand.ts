@@ -1,8 +1,8 @@
 import { create } from 'zustand';
-import { noData, phrasalVerbs, phrasalVerbsWords } from '../src/hardCodeDateObj/hardCodeDateObj.js';
+import { noData } from '../src/hardCodeDateObj/hardCodeDateObj.js';
 
-const email = localStorage.getItem('email');
-const userId = localStorage.getItem('userId');
+const email = localStorage.getItem('card-swiper:email');
+const userId = localStorage.getItem('card-swiper:userId');
 
 export const useUiState = create((set) => ({
   page: email || userId ? 'menu' : 'auth',

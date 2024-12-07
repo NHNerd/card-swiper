@@ -11,8 +11,8 @@ export const registration = async (email: string, pass: string): Promise<string 
   return axiosUser
     .post(src, { email, pass })
     .then((data) => {
-      // localStorage.setItem('userId', data.data.user._id);
-      // localStorage.setItem('email', email);
+      // localStorage.setItem('card-swiper:userId', data.data.user._id);
+      // localStorage.setItem('card-swiper:email', email);
       return data.data.user._id;
     })
     .catch((error) => {
@@ -30,8 +30,8 @@ export const login = (email: string, pass: string): Promise<string | void> => {
   return axiosUser
     .post(src, { email, pass })
     .then((data) => {
-      // localStorage.setItem('userId', data.data._id);
-      // localStorage.setItem('email', email);
+      // localStorage.setItem('card-swiper:userId', data.data._id);
+      // localStorage.setItem('card-swiper:email', email);
 
       return data.data._id;
     })
@@ -51,7 +51,7 @@ export const getUserId = (email: string): Promise<string | void> => {
   return axiosUser
     .get(src, { params })
     .then((data) => {
-      localStorage.setItem('userId', data.data._id);
+      localStorage.setItem('card-swiper:userId', data.data._id);
       return data.data._id;
     })
     .catch((error) => {
@@ -71,7 +71,7 @@ export const emailById = (userId: number): Promise<string | void> => {
     .get(src, { params })
     .then((data) => {
       const email = data.data.email;
-      localStorage.setItem('email', email);
+      localStorage.setItem('card-swiper:email', email);
       return email;
     })
     .catch((error) => {

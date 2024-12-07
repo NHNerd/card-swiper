@@ -16,7 +16,7 @@ export const getAllWords = async (userId) => {
       const Allwords = data.data.allWords;
       console.log(Allwords);
       //? convert object to string: JSON.stringify
-      localStorage.setItem('Allwords', JSON.stringify(Allwords));
+      localStorage.setItem('card-swiper:allWords', JSON.stringify(Allwords));
       return Allwords;
     })
     .catch((error) => {
@@ -32,7 +32,7 @@ export const getAllWords = async (userId) => {
 
 export const putNewWord = async (listId, word: string, translate: string) => {
   const src = '/add';
-  const userId = localStorage.getItem('userId');
+  const userId = localStorage.getItem('card-swiper:userId');
 
   return axiosWord
     .post(src, { userId, listId, word, translate })
@@ -58,7 +58,7 @@ export const patchWordField = async (
 ) => {
   const src = '/patchWordField';
 
-  const userId = localStorage.getItem('userId');
+  const userId = localStorage.getItem('card-swiper:userId');
 
   return axiosWord
     .patch(src, {
@@ -93,7 +93,7 @@ interface Word {
 
 export const putNewBulkWord = async (listId: number, words: Word[]): Promise<any> => {
   const src = '/addBulk';
-  const userId = localStorage.getItem('userId');
+  const userId = localStorage.getItem('card-swiper:userId');
 
   return axiosWord
     .post(src, { userId, listId, words })

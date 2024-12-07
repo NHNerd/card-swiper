@@ -2,7 +2,7 @@
 //TODO set correct value in client - change creating logic in server
 
 export const addList = (listName: string) => {
-  const allLists = JSON.parse(localStorage.getItem('allLists'));
+  const allLists = JSON.parse(localStorage.getItem('card-swiper:allLists'));
 
   if (allLists && allLists.some((item) => item.listName === listName)) {
     console.log('List: "' + listName + '" already exists!');
@@ -27,7 +27,7 @@ export const addList = (listName: string) => {
   };
   allLists.unshift(newList);
 
-  localStorage.setItem('allLists', JSON.stringify(allLists));
+  localStorage.setItem('card-swiper:allLists', JSON.stringify(allLists));
 
   return allLists;
 };
@@ -42,6 +42,6 @@ export const refreshLSAterDB = (newList: any, allLists: any[]) => {
   //! 0 - wrong!
   allLists[0] = newList;
 
-  localStorage.setItem('allLists', JSON.stringify(allLists));
+  localStorage.setItem('card-swiper:allLists', JSON.stringify(allLists));
   return allLists;
 };

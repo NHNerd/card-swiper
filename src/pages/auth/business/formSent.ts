@@ -51,7 +51,7 @@ export const handleSubmit = (
         } else {
           console.log('Logged in successfully with userId:', result);
           //!
-          localStorage.setItem('email', emailVal);
+          localStorage.setItem('card-swiper:email', emailVal);
           setPage('menu');
           setwrongValue({ value: '', message: '' });
         }
