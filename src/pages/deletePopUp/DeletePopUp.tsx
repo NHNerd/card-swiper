@@ -3,7 +3,7 @@ import React from 'react';
 import { zustandData } from '../../zustand';
 
 import cssDeletePopUp from './DeletePopUp.module.css';
-import Btn from './components/Btn';
+import BtnText from './components/Btn';
 
 type Props = {
   isDeletePopUp: boolean;
@@ -46,10 +46,10 @@ export default function DeletePopUp({ isDeletePopUp, setIsDeletePopUp, deletedLi
         </section>
         <section className={cssDeletePopUp.footer}>
           <div className={cssDeletePopUp.leftBtn}>
-            <Btn children1={<div>delete words</div>} children2={<div>permanently</div>} />
+            <BtnText children1={<div>delete words</div>} children2={<div>permanently</div>} />
           </div>
           <div className={cssDeletePopUp.rightBtn}>
-            <Btn
+            <BtnText
               children1={<div>move words</div>}
               children2={
                 <div className={cssDeletePopUp.textHorizont}>
@@ -61,7 +61,7 @@ export default function DeletePopUp({ isDeletePopUp, setIsDeletePopUp, deletedLi
           </div>
 
           <div className={cssDeletePopUp.centerBtn}>
-            <Btn children1={<div>cancel</div>} children2={null} />
+            <BtnText children1={<div>cancel</div>} children2={null} />
           </div>
         </section>
       </div>

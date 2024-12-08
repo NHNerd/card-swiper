@@ -1,0 +1,44 @@
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 80dvh;
+  width: 100dvw;
+  /* background-color: rgba(255, 192, 203, 0.082); */
+}
+
+.wrapBtn {
+  position: absolute;
+  height: 14dvh;
+  width: 60dvw;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* background-color: rgba(255, 105, 180, 0.178); */
+}
+
+.previous {
+  padding: 0 4px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 40px;
+  height: 40px;
+
+  background-image: url('/buttons/back.svg');
+  background-repeat: no-repeat;
+  background-size: 32% 50%;
+  background-position: center;
+}
+.translate {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: fit-content;
+  width: fit-content;
+  transform: translateX(20%);
+
+  text-align: center;
+  font-size: 22px;
+}

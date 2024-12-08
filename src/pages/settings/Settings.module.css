@@ -11,3 +11,14 @@
   user-select: none;
   pointer-events: none;
 }
+
+.logout {
+  padding: 10px 30px;
+  position: absolute;
+  font-size: 36px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: black;
+  border-radius: 10px;
+}

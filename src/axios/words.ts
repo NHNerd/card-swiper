@@ -15,7 +15,6 @@ export const getAllWords = async (userId) => {
     .get(src, { params })
     .then((data) => {
       const Allwords = data.data.allWords;
-      console.log(Allwords);
       //? convert object to string: JSON.stringify
       localStorage.setItem('card-swiper:allWords', JSON.stringify(Allwords));
       return Allwords;

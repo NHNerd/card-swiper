@@ -1,6 +1,7 @@
 #session {
   position: fixed;
   inset: 0;
+  transform-style: preserve-3d;
 }
 
 .on {
@@ -10,4 +11,48 @@
 .off {
   opacity: 0;
   transition: 1s;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 76dvh;
+  width: 100dvw;
+  background-color: rgba(255, 192, 203, 0.082);
+}
+
+.textHorizont {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  height: fit-content;
+}
+
+.leftBtn {
+  position: fixed;
+  left: 20dvw;
+  width: fit-content;
+  height: fit-content;
+  background-color: red;
+}
+
+.rightBtn {
+  position: fixed;
+  right: 20dvw;
+  width: fit-content;
+  height: fit-content;
+  background-color: blue;
+}
+.centerBtn {
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: fit-content;
+  height: fit-content;
 }

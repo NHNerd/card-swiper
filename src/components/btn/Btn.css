@@ -3,7 +3,9 @@
 .editListName,
 .tick,
 .word,
-.translate {
+.translate,
+.exitSession,
+.tickSession {
   position: absolute;
   /* top: 50%; */
   width: 6dvh;
@@ -34,6 +36,13 @@
 .editListName {
   background-image: url('/buttons/edit.svg');
 }
+.exitSession {
+  background-image: url('/buttons/exit.svg');
+  left: 0;
+}
+.tickSession {
+  right: 0;
+}
 
 .word,
 .translate {
@@ -59,7 +68,8 @@
   right: 0;
 }
 
-.tick {
+.tick,
+.tickSession {
   position: absolute;
   background-repeat: no-repeat;
   background-size: 32%;

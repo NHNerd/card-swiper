@@ -3,8 +3,18 @@ import React from 'react';
 import './Btn.css';
 
 type Props = {
-  parrent: 'lol' | 'le';
-  type: 'edit' | 'exit' | 'editListName' | 'tick' | 'editWord' | 'word' | 'translate';
+  parrent: 'lol' | 'le' | 'session';
+  type:
+    | 'edit'
+    | 'exit'
+    | 'editListName'
+    | 'tick'
+    | 'editWord'
+    | 'word'
+    | 'translate'
+    | 'exitSession'
+    | 'tickSession';
+
   hndlr: any;
   listOrder: number;
   setorderListEdit: any;
@@ -76,6 +86,18 @@ const Btn = ({ parrent, type, hndlr, listOrder }: Props) => {
       >
         {type}
       </button>
+    );
+  } else if (parrent == 'session') {
+    return (
+      // session tick
+      <>
+        <button
+          className={type}
+          onClick={() => {
+            hndlr();
+          }}
+        ></button>
+      </>
     );
   }
 };
