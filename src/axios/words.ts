@@ -110,3 +110,32 @@ export const putNewBulkWord = async (listId: number, words: Word[]): Promise<any
       }
     });
 };
+
+export const remove = async (_id: any) => {
+  const userId = localStorage.getItem('card-swiper:userId');
+
+  const src = `/delete/${userId}/${_id}`;
+
+  return axiosWord
+    .delete(src)
+    .then((response) => {
+      console.log(response.data.message);
+
+      // Refresh LS removedWords
+      const removedWords = JSON.parse(localStorage.getItem('card-swiper:removedWords')) || [];
+      const removedWordsUpdate = removedWords.filter((item: any) => item._id !== _id);
+      if (removedWordsUpdate.length === 0) localStorage.removeItem('card-swiper:removedWords');
+      else localStorage.setItem('card-swiper:removedWords', JSON.stringify(removedWordsUpdate));
+
+      return true;
+    })
+    .catch((error) => {
+      const statusCode = error.response.status;
+      if (statusCode === 404) {
+        console.log(error.response?.data.message);
+        return false;
+      }
+      console.error('Error fetching data (word remove):', error);
+      return false;
+    });
+};

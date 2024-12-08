@@ -11,6 +11,9 @@ const compare = async (getAllLists, removeMany, refreshOrdersSync, addSync, refr
   const listsDB = await getAllLists(localStorage.getItem('card-swiper:userId'));
   const removedLists: any[] | null = JSON.parse(localStorage.getItem('card-swiper:removedLists'));
 
+  //! Temp (solution not work with offline case )
+  localStorage.removeItem('card-swiper:allWords');
+
   console.log('-_'.repeat(6), ' sync start ', '-_'.repeat(6));
 
   //---------------------------------------------------------------------

@@ -1,12 +1,9 @@
 import React from 'react';
 
-import BtnArrow from '../btnArrow/BtnArrow.tsx';
+import { data, ListsTS } from '/public/temp/data.ts';
 
-import { data, ListsTS, ListTS } from '/public/temp/data.ts';
-import btnArrowHndlr from './btnArrowHndlr.ts';
 import { useUiState, zustandData, zustandOrderListEdit } from '../../../../zustand.ts';
 import Btn from '../../../../components/btn/Btn.tsx';
-import PopInput from '../../../../components/popInput/PopInput.tsx';
 
 import cssList from '../../../../components/list/List.module.css';
 import cssListLe from './ListLe.module.css';
@@ -17,6 +14,7 @@ type Props = {
   setCurrentWord;
   setCurrentTranslate;
   setIsOpen;
+  hndlrDelBtn;
 };
 
 const lists: ListsTS = data.lists.list1.words;
@@ -27,6 +25,7 @@ export default function ListLe({
   setCurrentWord,
   setCurrentTranslate,
   setIsOpen,
+  hndlrDelBtn,
 }: Props) {
   const { page } = useUiState();
   const { dataZus, setDataZus } = zustandData();
@@ -77,6 +76,7 @@ export default function ListLe({
           } as React.CSSProperties
         }
       />
+      <Btn parrent='le' type='exit' hndlr={hndlrDelBtn} listOrder={index} />
       <Btn parrent='le' type='editWord' hndlr={() => toEdit(word)} />
 
       <div

@@ -55,6 +55,16 @@ const Btn = ({ parrent, type, hndlr, listOrder }: Props) => {
         }}
       ></button>
     );
+  } else if (parrent == 'le' && type == 'exit') {
+    return (
+      //! lol edit
+      <button
+        className={type + ' btnLe'}
+        onClick={() => {
+          hndlr(listOrder);
+        }}
+      ></button>
+    );
   } else if (parrent == 'le' && (type == 'word' || type == 'translate')) {
     return (
       // le edit swithch to word

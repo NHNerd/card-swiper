@@ -6,7 +6,7 @@ import Footer from './components/footer/Footer.tsx';
 import PopInput from '../../components/popInput/PopInput.tsx';
 import TextArea from './components/textArea/TextArea.tsx';
 import { editWord } from '../../business/word/addWord.ts';
-import { patchWordField } from '../../axios/words.ts';
+import { patchWordField, remove } from '../../axios/words.ts';
 import { useUiState, zustandData, zustandOrderListEdit } from '../../zustand.ts';
 
 import cssLe from './Le.module.css';
@@ -123,18 +123,28 @@ export default function Le({}: Props) {
     submitClear(inputRef);
   };
 
-  const test3 = (
-    <textarea
-      // className={cssTextArea.textarea}
-      cols={20}
-      rows={8}
-      // 7 переносов строки
-      maxLength={167}
-      // value={newTextareaVal}
-      // onChange={hndlrChangeTextarea}
-      placeholder='Enter new translate'
-    ></textarea>
-  );
+  const hndlrDeleteWord = (listOrder: number) => {
+    const currentWord = dataZus[orderListEditZus].words[listOrder];
+
+    // state
+    dataZus[orderListEditZus].words.splice(listOrder, 1);
+    setDataZus(dataZus);
+    // LS
+    const wordsLS = JSON.parse(localStorage.getItem('card-swiper:allWords'));
+    const wordsLSNew = wordsLS.filter((word: any) => word._id !== currentWord._id);
+    localStorage.setItem('card-swiper:allWords', JSON.stringify(wordsLSNew));
+
+    // LS Flag - not apdated(DB)
+    const removedWords = JSON.parse(localStorage.getItem('card-swiper:removedWords')) || [];
+    // Chek doublicats(only unique _id)
+    if (!removedWords.some((item) => item._id === currentWord._id)) {
+      removedWords.push({ _id: currentWord._id });
+    }
+    localStorage.setItem('card-swiper:removedWords', JSON.stringify(removedWords));
+
+    // DB
+    remove(currentWord._id);
+  };
 
   return (
     <>
@@ -152,6 +162,7 @@ export default function Le({}: Props) {
             setCurrentWord={setCurrentWord}
             setCurrentTranslate={setCurrentTranslate}
             setIsOpen={setIsOpen}
+            hndlrDelBtn={hndlrDeleteWord}
           />
         </div>
       </div>
