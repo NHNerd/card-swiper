@@ -2,8 +2,6 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-console.log('API_URL:', API_URL);
-
 export default API_URL;
 
 const axiosUser = axios.create({
@@ -16,8 +14,6 @@ export const registration = async (email: string, pass: string): Promise<string 
   return axiosUser
     .post(src, { email, pass })
     .then((data) => {
-      // localStorage.setItem('card-swiper:userId', data.data.user._id);
-      // localStorage.setItem('card-swiper:email', email);
       return data.data.user._id;
     })
     .catch((error) => {
@@ -35,9 +31,6 @@ export const login = (email: string, pass: string): Promise<string | void> => {
   return axiosUser
     .post(src, { email, pass })
     .then((data) => {
-      // localStorage.setItem('card-swiper:userId', data.data._id);
-      // localStorage.setItem('card-swiper:email', email);
-
       return data.data._id;
     })
     .catch((error) => {

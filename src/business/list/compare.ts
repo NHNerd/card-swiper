@@ -177,13 +177,16 @@ const compare = async (getAllLists, removeMany, refreshOrdersSync, addSync, refr
   if (fresh_orders_LS_or_DB || lsAddToDB_success || dbAddToLS) {
     freshFields.sort((a, b) => a.order - b.order);
     freshFields.map((list, i) => {
+      console.log(LS_sameDB[i]);
       list.order = i;
-      // Fresh order for db after delete list(s)
-      DTOupdateDB_allOrder.push({
-        _id: LS_sameDB[i]._id,
-        order: LS_sameDB[i].order,
-        updateOrder: LS_sameDB[i].updateOrder,
-      });
+      // Fresh order for db
+      if (LS_sameDB[i]) {
+        DTOupdateDB_allOrder.push({
+          _id: LS_sameDB[i]._id,
+          order: LS_sameDB[i].order,
+          updateOrder: LS_sameDB[i].updateOrder,
+        });
+      }
     });
     localStorage.setItem('card-swiper:allLists', JSON.stringify(freshFields));
   }
