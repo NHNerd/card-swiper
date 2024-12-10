@@ -81,7 +81,9 @@ export default function Session({}: Props) {
         <Footer
           gameWords={gameWords}
           setGameWords={setGameWords}
+          know={know}
           setKnow={setKnow}
+          dontKnow={dontKnow}
           setDontKnow={setDontKnow}
           translate={translate}
           setTranslate={setTranslate}
