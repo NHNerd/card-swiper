@@ -102,8 +102,7 @@
   line-height: 1.5; /* it's standard settings in Chrome, we set just in case */
   font-weight: 400;
 
-  /* color-scheme: light dark; */
-  /* color-scheme: dark; */
+  color-scheme: dark;
 
   /* turn off auto text weight  */
   font-synthesis: none;
@@ -221,7 +220,7 @@ input {
   }
 }
 
-@media (prefers-color-scheme: light) {
+/* @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
     background-color: #ffffff;
@@ -232,7 +231,7 @@ input {
   button {
     background-color: #f9f9f9;
   }
-}
+} */
 
 .jetter-attntion {
   animation: jetter-attntion 0.5s ease-out 1;
