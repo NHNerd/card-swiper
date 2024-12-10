@@ -75,7 +75,7 @@ export default function Footer({}: Props) {
     <>
       <div className={cssFooter.containerFooter + ' ' + (page == 'le' ? cssFooter.on : cssFooter.off)}>
         <div className={cssFooter.left}>
-          <h2 className={cssFooter.wordCount}>{dataZus[orderListEditZus]?.words.length || 0}</h2>
+          <h2 className={cssFooter.wordCount}>{dataZus[orderListEditZus]?.words?.length || 0}</h2>
           <h2 className={cssFooter.wordText}>word count</h2>
         </div>
         <div className={cssFooter.right}>
