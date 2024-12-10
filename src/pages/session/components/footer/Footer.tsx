@@ -7,7 +7,9 @@ import cssFooter from './Footer.module.css';
 export default function Footer({
   gameWords,
   setGameWords,
+  know,
   setKnow,
+  dontKnow,
   setDontKnow,
   translate,
   setTranslate,
@@ -15,6 +17,7 @@ export default function Footer({
   setGameWordsPrev,
 }) {
   const hndlrDontKnow = () => {
+    if (know || dontKnow) return;
     console.log(`don't know`);
 
     setDontKnow(true);
@@ -30,6 +33,7 @@ export default function Footer({
   };
 
   const hndlrKnow = () => {
+    if (know || dontKnow) return;
     console.log('know');
 
     setKnow(true);
@@ -44,17 +48,14 @@ export default function Footer({
     }, 300);
   };
   const hndlrPrevious = () => {
+    if (know || dontKnow) return;
     console.log('Previous');
 
     const lastPrev = gameWordsPrev.slice(-1);
     const OtherPrev = gameWordsPrev.slice(0, gameWordsPrev.length - 1);
 
-    // console.log(
-    //   'last: ',
-    //   lastPrev[lastPrev.length - 1]?.word,
-    //   'gameWords: ',
-    //   gameWords[gameWords.length - 1]?.word
-    // );
+    // console.log(...OtherPrev);
+
     //TODO need check if (prev word === lastPrev word) return
     setGameWords((prev) => [...prev, ...lastPrev]);
     setGameWordsPrev(OtherPrev);
