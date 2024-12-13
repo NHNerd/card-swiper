@@ -31,7 +31,7 @@ export const handleSubmit = (
       setAttention('');
     }, 500);
     return;
-  } else if (!psswrdsMatch(passVal, passRepeatVal) && passVal) {
+  } else if (!psswrdsMatch(passVal, passRepeatVal) && passVal && sign !== 'in') {
     console.log(`passwords don't match!`);
     setwrongValue({ value: wrongValue, message: `passwords don't match!` });
     setAttention('passRepeat');
