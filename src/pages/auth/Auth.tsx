@@ -56,6 +56,10 @@ export default function Auth({}: Props) {
     };
   }, [emailVal, passVal]);
 
+  React.useEffect(() => {
+    console.log(wrongValue.value);
+  }, [emailVal]);
+
   return (
     <>
       <Header sign={sign} />
@@ -96,7 +100,7 @@ export default function Auth({}: Props) {
 
         <section className={cssAuth.inputs}>
           <InputStatus
-            status={validateEmail(emailVal) && (attention !== wrongValue.value || sign !== 'in')}
+            status={validateEmail(emailVal) && (attention === wrongValue.value || sign !== 'up')}
             attention={attention === 'email'}
           />
           <input
@@ -124,7 +128,7 @@ export default function Auth({}: Props) {
             className={cssAuth.input}
             type='password'
             name='password'
-            placeholder='enter password'
+            placeholder='enter pass'
             value={passVal}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassVal(e.target.value)}
             required
@@ -142,33 +146,36 @@ export default function Auth({}: Props) {
             {wrongValue.message}
           </div>
           <div className={cssAuth.line}></div>
-          <InputStatus
-            status={psswrdsMatch(passVal, passRepeatVal)}
-            attention={attention === 'passRepeat'}
-          />
-          <input
-            ref={inputPassrepeatRef}
-            className={cssAuth.input}
-            type='password'
-            name='password'
-            placeholder='repeat password'
-            value={passRepeatVal}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setpassRepeatVal(e.target.value)}
-            required
-            //   onFocus={() => inputFocusedHandler('mail')}
-            //   onBlur={() => inputFocusedHandler('none')}
-            //! Dont work
-            autoComplete='password'
-          ></input>
-          <div
-            className={
-              cssAuth.error +
-              (attention === 'passRepeat' ? ' ' + cssAuth.errorAnother : ' ' + cssAuth.errorOff)
-            }
-          >
-            {wrongValue.message}
+
+          <div className={sign === 'up' ? cssAuth.rePassContainer : cssAuth.rePassContainerOff}>
+            <InputStatus
+              status={psswrdsMatch(passVal, passRepeatVal)}
+              attention={attention === 'passRepeat'}
+            />
+            <input
+              ref={inputPassrepeatRef}
+              className={cssAuth.input}
+              type='password'
+              name='password'
+              placeholder='re pass'
+              value={passRepeatVal}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setpassRepeatVal(e.target.value)}
+              required
+              //   onFocus={() => inputFocusedHandler('mail')}
+              //   onBlur={() => inputFocusedHandler('none')}
+              //! Dont work
+              autoComplete='password'
+            ></input>
+            <div
+              className={
+                cssAuth.error +
+                (attention === 'passRepeat' ? ' ' + cssAuth.errorAnother : ' ' + cssAuth.errorOff)
+              }
+            >
+              {wrongValue.message}
+            </div>
+            <div className={cssAuth.line}></div>
           </div>
-          <div className={cssAuth.line}></div>
         </section>
 
         <button type='button' className={cssAuth.forgot}>
