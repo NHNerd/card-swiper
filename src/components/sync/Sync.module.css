@@ -1,8 +1,8 @@
 .wraper {
   padding: 6px;
   position: fixed;
-  top: 20px;
-  left: 20px;
+  top: var(--padding);
+  left: var(--padding);
   height: 30px;
   width: 30px;
   transition: scale 0.25s, opacity 0.25s, transform 0.4s;

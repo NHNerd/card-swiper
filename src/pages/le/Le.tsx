@@ -11,7 +11,11 @@ import { useUiState, zustandData, zustandOrderListEdit } from '../../zustand.ts'
 
 import cssLe from './Le.module.css';
 
-export default function Le({}: Props) {
+type Props = {
+  scrollSectionLeRef: React.RefObject<HTMLElement>;
+};
+
+export default function Le({ scrollSectionLeRef }: Props) {
   //Zustand
   const { page } = useUiState();
   const { dataZus, setDataZus } = zustandData();
@@ -156,15 +160,19 @@ export default function Le({}: Props) {
 
         <Footer />
         <div className={cssLe.scrollFade}></div>
-        <div className={cssLe.scrollWrap + ' ' + (page == 'le' ? 'scrollWrapOn' : 'scrollWrapOff')}>
+        <section
+          ref={scrollSectionLeRef}
+          className={cssLe.scrollWrap + ' ' + (page == 'le' ? 'scrollWrapOn' : 'scrollWrapOff')}
+        >
           <ListLe
+            scrollSectionLeRef={scrollSectionLeRef}
             parrent={'le'}
             setCurrentWord={setCurrentWord}
             setCurrentTranslate={setCurrentTranslate}
             setIsOpen={setIsOpen}
             hndlrDelBtn={hndlrDeleteWord}
           />
-        </div>
+        </section>
       </div>
       <PopInput
         isOpen={isOpen}

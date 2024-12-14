@@ -30,11 +30,12 @@ export default function Session({}: Props) {
     // refresh after session
     if (page === 'menu') {
       setGameWords(dataZus[0].words);
+      setGameWordsPrev([]);
     }
   }, [page]);
   React.useEffect(() => {
+    // refresh game words
     if (dataZus && dataZus.length > 0 && dataZus[0].words) {
-      // setGameWords(dataZus[0].words);
       setGameWords(dataZus[0].words);
     }
   }, [dataZus]);
@@ -51,6 +52,7 @@ export default function Session({}: Props) {
   //   }
   // }, [gameWords]);
   React.useEffect(() => {
+    // end of  ession
     if (gameWords?.length === 0 && page == 'session') {
       flagExite = false;
       setEnd(false);

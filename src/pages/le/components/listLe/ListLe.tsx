@@ -4,11 +4,13 @@ import { data, ListsTS } from '/public/temp/data.ts';
 
 import { useUiState, zustandData, zustandOrderListEdit } from '../../../../zustand.ts';
 import Btn from '../../../../components/btn/Btn.tsx';
+import ScrollFooter from '../../../../components/list/listFooter/ScrollFooter.tsx';
 
 import cssList from '../../../../components/list/List.module.css';
 import cssListLe from './ListLe.module.css';
 
 type Props = {
+  scrollSectionLeRef;
   children?: React.ReactNode;
   parrent;
   setCurrentWord;
@@ -20,6 +22,7 @@ type Props = {
 const lists: ListsTS = data.lists.list1.words;
 
 export default function ListLe({
+  scrollSectionLeRef,
   children,
   parrent,
   setCurrentWord,
@@ -53,44 +56,50 @@ export default function ListLe({
     return <div className={cssListLe.empty}>Empty :(</div>;
   }
 
-  return dataZus[orderListEditZus].words.map((word: any, index: number) => (
-    <section
-      key={index}
-      className={
-        cssList.containerList +
-        (parrent === 'menu' ? ' ' + cssList.menu : '') +
-        ' ' +
-        (page === 'lol' ? cssList.lolHeight : cssList.leHeight)
-      }
-    >
-      <div
-        className={cssListLe.progressBar}
-        // min: -100, max: 0
-        style={
-          {
-            '--translateX': `${
-              Number(word.correct) === 0
-                ? -100
-                : -100 + (word.correct / (word.correct + word.wrong)) * 100
-            }%`,
-          } as React.CSSProperties
-        }
-      />
-      <Btn parrent='le' type='exit' hndlr={hndlrDelBtn} listOrder={index} />
-      <Btn parrent='le' type='editWord' hndlr={() => toEdit(word)} />
+  return (
+    <>
+      {dataZus[orderListEditZus].words.map((word: any, index: number) => (
+        <section
+          key={index}
+          className={
+            cssList.containerList +
+            (parrent === 'menu' ? ' ' + cssList.menu : '') +
+            ' ' +
+            (page === 'lol' ? cssList.lolHeight : cssList.leHeight)
+          }
+        >
+          <div
+            className={cssListLe.progressBar}
+            // min: -100, max: 0
+            style={
+              {
+                '--translateX': `${
+                  Number(word.correct) === 0
+                    ? -100
+                    : -100 + (word.correct / (word.correct + word.wrong)) * 100
+                }%`,
+              } as React.CSSProperties
+            }
+          />
+          <Btn parrent='le' type='exit' hndlr={hndlrDelBtn} listOrder={index} />
+          <Btn parrent='le' type='editWord' hndlr={() => toEdit(word)} />
 
-      <div
-        onClick={() => {
-          console.log(word.word);
-        }}
-        className={page == 'le' ? 'flopOn' : 'flopOff'}
-      >
-        <h1 className={cssListLe.fontSize}>
-          {word.word}
-          {/* ?????  */}
-          {children}
-        </h1>
-      </div>
-    </section>
-  ));
+          <div
+            onClick={() => {
+              console.log(word.word);
+            }}
+            className={page == 'le' ? 'flopOn' : 'flopOff'}
+          >
+            <h1 className={cssListLe.fontSize}>
+              {word.word}
+              {/* ?????  */}
+              {children}
+            </h1>
+          </div>
+        </section>
+      ))}
+      <ScrollFooter scrollSectionRef={scrollSectionLeRef} />
+      <div className={cssListLe.footerPadding}></div>
+    </>
+  );
 }

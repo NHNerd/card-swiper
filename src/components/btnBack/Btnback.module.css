@@ -1,8 +1,8 @@
 .back {
   padding: var(--btn-overscan);
   position: fixed;
-  top: 20px;
-  left: 20px;
+  top: var(--padding);
+  left: var(--padding);
   width: 2dvh;
   height: 2dvh;
   /* background-color: rgba(172, 255, 47, 0.219); */

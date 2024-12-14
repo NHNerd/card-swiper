@@ -47,3 +47,32 @@
     text-shadow: 0 0 1px rgba(255, 255, 255, 0.1), 0 0 1px rgba(255, 255, 255, 0.1);
   }
 }
+
+.footer {
+  position: relative;
+  height: 5dvh;
+  width: 100%;
+  /* background-color: hotpink; */
+}
+
+.scrollTop {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border: 8px solid transparent;
+  border-bottom: 6px solid;
+  height: width * sqrt(3) / 2 for an equilateral triangle;
+
+  transform: translate(-50%, -50%);
+}
+
+.actArea {
+  position: absolute;
+  padding: 16px;
+  margin: -16px;
+  border-radius: 50%;
+  /* border: solid 1px red;
+  box-sizing: border-box; */
+}
