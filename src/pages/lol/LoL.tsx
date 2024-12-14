@@ -14,7 +14,9 @@ import debounce from '../../handlers/throttle.ts';
 import '../../components/container.css';
 import cssLoL from './LoL.module.css';
 
-type Props = {};
+type Props = {
+  scrollSectionLolRef: React.RefObject<HTMLElement>;
+};
 interface DataItem {
   id: number;
   name: string;
@@ -23,7 +25,7 @@ interface DataItem {
 // wrapping "refreshing allLists in localstorage" into debounce
 const debouncePutRefreshOrders = debounce(remove, 500);
 
-export default function LoL({}: Props) {
+export default function LoL({ scrollSectionLolRef }: Props) {
   //Zustand
   const { page } = useUiState();
   const { dataZus, setDataZus } = zustandData();
@@ -90,9 +92,15 @@ export default function LoL({}: Props) {
           <div className={cssLoL.scrollFade}></div>
 
           <section
+            ref={scrollSectionLolRef}
+            id='scrollSectionLol'
             className={cssLoL.scrollWrap + ' ' + (page !== 'le' ? 'scrollWrapOn' : 'scrollWrapOff')}
           >
-            <ListOfList parrent={'lol'} hndlrButton={hndlrDeleteList}></ListOfList>
+            <ListOfList
+              scrollSectionLolRef={scrollSectionLolRef}
+              parrent={'lol'}
+              hndlrButton={hndlrDeleteList}
+            ></ListOfList>
 
             {/* <List parrent={'lol'}></List> */}
           </section>

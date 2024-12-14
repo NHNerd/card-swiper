@@ -33,6 +33,7 @@
   left: max(4dvw, 20px);
   background-image: url('/buttons/exit.svg');
 }
+
 .editListName {
   background-image: url('/buttons/edit.svg');
 }

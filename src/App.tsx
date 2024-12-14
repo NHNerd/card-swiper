@@ -1,3 +1,5 @@
+import React from 'react';
+
 import Auth from './pages/auth/Auth.tsx';
 import Menu from './pages/menu/Menu.tsx';
 import LoL from './pages/lol/LoL.tsx';
@@ -13,14 +15,27 @@ import cssAppTest from './AppTest.module.css';
 function App() {
   const { page } = useUiState();
 
+  const scrollSectionLolRef = React.useRef<HTMLElement>(null);
+  const scrollSectionLeRef = React.useRef<HTMLElement>(null);
+
   console.log('page: ', page);
+
+  // refresh topScroll
+  React.useEffect(() => {
+    if (page === 'menu' && scrollSectionLolRef?.current) {
+      scrollSectionLolRef?.current?.scrollTo({ top: 0 });
+    }
+    if ((page === 'lol' || page === 'menu') && scrollSectionLeRef?.current) {
+      scrollSectionLeRef?.current?.scrollTo({ top: 0 });
+    }
+  }, [page, scrollSectionLolRef]);
 
   if (page === 'auth') return <Auth />;
   return (
     <>
       <Session />
-      <LoL />
-      <Le />
+      <LoL scrollSectionLolRef={scrollSectionLolRef} />
+      <Le scrollSectionLeRef={scrollSectionLeRef} />
       <Menu />
       <Settings />
       <Burger />
