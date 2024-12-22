@@ -74,8 +74,8 @@ export default function Menu({}: Props) {
         className={
           cssMenu.footer +
           ' ' +
-          // changong top to bottom returns ancorrect animation
-          (page === 'menu' || page === 'settings'
+          //! changong top to bottom returns ancorrect animation
+          (page === 'menu' || page === 'settings' || page === 'statistics'
             ? cssMenu.menu + ' ' + cssMenu.anchorMenu
             : page === 'session'
             ? cssMenu.session

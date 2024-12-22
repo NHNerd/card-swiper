@@ -10,26 +10,27 @@ type Props = {
   time: number;
   setTime: (time: number) => void;
   end: boolean;
-  setEnd: (end: booleans) => void;
+  combo: number;
 };
 
-export default function DataSession({ gameWords, time, setTime, end, setEnd }: Props) {
+export default function DataSession({ gameWords, time, setTime, end, combo }: Props) {
   const { page, setPage } = useUiState();
-  //   const [end, setEnd] = React.useState(false);
+  const [comboAnime, setComboAnime] = React.useState<string>('comboAnimeOff');
+  const [timeAnime, setTimeAnime] = React.useState<string>('timeAnimeOff');
 
   React.useEffect(() => {
-    if (gameWords.length === 0 && page === 'session' && !end) {
-      setEnd(true);
-      console.log('Sessia is ended, now you see statistic');
-    }
-  }, [gameWords]);
+    if (end) return;
 
-  React.useEffect(() => {
     const timeStart = Date.now();
 
     if (page === 'session' && !end) {
       const intervalId = setInterval(() => {
         setTime(Math.round((Date.now() - timeStart) / 1000));
+
+        setTimeAnime('timeAnime');
+        setTimeout(() => {
+          setTimeAnime('timeAnimeOff');
+        }, 250);
       }, 1000);
       return () => clearInterval(intervalId);
     } else if (page === 'menu') {
@@ -37,10 +38,31 @@ export default function DataSession({ gameWords, time, setTime, end, setEnd }: P
     }
   }, [page, end]);
 
+  React.useEffect(() => {
+    if (combo !== 0) {
+      setComboAnime('comboAnime');
+      setTimeout(() => {
+        setComboAnime('comboAnimeClear');
+      }, 250);
+    } else {
+      setComboAnime('comboAnimeOff');
+    }
+  }, [combo]);
+
   return (
     <>
       <div className={cssData.dataContainer}>
-        <div className={cssData.time}>time: {time}s</div>
+        <div className={cssData.comboWrap}>
+          time:
+          <div className={cssData.time + ' ' + cssData[timeAnime]}>{time}</div>s
+        </div>
+
+        <div className={cssData.comboWrap}>
+          combo:
+          <div className={cssData[comboAnime]} data-text={combo}>
+            {combo}
+          </div>
+        </div>
       </div>
     </>
   );

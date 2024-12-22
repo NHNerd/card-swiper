@@ -3,6 +3,7 @@
   position: fixed;
   top: -10ch;
   bottom: -10ch;
+  left: 0;
   width: 100%;
   font-size: max(2.2dvh, 18px);
   border-left: solid 1px var(--color2);

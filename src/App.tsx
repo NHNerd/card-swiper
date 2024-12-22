@@ -7,6 +7,7 @@ import Le from './pages/le/Le.tsx';
 import Session from './pages/session/Session.tsx';
 import Settings from './pages/settings/Settings.tsx';
 import Burger from './components/burger/Burger.tsx';
+import Statistics from './pages/statistics/Statistics.tsx';
 
 import { useUiState } from './zustand.ts';
 
@@ -33,6 +34,7 @@ function App() {
   if (page === 'auth') return <Auth />;
   return (
     <>
+      <Statistics />
       <Session />
       <LoL scrollSectionLolRef={scrollSectionLolRef} />
       <Le scrollSectionLeRef={scrollSectionLeRef} />

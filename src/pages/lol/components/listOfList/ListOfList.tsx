@@ -56,7 +56,7 @@ export default function ListOfList({ scrollSectionLolRef, children, parrent, hnd
           key={index}
           className={
             cssList.containerList +
-            (page === 'auth' ? ' ' + 'off' + ' ' : '') +
+            (page === 'auth' || page === 'statistics' ? ' ' + 'off' + ' ' : '') +
             ' ' +
             (page !== 'le' ? cssList.lolHeight + ' ' + cssList.lolMinHeight : cssList.leHeight + ' ')
           }

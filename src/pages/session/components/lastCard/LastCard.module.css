@@ -1,0 +1,107 @@
+.card {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: perspective(1000px) translate(-50%, -50%);
+  height: 54dvh;
+  aspect-ratio: 0.64;
+  /* background-color: var(--main-color); */
+  border-radius: 20px;
+  text-align: center;
+  color: black;
+  font-size: 28px;
+  border: dotted 2px rgb(255, 255, 255);
+  /* border-left: solid 2px rgb(255, 255, 255);
+  border-right: solid 2px rgb(255, 255, 255); */
+  transform-origin: 0% 0%;
+  white-space: pre-line;
+  color: var(--main-color);
+
+  scale: 0.97;
+  user-select: none;
+  pointer-events: none;
+}
+
+/*TODO Надо сшить нормально перход из go в card и обратно */
+.on {
+  transition: 0.2s;
+}
+
+/*? For avoid freeze in draging time  */
+.card:active {
+  transition: transform 0s, top 0s, left 0s;
+}
+
+.off {
+  border-radius: 50%;
+  opacity: 0;
+  filter: blur(3px);
+  transition: 0.2s;
+  scale: 0.9;
+  cursor: default;
+  user-select: none;
+}
+
+.know {
+  translate: 100dvw;
+  rotate: 30deg;
+  transition: 0.5s;
+}
+.dontKnow {
+  translate: -100dvw;
+  rotate: -30deg;
+  transition: 0.5s;
+}
+
+.translate {
+  /* transform: perspective(1000px) rotateX(180deg) translate(-50%, -50%); */
+  animation: translate 0.5s 1 ease-in-out;
+  /* transition: 0.5s; */
+}
+
+.translateOff {
+  animation: translateOff 0.5s 1 ease-in-out;
+}
+@keyframes translate {
+  0% {
+    scale: 1 1;
+  }
+  50% {
+    scale: 1 0;
+  }
+  100% {
+    scale: 1 1;
+  }
+}
+@keyframes translateOff {
+  0% {
+    scale: 1 1;
+  }
+  50% {
+    scale: 1 0;
+  }
+  100% {
+    scale: 1 1;
+  }
+}
+
+.fasterContainer {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.green {
+  margin-left: 10px;
+  color: rgb(171, 233, 79);
+}
+
+.red {
+  color: rgb(247, 77, 91);
+}
+
+.sessionEnd {
+  scale: 1;
+}

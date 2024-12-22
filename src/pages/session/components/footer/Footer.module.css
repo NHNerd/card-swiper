@@ -3,6 +3,7 @@
   bottom: 0;
   left: 0;
   right: 0;
+
   top: 80dvh;
   width: 100dvw;
   /* background-color: rgba(255, 192, 203, 0.082); */
@@ -12,8 +13,10 @@
   position: absolute;
   height: 14dvh;
   width: 60dvw;
+  min-width: 150px;
   top: 50%;
   left: 50%;
+
   transform: translate(-50%, -50%);
   /* background-color: rgba(255, 105, 180, 0.178); */
 }
@@ -41,4 +44,47 @@
 
   text-align: center;
   font-size: 22px;
+}
+
+.exit {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 100px;
+
+  height: 4dvh;
+  min-height: 20px;
+
+  border-left: 3px solid rgb(129, 129, 129);
+  border-right: 3px solid rgb(129, 129, 129);
+  border-radius: 8px;
+  text-align: center;
+  opacity: 1;
+  transition: width 0.5s, opacity 0.5s;
+}
+
+.exitOff {
+  width: 100%;
+  opacity: 0;
+  user-select: none;
+  pointer-events: none;
+}
+
+.swipeBtn {
+  transition: transform 0.5s, opacity 0.5s;
+}
+.swipeBtnOff {
+  transform: scale(0.1, 1);
+  opacity: 0;
+  user-select: none;
+  pointer-events: none;
+}
+
+.bottomBtnOff {
+  transform: translateY(70px);
+  opacity: 0;
+  user-select: none;
+  pointer-events: none;
+  transition: transform 0.5s, opacity 0.5s;
 }
