@@ -1,0 +1,29 @@
+.container {
+  position: fixed;
+  margin-top: 5dvh;
+
+  top: 0;
+  height: 10dvh;
+  left: 20dvw;
+  right: 20dvw;
+
+  /* background-color: rgba(255, 105, 180, 0.192); */
+}
+
+.dayDot {
+  position: absolute;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 100%;
+}
+
+.dayLetter {
+  margin-top: 3dvh;
+  position: absolute;
+  height: fit-content;
+  width: fit-content;
+  text-align: center;
+}

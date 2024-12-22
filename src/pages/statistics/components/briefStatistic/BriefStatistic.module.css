@@ -1,0 +1,36 @@
+.container {
+  position: relative;
+  margin-top: 25dvh;
+  position: fixed;
+  /* left: 18dvw;
+  right: 18dvw; */
+  width: 60dvw;
+  min-width: 190px;
+  left: 50%;
+  transform: translateX(-50%);
+  /* background-color: rgba(172, 255, 47, 0.151); */
+}
+
+.stringContainer {
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+.spaceBetween {
+  width: 100%;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+}
+
+.value {
+  margin-left: 8px;
+  justify-content: space-between;
+}
+
+.hardes {
+  margin-top: 3dvh;
+  align-self: center;
+  width: 100%;
+  justify-content: center;
+}

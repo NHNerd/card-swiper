@@ -1,0 +1,15 @@
+.container {
+  /* position: absolute; */
+  transition: transform 0.25s;
+}
+
+.off {
+  transform: translateY(-40dvh);
+}
+
+.BtnArrowContainer {
+  position: absolute;
+  left: 50%;
+  top: 32dvh;
+  z-index: 1;
+}
