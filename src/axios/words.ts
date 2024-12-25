@@ -86,6 +86,30 @@ export const patchWordField = async (
     });
 };
 
+export const patchWordFielCorrectWrongdMany = async (listWordsNewDTO: any[]) => {
+  const src = '/patchWordFielCorrectWrongdMany';
+
+  return axiosWord
+    .patch(src, {
+      listWordsNewDTO,
+    })
+    .then((response) => {
+      console.log(response.data.message);
+      return true;
+    })
+    .catch((error) => {
+      const statusCode = error.response.status;
+      if (statusCode === 400) {
+        console.log(error.response?.data.message);
+        return statusCode;
+      }
+      if (statusCode === 404) {
+        console.log(error.response?.data.message);
+        return statusCode;
+      }
+    });
+};
+
 interface Word {
   word: string;
   translate: string;

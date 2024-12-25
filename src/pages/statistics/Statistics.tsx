@@ -8,6 +8,7 @@ type Props = {};
 
 export default function Statistics({}: Props) {
   const { page, setPage } = useUiState();
+
   const btnArrowHndlr = () => {
     console.log('btnArrowHndl');
     setPage('statistics');

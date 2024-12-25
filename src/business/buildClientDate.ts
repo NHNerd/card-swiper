@@ -1,6 +1,7 @@
 import { getUserId, emailById } from '../axios/user.ts';
 import { getAllLists } from '../axios/list.ts';
 import { getAllWords } from '../axios/words.ts';
+import sotByRatio from './word/sotByRatio.ts';
 
 import buildClientDateFirstTime from './buildClientDateFirstTime.ts';
 
@@ -94,8 +95,15 @@ async function buildClientDate(email: string): Promise<ListData[]> {
   // only one iteration for all list - create fild wordCount
   data.forEach((list) => {
     const listWord = words[list.listId];
-    list.words = listWord || [];
-    list.wordCount = listWord?.length || 0;
+
+    if (!listWord || listWord?.length === 0) {
+      list.words = [];
+      list.wordCount = 0;
+    } else {
+      sotByRatio(listWord);
+      list.words = listWord;
+      list.wordCount = listWord?.length;
+    }
   });
   //? O = "order of growth" (Big-O Notation)
   //? n = Allwords
