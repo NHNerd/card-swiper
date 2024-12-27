@@ -15,6 +15,7 @@ export const wordStatisticLS = (wordStatus) => {
       word.updateWord = newTime;
       word.updateTranslate = newTime;
       word.updateKnow = newTime;
+
       wordStatus[i].know ? (word.correct += 1) : (word.wrong += 1);
 
       listWords.push(word);

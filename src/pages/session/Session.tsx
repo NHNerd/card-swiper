@@ -6,7 +6,10 @@ import Bar from './components/bar/Bar.tsx';
 import DataSession from './components/data/Data.tsx';
 import Footer from './components/footer/Footer.tsx';
 import { wordStatisticLS } from './bussines/wordStatisticLS.ts';
+import { listStatisticLS } from './bussines/listStatisticLS.ts';
 import { patchWordFielCorrectWrongdMany } from '../../axios/words.ts';
+import { patchListSessionCount } from '../../axios/list.ts';
+
 import sotByRatio from '../../business/word/sotByRatio.ts';
 
 import cssSession from './Session.module.css';
@@ -63,7 +66,7 @@ export default function Session({}: Props) {
   }, [dataZus]);
 
   React.useEffect(() => {
-    // end of  ession
+    //* end of  session
 
     if (gameWords?.length === 0 && page == 'session' && !end) {
       wordStatus.map((item) => {
@@ -84,6 +87,7 @@ export default function Session({}: Props) {
       console.log('end of session');
       // LS
       const [listWordsNewDTO] = wordStatisticLS(wordStatus);
+      const [listNewDTO] = listStatisticLS();
       // DZ
       const dataZusCopy: any = [...dataZus];
       dataZusCopy[orderListEditZus].words.sort((a, b) => ('' + a._id).localeCompare(b._id));
@@ -92,9 +96,11 @@ export default function Session({}: Props) {
         wordStatus[i].know ? (word.correct += 1) : (word.wrong += 1);
       });
       sotByRatio(dataZusCopy[orderListEditZus].words);
+      dataZusCopy[0].sessionCount = listNewDTO.sessionCount;
       setDataZus(dataZusCopy);
       // DB
       patchWordFielCorrectWrongdMany(listWordsNewDTO);
+      patchListSessionCount(listNewDTO);
 
       setEnd(true);
     }
