@@ -15,7 +15,6 @@ export default function BriefStatistic({}: Props) {
   React.useEffect(() => {
     if (dataZus && dataZus.length !== 0 && dataZus[0]?.words && dataZus[0]?.words?.length !== 0) {
       setHardes(dataZus[0]?.words[0]?.word);
-      console.log(dataZus[0]);
 
       //TODO Need count session (need add field in Model)
 
@@ -32,7 +31,7 @@ export default function BriefStatistic({}: Props) {
       <div className={`${cssBriefStatistic.stringContainer} ${cssBriefStatistic.spaceBetween}`}>
         <h3 className={cssBriefStatistic.stringContainer}>
           <div className={cssBriefStatistic.text + ' color2'}>sessions:</div>
-          <div className={cssBriefStatistic.value}>{'...'}</div>
+          <div className={cssBriefStatistic.value}>{dataZus[0]?.sessionCount}</div>
         </h3>
         <h3 className={cssBriefStatistic.stringContainer}>
           <div className={cssBriefStatistic.text + ' color2'}>words repeated:</div>

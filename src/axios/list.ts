@@ -100,6 +100,19 @@ export const refreshFieldsSync = async (lists: any) => {
       return false;
     });
 };
+export const patchListSessionCount = async (listNewDTO: { _id: any; sessionCount: number }) => {
+  const src = '/patchListSessionCount';
+
+  return axiosList
+    .patch(src, listNewDTO)
+    .then((response) => {
+      console.log(response.data.message);
+    })
+    .catch((error) => {
+      console.error('Error patch data:', error);
+      return true;
+    });
+};
 
 export const putNewList = async (listName: string) => {
   const src = '/add';

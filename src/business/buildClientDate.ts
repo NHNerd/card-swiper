@@ -14,6 +14,7 @@ type ListData = {
   order: number;
   wordCount: number;
   gameCount: number;
+  sessionCount: number;
   words: any[];
 };
 
@@ -59,9 +60,10 @@ async function buildClientDate(email: string): Promise<ListData[]> {
     const order: number = list.order;
     const wordCount: number = 0;
     const gameCount: number = list.gameCount;
+    const sessionCount: number = list?.sessionCount ? list.sessionCount : 0;
     const words: [] = [];
 
-    data.push({ listId, listName, order, wordCount, gameCount, words });
+    data.push({ listId, listName, order, wordCount, gameCount, sessionCount, words });
 
     //collect all lists id for get all users words
     allListsId.push(listId);
