@@ -10,6 +10,8 @@
 }
 .off {
   opacity: 0;
+  pointer-events: none;
+  user-select: none;
   transition: 1s;
 }
 

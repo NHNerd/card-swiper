@@ -31,10 +31,12 @@ export const login = (email: string, pass: string): Promise<string | void> => {
   return axiosUser
     .post(src, { email, pass })
     .then((data) => {
+      console.log(data.data._id);
       return data.data._id;
     })
     .catch((error) => {
-      const statusCode = error.response.status;
+      const statusCode = error?.response.status || "I don't know";
+      console.log('!!!!!!!!!!!: ', error);
       if (statusCode === 404) {
         console.log(error.response.data.message);
         return statusCode;

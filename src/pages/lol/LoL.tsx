@@ -36,12 +36,12 @@ export default function LoL({ scrollSectionLolRef }: Props) {
   const [deletedListOrder, setDeletedListOrder] = React.useState<number>(0);
 
   React.useEffect(() => {
-    if (page === 'menu' || page === 'session' || page === 'settings') {
-      setOpacity(cssLoL.opacity0);
-    } else {
+    if (page === 'lol' || page === 'le') {
       setTimeout(() => {
         setOpacity(cssLoL.opacity1);
       }, 250);
+    } else {
+      setOpacity(cssLoL.opacity0);
     }
   }, [page]);
 

@@ -56,9 +56,9 @@ export default function Auth({}: Props) {
     };
   }, [emailVal, passVal]);
 
-  React.useEffect(() => {
-    console.log(wrongValue.value);
-  }, [emailVal]);
+  // React.useEffect(() => {
+  //   console.log(wrongValue.value);
+  // }, [emailVal]);
 
   return (
     <>

@@ -1,14 +1,12 @@
 .container {
-  position: relative;
-  margin-top: 25dvh;
-  position: fixed;
-  /* left: 18dvw;
-  right: 18dvw; */
-  width: 60dvw;
+  position: absolute;
+  margin-top: -10dvh;
+  width: 58dvw;
   min-width: 190px;
   left: 50%;
+
   transform: translateX(-50%);
-  /* background-color: rgba(172, 255, 47, 0.151); */
+  transition: width 0.5s, opacity 1s;
 }
 
 .stringContainer {
@@ -33,4 +31,8 @@
   align-self: center;
   width: 100%;
   justify-content: center;
+}
+
+.off {
+  width: calc(100dvw + 220px);
 }

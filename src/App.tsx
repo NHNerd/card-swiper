@@ -19,7 +19,7 @@ function App() {
   const scrollSectionLolRef = React.useRef<HTMLElement>(null);
   const scrollSectionLeRef = React.useRef<HTMLElement>(null);
 
-  console.log('page: ', page);
+  console.log('📕page: ', page);
 
   // refresh topScroll
   React.useEffect(() => {

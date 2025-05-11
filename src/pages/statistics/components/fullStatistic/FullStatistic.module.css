@@ -1,0 +1,60 @@
+.container {
+  position: relative;
+  top: 6dvh;
+  width: 58dvw;
+  min-width: 200px;
+  height: 30dvh;
+  left: 50%;
+  transform: translateX(-50%);
+
+  border: dotted 1px rgba(255, 0, 0, 0.308);
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  transition: opacity 1s;
+}
+.off {
+  opacity: 0;
+}
+
+.stringContainer {
+  width: fit-content;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  font-size: 18px;
+}
+.spaceBetween {
+  width: 100%;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+}
+
+.value {
+  margin-left: 8px;
+  justify-content: space-between;
+  font-size: 20px;
+}
+
+.hardes {
+  margin-top: 3dvh;
+  align-self: center;
+  width: 100%;
+  justify-content: center;
+}
+
+.wordsAdded {
+  color: var(--wordsAdded-btnSttstc-color);
+}
+.wordsRep {
+  color: var(--session-btnSttstc-color);
+}
+.session {
+  color: var(--wordsRep-btnSttstc-color);
+}
+.time {
+  color: var(--time-btnSttstc-color);
+}
