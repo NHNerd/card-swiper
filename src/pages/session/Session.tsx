@@ -22,7 +22,7 @@ export default function Session({}: Props) {
   const { orderListEditZus } = zustandOrderListEdit();
 
   const [time, setTime] = React.useState<number>(0);
-  const [end, setEnd] = React.useState(false);
+  const [end, setEnd] = React.useState<boolean>(false);
 
   const [know, setKnow] = React.useState<boolean>(false);
   const [dontKnow, setDontKnow] = React.useState<boolean>(false);
@@ -110,46 +110,44 @@ export default function Session({}: Props) {
   if ((!gameWords || !dataZus[0]?.words || gameWords?.length === 0) && page !== 'session') return null;
 
   return (
-    <>
-      <div
-        ref={ContainerSessionRef}
-        id={cssSession.session}
-        className={page === 'session' ? cssSession.on : cssSession.off}
-      >
-        <Bar gameWords={gameWords} />
-        <DataSession gameWords={gameWords} time={time} setTime={setTime} end={end} combo={combo} />
+    <div
+      ref={ContainerSessionRef}
+      id={cssSession.session}
+      className={page === 'session' ? cssSession.on : cssSession.off}
+    >
+      <Bar gameWords={gameWords} />
+      <DataSession gameWords={gameWords} time={time} setTime={setTime} end={end} combo={combo} />
 
-        <LastCard wordStatus={wordStatus} statusEnd={statusEnd} maxCombo={maxCombo} end={end} />
-        <Card
-          ContainerSessionRef={ContainerSessionRef}
-          gameWords={gameWords}
-          setGameWords={setGameWords}
-          time={time}
-          know={know}
-          dontKnow={dontKnow}
-          translate={translate}
-        />
-        <Footer
-          gameWords={gameWords}
-          setGameWords={setGameWords}
-          know={know}
-          setKnow={setKnow}
-          dontKnow={dontKnow}
-          setDontKnow={setDontKnow}
-          translate={translate}
-          setTranslate={setTranslate}
-          gameWordsPrev={gameWordsPrev}
-          setGameWordsPrev={setGameWordsPrev}
-          wordStatus={wordStatus}
-          setWordStatus={setWordStatus}
-          combo={combo}
-          setCombo={setCombo}
-          maxCombo={maxCombo}
-          setMaxCombo={setMaxCombo}
-          end={end}
-          setEnd={setEnd}
-        />
-      </div>
-    </>
+      <LastCard wordStatus={wordStatus} statusEnd={statusEnd} maxCombo={maxCombo} end={end} />
+      <Card
+        ContainerSessionRef={ContainerSessionRef}
+        gameWords={gameWords}
+        setGameWords={setGameWords}
+        time={time}
+        know={know}
+        dontKnow={dontKnow}
+        translate={translate}
+      />
+      <Footer
+        gameWords={gameWords}
+        setGameWords={setGameWords}
+        know={know}
+        setKnow={setKnow}
+        dontKnow={dontKnow}
+        setDontKnow={setDontKnow}
+        translate={translate}
+        setTranslate={setTranslate}
+        gameWordsPrev={gameWordsPrev}
+        setGameWordsPrev={setGameWordsPrev}
+        wordStatus={wordStatus}
+        setWordStatus={setWordStatus}
+        combo={combo}
+        setCombo={setCombo}
+        maxCombo={maxCombo}
+        setMaxCombo={setMaxCombo}
+        end={end}
+        setEnd={setEnd}
+      />
+    </div>
   );
 }

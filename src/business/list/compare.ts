@@ -14,7 +14,7 @@ const compare = async (getAllLists, removeMany, refreshOrdersSync, addSync, refr
   //! Temp (solution not work with offline case )
   localStorage.removeItem('card-swiper:allWords');
 
-  console.log('-_'.repeat(6), ' sync start ', '-_'.repeat(6));
+  console.log('♻️ - '.repeat(3), 'sync start', ' - ♻️'.repeat(3));
 
   //---------------------------------------------------------------------
   //* Work with object
@@ -200,7 +200,7 @@ const compare = async (getAllLists, removeMany, refreshOrdersSync, addSync, refr
   }
 
   const dateEnd = Date.now();
-  console.log('-_'.repeat(5), ' sync end ', (dateEnd - dateStart) / 1000, 's.', '-_'.repeat(5));
+  console.log('♻️ - '.repeat(3), 'sync end', (dateEnd - dateStart) / 1000, 's.', '- ♻️ '.repeat(3));
 
   return true;
 };

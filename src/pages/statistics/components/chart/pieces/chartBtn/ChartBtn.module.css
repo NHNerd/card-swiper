@@ -1,0 +1,74 @@
+.btnContainer {
+  position: relative;
+  top: 8dvh;
+  width: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 220px;
+  max-width: 260px;
+  height: 100%;
+  font-size: 14px;
+}
+.btn {
+  position: absolute;
+  width: fit-content;
+  padding: 0 18px;
+  height: 4dvh;
+  min-height: 20px;
+
+  border-radius: 8px;
+  text-align: center;
+  opacity: 1;
+}
+
+.btnWordsAdded {
+  top: 0;
+  left: 0;
+  color: var(--wordsAdded-btnSttstc-color);
+  border-left: 1px solid var(--wordsAdded-btnSttstc-color);
+  border-right: 1px solid var(--wordsAdded-btnSttstc-color);
+  opacity: 50%;
+  filter: saturate(0.1);
+}
+
+.btnWordsRep {
+  bottom: 0;
+  left: 0;
+  color: var(--session-btnSttstc-color);
+  border-left: 1px solid var(--session-btnSttstc-color);
+  border-right: 1px solid var(--session-btnSttstc-color);
+  opacity: 50%;
+  filter: saturate(0.1);
+}
+.btnSession {
+  top: 0;
+  right: 0;
+  color: var(--wordsRep-btnSttstc-color);
+  border-left: 1px solid var(--wordsRep-btnSttstc-color);
+  border-right: 1px solid var(--wordsRep-btnSttstc-color);
+  filter: saturate(0.1);
+  opacity: 50%;
+}
+.btnTime {
+  bottom: 0;
+  right: 0;
+  color: var(--time-btnSttstc-color);
+  border-left: 1px solid var(--time-btnSttstc-color);
+  border-right: 1px solid var(--time-btnSttstc-color);
+  opacity: 50%;
+  filter: saturate(0.1);
+}
+
+.btnOn {
+  opacity: 1;
+  filter: saturate(1);
+}
+
+.btnOn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.06);
+  filter: blur(10px);
+}

@@ -88,6 +88,11 @@
 :root {
   font-family: 'ShareTech-Regular';
 
+  --wordsAdded-btnSttstc-color: rgb(203, 248, 136);
+  --wordsRep-btnSttstc-color: rgb(200, 166, 255);
+  --session-btnSttstc-color: rgb(178, 233, 255);
+  --time-btnSttstc-color: rgb(248, 224, 144);
+
   --bg-color: #232323;
   --color2: #d9d9d983;
   --main-color: #d9d9d9;
