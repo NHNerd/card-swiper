@@ -9,6 +9,8 @@ import { wordStatisticLS } from './bussines/wordStatisticLS.ts';
 import { listStatisticLS } from './bussines/listStatisticLS.ts';
 import { patchWordFielCorrectWrongdMany } from '../../axios/words.ts';
 import { patchListSessionCount } from '../../axios/list.ts';
+import { patchSessionDays } from '../../axios/statistic.ts';
+import { sessionAddStatistic } from '../../business/statistic/session.ts';
 
 import sotByRatio from '../../business/word/sotByRatio.ts';
 
@@ -69,13 +71,18 @@ export default function Session({}: Props) {
     //* end of  session
 
     if (gameWords?.length === 0 && page == 'session' && !end) {
+      let correct = 0;
+      let wrong = 0;
+
       wordStatus.map((item) => {
         if (item.know) {
+          correct += 1;
           setStatusEnd((prev) => ({
             ...prev,
             know: prev.know + 1,
           }));
         } else {
+          wrong += 1;
           setStatusEnd((prev) => ({
             ...prev,
             dontKnow: prev.dontKnow + 1,
@@ -88,6 +95,7 @@ export default function Session({}: Props) {
       // LS
       const [listWordsNewDTO] = wordStatisticLS(wordStatus);
       const [listNewDTO] = listStatisticLS();
+      const sessionStatistic: any[] = sessionAddStatistic(time, maxCombo, correct, wrong);
       // DZ
       const dataZusCopy: any = [...dataZus];
       dataZusCopy[orderListEditZus].words.sort((a, b) => ('' + a._id).localeCompare(b._id));
@@ -101,6 +109,8 @@ export default function Session({}: Props) {
       // DB
       patchWordFielCorrectWrongdMany(listWordsNewDTO);
       patchListSessionCount(listNewDTO);
+
+      patchSessionDays(sessionStatistic);
 
       setEnd(true);
     }

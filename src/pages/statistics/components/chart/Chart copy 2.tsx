@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ChartBtn from './pieces/chartBtn/ChartBtn';
+
+import Statistic from '../../../menu/components/statistic/Statistic';
+import Session from '../../../session/Session';
 
 import { timeRangeSwitch } from './hndlrs/timeRangeSwitch';
 import { y2Calc } from './hndlrs/math';
@@ -20,6 +23,16 @@ const wordsRep: number[] = [];
 const session: number[] = [];
 const time: number[] = [];
 
+const forConsole = (i, userDaysI, dateStep, daysInput) => {
+  const days = dateStep.toISOString().split('T')[0];
+  const userDays = daysInput[userDaysI]?.date;
+  let emoji = '❌';
+  if (days === userDays) {
+    emoji = '✅';
+  }
+  console.log(emoji, 'days: ', days, ' | ', 'userDays: ', userDays, '   (', i, ')');
+};
+
 type Props = {
   chartWordsRepOn: boolean;
   setChartWordsRepOn: React.Dispatch<React.SetStateAction<boolean>>;
@@ -38,6 +51,16 @@ type Props = {
   setKnowPrsntClc: React.Dispatch<React.SetStateAction<object>>;
   setSessionAvgClc: React.Dispatch<React.SetStateAction<object>>;
   setComboAvgClc: React.Dispatch<React.SetStateAction<object>>;
+};
+
+const statisticTotal = {
+  wordAdd: 'агригированные данные, обновляются после каждой сессии',
+  wordRep: 'агригированные данные, обновляются после каждой сессии',
+  session: 'агригированные данные, обновляются после каждой сессии',
+  timeSec: 'агригированные данные, обновляются после каждой сессии',
+  comboMax: 'агригированные данные, обновляются после каждой сессии (if(new > current))',
+  comboAvg: 'агригированные данные, обновляются после каждой сессии',
+  timeAvg: 'агригированные данные, обновляются после каждой сессии',
 };
 
 export default function Chart({
@@ -64,14 +87,22 @@ export default function Chart({
   //TODO now recalculate  begins after click on the line chart buttons
   //TODO recalculate must be only in time canching values of the: days, firstDate, daysCount
   //? useMemo - applay only first render, next applay after trigger запвисимостей
+
   const { days, firstDate, lastDate, daysCount } = React.useMemo(() => {
     return processingDate();
   }, []);
+
   const { weekStart, weekEnd, monthStart, monthEnd, yearStart, yearEnd } = React.useMemo(() => {
     return wmyFirstLastISO(lastDate);
   }, [lastDate]);
 
-  //? filling empty dayss
+  // const [wordsAdd, setWordsAdd] = React.useState<number[]>([]);
+  // const [wordsRep, setWordsRep] = React.useState<number[]>([]);
+  // const [session, setSession] = React.useState<number[]>([]);
+  // const [time, setTime] = React.useState<number[]>([]);
+
+  //? filling empty days
+
   const createClcData = (): ClcData => ({ w: 0, m: 0, y: 0, all: 0 });
   let wordAddClcData: ClcData = createClcData();
   let wordsRepClcData: ClcData = createClcData();
@@ -277,38 +308,6 @@ export default function Chart({
     );
   };
 
-  const sceletonOrChart = () => {
-    if (true) {
-      return (
-        <>
-          <svg width='100%' height='100%' strokeWidth={lineWidth} strokeLinecap='round'>
-            {linesTSX}
-            {circlesTSX}
-          </svg>
-
-          {dotDay(wordsAddSlice, 'var(--wordsAdded-btnSttstc-color)', chartWordsAddOn, step, lineWidth)}
-          {dotDay(wordsRepWeekS, 'var(--session-btnSttstc-color)', chartWordsRepOn, step, lineWidth)}
-          {dotDay(sessionWeekS, 'var(--wordsRep-btnSttstc-color)', chartSessionOn, step, lineWidth)}
-          {dotDay(timeSlice, 'var(--time-btnSttstc-color)', chartTimeOn, step, lineWidth)}
-
-          {maxVal(wordsAddSlice, 'var(--wordsAdded-btnSttstc-color)', chartWordsAddOn, '', 0)}
-          {maxVal(wordsRepWeekS, 'var(--session-btnSttstc-color)', chartWordsRepOn, '', 1)}
-          {maxVal(sessionWeekS, 'var(--wordsRep-btnSttstc-color)', chartSessionOn, '', 2)}
-          {maxVal(timeSlice, 'var(--time-btnSttstc-color)', chartTimeOn, 'm.', 3)}
-        </>
-      );
-    } else {
-      return (
-        <div className={cssChart.skeleton}>
-          loading
-          <div className={cssChart.skeletonDot1}>.</div>
-          <div className={cssChart.skeletonDot2}>.</div>
-          <div className={cssChart.skeletonDot3}>.</div>
-        </div>
-      );
-    }
-  };
-
   return (
     <div className={`${cssChart.container}`}>
       <header className={`${cssChart.timeRange} ${page !== 'statistics' ? cssChart.timeRangeOff : ''}`}>
@@ -325,7 +324,20 @@ export default function Chart({
           page === 'menu' || page === 'statistics' || page === 'settings' ? '' : cssChart.miniChartOff
         }`}
       >
-        {sceletonOrChart()}
+        <svg width='100%' height='100%' strokeWidth={lineWidth} strokeLinecap='round'>
+          {linesTSX}
+          {circlesTSX}
+        </svg>
+
+        {dotDay(wordsAddSlice, 'var(--wordsAdded-btnSttstc-color)', chartWordsAddOn, step, lineWidth)}
+        {dotDay(wordsRepWeekS, 'var(--session-btnSttstc-color)', chartWordsRepOn, step, lineWidth)}
+        {dotDay(sessionWeekS, 'var(--wordsRep-btnSttstc-color)', chartSessionOn, step, lineWidth)}
+        {dotDay(timeSlice, 'var(--time-btnSttstc-color)', chartTimeOn, step, lineWidth)}
+
+        {maxVal(wordsAddSlice, 'var(--wordsAdded-btnSttstc-color)', chartWordsAddOn, '', 0)}
+        {maxVal(wordsRepWeekS, 'var(--session-btnSttstc-color)', chartWordsRepOn, '', 1)}
+        {maxVal(sessionWeekS, 'var(--wordsRep-btnSttstc-color)', chartSessionOn, '', 2)}
+        {maxVal(timeSlice, 'var(--time-btnSttstc-color)', chartTimeOn, 'm.', 3)}
 
         {dayLettersTSX}
       </section>

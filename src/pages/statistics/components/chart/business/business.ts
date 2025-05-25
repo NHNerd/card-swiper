@@ -1,5 +1,6 @@
 import { statisticDays2024, statisticDays2025 } from '../tempData';
 import { ClcData } from '../../../types.ts';
+import { getStatistic } from '../../../../../axios/statistic.ts';
 
 // Дата в ISO-формате:
 
@@ -7,8 +8,16 @@ import { ClcData } from '../../../types.ts';
 
 export const processingDate = () => {
   const years: any[] = [];
+
   years.push(statisticDays2024);
   years.push(statisticDays2025);
+
+  //TODO problem with await😡😡😡
+  // const statistic = await getStatistic();
+
+  // for (let i = statistic.length - 1; i >= 0; i--) {
+  //   years.push(statistic[i]);
+  // }
 
   const days: any[] = [...years[0].days, ...years[years.length - 1].days];
 
@@ -132,7 +141,7 @@ export const daysForEach = (
   calcAvgData('w', daysActiveCount.w);
   calcAvgData('m', daysActiveCount.m);
   calcAvgData('y', daysActiveCount.y);
-  calcAvgData('all', days.length);
+  calcAvgData('all', Array.isArray(days) ? days.length : 0);
 
   return { wordAddClc, wordsRepClc, sessionClc, timeClc, knowPrsntClc, sessionAvgClc, comboAvgClc };
 };
