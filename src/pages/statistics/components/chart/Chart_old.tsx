@@ -176,10 +176,10 @@ export default function Chart({
     dayLetters = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
     headerRange = headerRangeHndlr(weekStart, weekEnd);
   } else if (timeRange === 'm') {
-    chartRange = monthEnd.slice(8);
+    chartRange = Number(monthEnd.slice(8));
     rangeOffset = chartRange - 1 - difDays(monthStart);
     //? I can show через 1 или 2 like: 1, 3, 5 || 1, 4, 7, 10
-    dayLetters = monthDayLetters(monthDaysChartCurrent);
+    dayLetters = monthDayLetters(new Date(monthDaysChartCurrent));
     headerRange = headerRangeHndlr(monthStart, monthEnd);
   } else if (timeRange === 'y') {
     chartRange = 12;

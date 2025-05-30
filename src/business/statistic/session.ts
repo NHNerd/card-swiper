@@ -1,4 +1,5 @@
 import { SessionStatistic } from '../../types/types';
+import dateToLocalUtcOffset from '../../handlers/dateToLocalUtcOffset';
 
 export const sessionAddStatistic = (
   timeSec: number,
@@ -12,17 +13,16 @@ export const sessionAddStatistic = (
 
   //? sessionAddStatistic array don't exist => create obj with session results
   if (!sessionAddStatistic) {
-    sessionAddStatistic = [{ date: new Date(), session: 1, timeSec, comboMax, correct, wrong }];
+    sessionAddStatistic = [
+      { date: dateToLocalUtcOffset(new Date()), session: 1, timeSec, comboMax, correct, wrong },
+    ];
 
     //? sessionAddStatistic array EXIST && last obj.date in array == toDay =>
     //? session result plus existe fields
   } else if (
-    new Date(sessionAddStatistic[sessionAddStatistic.length - 1].date).toISOString().split('T')[0] ===
-    new Date().toISOString().split('T')[0]
+    sessionAddStatistic[sessionAddStatistic.length - 1].date === dateToLocalUtcOffset(new Date())
   ) {
     const today = sessionAddStatistic[sessionAddStatistic.length - 1];
-    // Refresh today Date for new sec, for to compare last update on server side
-    today.date = new Date();
     today.session += 1;
     today.timeSec += timeSec;
     today.comboMax = Math.max(today.comboMax, comboMax);
@@ -33,12 +33,12 @@ export const sessionAddStatistic = (
     //? push new day
   } else {
     const today: SessionStatistic = {
-      date: new Date(),
+      date: dateToLocalUtcOffset(new Date()),
       session: 1,
-      timeSec: timeSec,
-      comboMax: comboMax,
-      correct: correct,
-      wrong: wrong,
+      timeSec,
+      comboMax,
+      correct,
+      wrong,
     };
 
     sessionAddStatistic.push(today);

@@ -9,16 +9,44 @@ import wmyFirstLastISO from './hndlrs/wmyFirstLastISO';
 import monthDayLetters from './hndlrs/monthDayLetters';
 import { useUiState } from '../../../../zustand';
 import { ClcData } from '../../types';
+import { getStatistic } from '../../../../axios/statistic';
+import { DayStats } from '../../types';
+import dateToLocalUtcOffset from '../../../../handlers/dateToLocalUtcOffset.ts';
 
 import cssChart from './Chart.module.css';
 import cssStatistics from '../../Statistics.module.css';
-
-let isSttstcCalc = false;
 
 const wordsAdd: number[] = [];
 const wordsRep: number[] = [];
 const session: number[] = [];
 const time: number[] = [];
+
+const headerRangeHndlr = (first: string | null, last: string | null) => {
+  if (!first || !last) return null;
+  return first.replace(/-/g, '.') + ' - ' + last.replace(/-/g, '.');
+};
+
+const difDays = (start: string | null, end: string | null) => {
+  if (!start || !end) return 0;
+
+  const difSec = new Date(end).getTime() - new Date(start).getTime();
+  return Math.round(difSec / (1000 * 60 * 60 * 24));
+};
+
+type RefsType = {
+  data: any;
+  days: DayStats[] | null;
+  firstDate: string | null;
+  lastDate: string;
+  daysCount: number;
+  weekStart: string;
+  weekEnd: string;
+  monthStart: string;
+  monthEnd: string;
+  yearStart: string;
+  yearEnd: string;
+  chartRange: number;
+};
 
 type Props = {
   chartWordsRepOn: boolean;
@@ -38,6 +66,7 @@ type Props = {
   setKnowPrsntClc: React.Dispatch<React.SetStateAction<object>>;
   setSessionAvgClc: React.Dispatch<React.SetStateAction<object>>;
   setComboAvgClc: React.Dispatch<React.SetStateAction<object>>;
+  statistic: any;
 };
 
 export default function Chart({
@@ -58,243 +87,307 @@ export default function Chart({
   setKnowPrsntClc,
   setSessionAvgClc,
   setComboAvgClc,
+  statistic,
 }: Props) {
   const { page, setPage } = useUiState();
 
-  //TODO now recalculate  begins after click on the line chart buttons
-  //TODO recalculate must be only in time canching values of the: days, firstDate, daysCount
-  //? useMemo - applay only first render, next applay after trigger запвисимостей
-  const { days, firstDate, lastDate, daysCount } = React.useMemo(() => {
-    return processingDate();
-  }, []);
-  const { weekStart, weekEnd, monthStart, monthEnd, yearStart, yearEnd } = React.useMemo(() => {
-    return wmyFirstLastISO(lastDate);
-  }, [lastDate]);
+  const [statisticFromDB, setStatisticFromDB] = React.useState(null);
+  const [dayLettersTSX, setDayLettersTSX] = React.useState<any[]>([]);
+  const [linesTSX, setLinesTSX] = React.useState<any[]>([]);
+  const [circlesTSX, setCirclesTSX] = React.useState<any[]>([]);
+  const [headerRange, setHeaderRange] = React.useState<string | null>('2000-01-01');
+  const [step, setStep] = React.useState<number>(18);
 
-  //? filling empty dayss
-  const createClcData = (): ClcData => ({ w: 0, m: 0, y: 0, all: 0 });
-  let wordAddClcData: ClcData = createClcData();
-  let wordsRepClcData: ClcData = createClcData();
-  let sessionClcData: ClcData = createClcData();
-  let timeClcData: ClcData = createClcData();
-  let knowPrsntClcData: ClcData = createClcData();
-  let sessionAvgClcData: ClcData = createClcData();
-  let comboAvgClcData: ClcData = createClcData();
+  const Refs = React.useRef<RefsType>({
+    data: [],
+    days: [],
+    firstDate: '',
+    lastDate: dateToLocalUtcOffset(new Date()),
+    daysCount: 0,
+    weekStart: '',
+    weekEnd: '',
+    monthStart: '',
+    monthEnd: '',
+    yearStart: '',
+    yearEnd: '',
+    chartRange: 7,
+  });
 
-  if (isSttstcCalc === false) {
-    const culcStatistic = daysForEach(
-      wordsAdd,
-      wordsRep,
-      session,
-      time,
-      days,
-      firstDate,
-      daysCount,
-      weekStart,
-      monthStart,
-      yearStart
-    );
-    wordAddClcData = culcStatistic.wordAddClc;
-    wordsRepClcData = culcStatistic.wordsRepClc;
-    sessionClcData = culcStatistic.sessionClc;
-    timeClcData = culcStatistic.timeClc;
-    knowPrsntClcData = culcStatistic.knowPrsntClc;
-    sessionAvgClcData = culcStatistic.sessionAvgClc;
-    comboAvgClcData = culcStatistic.comboAvgClc;
+  const sliceSumIsNotNUllRef = React.useRef<{
+    add: boolean;
+    rep: boolean;
+    session: boolean;
+    time: boolean;
+  }>({ add: false, rep: false, session: false, time: false });
 
-    isSttstcCalc = true;
-  }
+  const wordsAddSliceRef = React.useRef<number[]>([]);
+  const wordsRepSliceRef = React.useRef<number[]>([]);
+  const sessionSliceRef = React.useRef<number[]>([]);
+  const timeSliceRef = React.useRef<number[]>([]);
 
+  const dayLettersRef = React.useRef<string[]>(['M', 'T', 'W', 'T', 'F', 'S', 'S']);
+
+  //TODO it's must return () => return <div...
+  const maxValRef = React.useRef<any>(() => <div>0</div>);
+
+  const lineWidth: number = 2;
+
+  // Get DB, then calc
   React.useEffect(() => {
-    if (isSttstcCalc === true) {
-      console.log('📜 Calc Statistic(in render time, and the session end)');
+    const fetchData = async () => {
+      if (statistic.length === 0) Refs.current.data = await getStatistic();
+      else {
+        Refs.current.data[0] = statistic;
+      }
+
+      const result = processingDate(Refs.current.data);
+      const range = wmyFirstLastISO(result.lastDate);
+
+      Refs.current = {
+        data: Refs.current.data,
+        ...result,
+        ...range,
+        chartRange: 7,
+      };
+
+      const { days, firstDate, daysCount, weekStart, monthStart, yearStart } = Refs.current;
+
+      //? filling empty days
+      const culcStatistic = daysForEach(
+        wordsAdd,
+        wordsRep,
+        session,
+        time,
+        days,
+        firstDate,
+        daysCount,
+        weekStart,
+        monthStart,
+        yearStart
+      );
 
       const setData = (setData: any, data: ClcData) =>
         setData({ w: data.w, m: data.m, y: data.y, all: data.all });
 
-      setData(setWordAddClc, wordAddClcData);
-      setData(setWordsRepClc, wordsRepClcData);
-      setData(setSessionClc, sessionClcData);
-      setData(setTimeClc, timeClcData);
-      setData(setKnowPrsntClc, knowPrsntClcData);
-      setData(setSessionAvgClc, sessionAvgClcData);
-      setData(setComboAvgClc, comboAvgClcData);
+      setData(setWordAddClc, culcStatistic.wordAddClc);
+      setData(setWordsRepClc, culcStatistic.wordsRepClc);
+      setData(setSessionClc, culcStatistic.sessionClc);
+      setData(setTimeClc, culcStatistic.timeClc);
+      setData(setKnowPrsntClc, culcStatistic.knowPrsntClc);
+      setData(setSessionAvgClc, culcStatistic.sessionAvgClc);
+      setData(setComboAvgClc, culcStatistic.comboAvgClc);
+
+      setStatisticFromDB(Refs.current.data);
+    };
+
+    fetchData();
+  }, [statistic]);
+
+  React.useEffect(() => {
+    if (!statisticFromDB) return;
+
+    const { firstDate, lastDate, daysCount, weekStart, weekEnd, monthStart, monthEnd, yearStart, yearEnd } =
+      Refs.current;
+
+    let rangeOffset = Refs.current.chartRange - 1 - difDays(weekStart, lastDate);
+
+    // w | m | y | all
+    if (timeRange === 'w') {
+      Refs.current.chartRange = 7;
+      rangeOffset = Refs.current.chartRange - 1 - difDays(weekStart, lastDate);
+      dayLettersRef.current = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+      setHeaderRange(headerRangeHndlr(weekStart, weekEnd));
+    } else if (timeRange === 'm') {
+      Refs.current.chartRange = Number(monthEnd.slice(8));
+      rangeOffset = Refs.current.chartRange - 1 - difDays(monthStart, lastDate);
+      //? I can show через 1 или 2 like: 1, 3, 5 || 1, 4, 7, 10
+      dayLettersRef.current = monthDayLetters(lastDate);
+      setHeaderRange(headerRangeHndlr(monthStart, monthEnd));
+    } else if (timeRange === 'y') {
+      Refs.current.chartRange = 12;
+      //! For year need uniq array with 12 culc mounth
+      rangeOffset =
+        Refs.current.chartRange - 2 - (Number(new Date(lastDate).getMonth()) - Number(yearStart.slice(5, 7)));
+      dayLettersRef.current = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+      setHeaderRange(headerRangeHndlr(yearStart, yearEnd));
+    } else if (timeRange === 'all') {
+      Refs.current.chartRange = daysCount;
+      rangeOffset = 0;
+      //? I can shwo a few🤔🤔🤔
+      dayLettersRef.current = [''];
+      setHeaderRange(headerRangeHndlr(firstDate, lastDate));
     }
-  }, []);
 
-  const newDate = new Date();
+    const stepConst = 100 / (Refs.current.chartRange - 1);
+    setStep(stepConst);
 
-  const monthDaysChartCurrent = new Date(newDate.getFullYear(), newDate.getMonth() + 1, 0).getDate();
+    const sliceHndlr = (words: number[]) => words.slice(-Refs.current.chartRange + rangeOffset);
 
-  const headerRangeHndlr = (first, last) => first.replace(/-/g, '.') + ' - ' + last.replace(/-/g, '.');
+    wordsAddSliceRef.current = sliceHndlr(wordsAdd);
+    wordsRepSliceRef.current = sliceHndlr(wordsRep);
+    sessionSliceRef.current = sliceHndlr(session);
+    timeSliceRef.current = sliceHndlr(time);
 
-  const difDays = (start) => {
-    const difSec = lastDate.getTime() - new Date(start).getTime();
-    return Math.round(difSec / (1000 * 60 * 60 * 24));
-  };
+    const isSliceSumNotNull = (arr: number[]) => arr.reduce((acc, curr) => acc + curr, 0) !== 0;
+    sliceSumIsNotNUllRef.current = {
+      add: isSliceSumNotNull(wordsAddSliceRef.current),
+      rep: isSliceSumNotNull(wordsRepSliceRef.current),
+      session: isSliceSumNotNull(sessionSliceRef.current),
+      time: isSliceSumNotNull(timeSliceRef.current),
+    };
 
-  // w | m | y | all
-  let headerRange = headerRangeHndlr(weekStart, weekEnd);
-  let chartRange = 7;
-  let rangeOffset = chartRange - 1 - difDays(weekStart);
+    const maxIndexFunc = (array: number[]) => {
+      return array.reduce((maxIdx, current, idx, arr) => {
+        return current > arr[maxIdx] ? idx : maxIdx;
+      }, 0);
+    };
+    const MaxValArray = [
+      maxIndexFunc(wordsAddSliceRef.current),
+      maxIndexFunc(wordsRepSliceRef.current),
+      maxIndexFunc(sessionSliceRef.current),
+      maxIndexFunc(timeSliceRef.current),
+    ];
 
-  let dayLetters: string[] = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-  if (timeRange === 'w') {
-    chartRange = 7;
-    rangeOffset = chartRange - 1 - difDays(weekStart);
-    dayLetters = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-    headerRange = headerRangeHndlr(weekStart, weekEnd);
-  } else if (timeRange === 'm') {
-    chartRange = monthEnd.slice(8);
-    rangeOffset = chartRange - 1 - difDays(monthStart);
-    //? I can show через 1 или 2 like: 1, 3, 5 || 1, 4, 7, 10
-    dayLetters = monthDayLetters(monthDaysChartCurrent);
-    headerRange = headerRangeHndlr(monthStart, monthEnd);
-  } else if (timeRange === 'y') {
-    chartRange = 12;
-    rangeOffset = chartRange - 2 - (Number(lastDate.getMonth()) - Number(yearStart.slice(5, 7)));
-    dayLetters = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
-    headerRange = headerRangeHndlr(yearStart, yearEnd);
-  } else if (timeRange === 'all') {
-    chartRange = daysCount;
-    rangeOffset = 0;
-    //? I can shwo a few🤔🤔🤔
-    dayLetters = [''];
-    headerRange = headerRangeHndlr(
-      firstDate.toISOString().split('T')[0],
-      lastDate.toISOString().split('T')[0]
-    );
-  }
+    const arrayMargin = [0, 0, 0, 0];
+    const MaxValArraySet = new Set(MaxValArray);
+    const MaxValArraySetIndex = Array.from(MaxValArraySet);
 
-  const wordsAddSlice = wordsAdd.slice(-chartRange + rangeOffset);
-  const wordsRepWeekS = wordsRep.slice(-chartRange + rangeOffset);
-  const sessionWeekS = session.slice(-chartRange + rangeOffset);
-  const timeSlice = time.slice(-chartRange + rangeOffset);
+    MaxValArray.map((item, i) => {
+      if (item !== MaxValArraySetIndex[i])
+        arrayMargin[i] = (arrayMargin[1] ? 1 : 0) + (arrayMargin[2] ? 1 : 0) + 1;
+    });
 
-  const step: number = 100 / (chartRange - 1);
-  const lineWidth: number = 2;
-
-  const linesTSX: any[] = [];
-  const circlesTSX: any[] = [];
-
-  const dayLettersTSX = [];
-
-  const linesAndCircles = (array: number[], color: string, i: number, key: string) => {
-    if (array.length > i) {
-      const dotMonth = timeRange === 'm' ? (i % 3 === 0 ? 1.4 : 0) : 1;
-      circlesTSX.push(
-        <circle
-          key={`${key}${i}`}
-          cx={`${i * step}%`}
-          cy={`${y2Calc(array, i, lineWidth)}%`}
-          r={(lineWidth / 2) * dotMonth}
-          fill='#d9d9d9'
-          stroke={color}
-        />
+    maxValRef.current = (
+      array: number[],
+      color: string,
+      isOn: boolean,
+      description: string,
+      MaxValArrayIndex: number
+    ) => {
+      return (
+        <div
+          className={cssChart.maxVal}
+          style={{
+            left: `${
+              MaxValArray[MaxValArrayIndex] * step +
+              8 * arrayMargin[MaxValArrayIndex] -
+              (MaxValArray.length - MaxValArraySetIndex.length) * 4
+            }%`,
+            top: `${y2Calc(array, MaxValArray[MaxValArrayIndex], lineWidth)}%`,
+            color: color,
+            display: isOn ? 'block' : 'none',
+          }}
+        >
+          {array[MaxValArray[MaxValArrayIndex]] + (description || '')}
+        </div>
       );
-      if (array.length - 1 > i) {
-        linesTSX.push(
-          <line
-            key={`line-${key}${i}`}
-            x1={`${i * step}%`}
-            y1={`${y2Calc(array, i, lineWidth)}%`}
-            x2={`${(i + 1) * step}%`}
-            y2={`${y2Calc(array, i + 1, lineWidth)}%`}
+    };
+
+    // First Time Render - statisticFromDB
+    // Change chart range Re:Render - timeRange
+    // End of session Re:Render - statistic
+  }, [statisticFromDB, timeRange, statistic]);
+
+  //Update svg when user choise chart  on/off
+  React.useEffect(() => {
+    // Arr clear
+    const linesTSXConst: JSX.Element[] = [];
+    const circlesTSXConst: JSX.Element[] = [];
+    const dayLettersTSXConst: JSX.Element[] = [];
+
+    const stepConst = 100 / (Refs.current.chartRange - 1);
+
+    const linesAndCircles = (array: number[], color: string, i: number, key: string) => {
+      if (array.length > i) {
+        const dotMonth = timeRange === 'm' ? (i % 3 === 0 ? 1.4 : 0) : 1;
+        circlesTSXConst.push(
+          <circle
+            key={`${key}${i}`}
+            cx={`${i * stepConst}%`}
+            cy={`${y2Calc(array, i, lineWidth)}%`}
+            r={(lineWidth / 2) * dotMonth}
+            fill='#d9d9d9'
             stroke={color}
-            opacity={0.7}
           />
         );
+
+        if (array.length - 1 > i) {
+          linesTSXConst.push(
+            <line
+              key={`line-${key}${i}`}
+              x1={`${i * stepConst}%`}
+              y1={`${y2Calc(array, i, lineWidth)}%`}
+              x2={`${(i + 1) * stepConst}%`}
+              y2={`${y2Calc(array, i + 1, lineWidth)}%`}
+              stroke={color}
+              opacity={0.7}
+            />
+          );
+        }
       }
+    };
+
+    for (let i = 0; i < Refs.current.chartRange; i++) {
+      if (sliceSumIsNotNUllRef.current.add && chartWordsAddOn)
+        linesAndCircles(wordsAddSliceRef.current, 'var(--wordsAdded-btnSttstc-color)', i, 'add-');
+      if (sliceSumIsNotNUllRef.current.rep && chartWordsRepOn)
+        linesAndCircles(wordsRepSliceRef.current, 'var(--session-btnSttstc-color)', i, 'rep-');
+      if (sliceSumIsNotNUllRef.current.session && chartSessionOn)
+        linesAndCircles(sessionSliceRef.current, 'var(--wordsRep-btnSttstc-color)', i, 'session-');
+      if (sliceSumIsNotNUllRef.current.time && chartTimeOn)
+        linesAndCircles(timeSliceRef.current, 'var(--time-btnSttstc-color)', i, 'time-');
+
+      dayLettersTSXConst.push(
+        <div
+          key={`dayLetter-${i}`}
+          className={`${cssChart.dayLetter}`}
+          style={{
+            left: `${i * stepConst}%`,
+            color: `${i === wordsAdd.length - 1 ? '#d9d9d9' : '#d9d9d983'}`,
+            textShadow: `${i === wordsAdd.length - 1 ? 'rgb(255, 255, 255) 0px 0 1px' : ''}`,
+          }}
+        >
+          {dayLettersRef.current[i]}
+        </div>
+      );
     }
-  };
 
-  for (let i = 0; i < chartRange; i++) {
-    if (chartWordsAddOn) linesAndCircles(wordsAddSlice, 'var(--wordsAdded-btnSttstc-color)', i, 'add-');
-    if (chartWordsRepOn) linesAndCircles(wordsRepWeekS, 'var(--session-btnSttstc-color)', i, 'rep-');
-    if (chartSessionOn) linesAndCircles(sessionWeekS, 'var(--wordsRep-btnSttstc-color)', i, 'session-');
-    if (chartTimeOn) linesAndCircles(timeSlice, 'var(--time-btnSttstc-color)', i, 'time-');
-
-    dayLettersTSX.push(
-      <div
-        key={`dayLetter-${i}`}
-        className={`${cssChart.dayLetter}`}
-        style={{
-          left: `${i * step}%`,
-          color: `${i === wordsAdd.length - 1 ? '#d9d9d9' : '#d9d9d983'}`,
-          textShadow: `${i === wordsAdd.length - 1 ? 'rgb(255, 255, 255) 0px 0 1px' : ''}`,
-        }}
-      >
-        {dayLetters[i]}
-      </div>
-    );
-  }
-
-  const maxIndexFunc = (array: number[]) => {
-    return array.reduce((maxIdx, current, idx, arr) => {
-      return current > arr[maxIdx] ? idx : maxIdx;
-    }, 0);
-  };
-
-  const MaxValArray = [
-    maxIndexFunc(wordsAddSlice),
-    maxIndexFunc(wordsRepWeekS),
-    maxIndexFunc(sessionWeekS),
-    maxIndexFunc(timeSlice),
-  ];
-
-  const arrayMargin = [0, 0, 0, 0];
-  const MaxValArraySet = new Set(MaxValArray);
-  const MaxValArraySetIndex = Array.from(MaxValArraySet);
-
-  MaxValArray.map((item, i) => {
-    if (item !== MaxValArraySetIndex[i])
-      arrayMargin[i] = (arrayMargin[1] ? 1 : 0) + (arrayMargin[2] ? 1 : 0) + 1;
-  });
-
-  const maxVal = (
-    array: number[],
-    color: string,
-    isOn: boolean,
-    description: string,
-    MaxValArrayIndex: number
-  ) => {
-    return (
-      <div
-        className={cssChart.maxVal}
-        style={{
-          left: `${
-            MaxValArray[MaxValArrayIndex] * step +
-            8 * arrayMargin[MaxValArrayIndex] -
-            (MaxValArray.length - MaxValArraySetIndex.length) * 4
-          }%`,
-          top: `${y2Calc(array, MaxValArray[MaxValArrayIndex], lineWidth)}%`,
-          color: color,
-          display: isOn ? 'block' : 'none',
-        }}
-      >
-        {array[MaxValArray[MaxValArrayIndex]] + (description || '')}
-      </div>
-    );
-  };
+    setDayLettersTSX(dayLettersTSXConst);
+    setLinesTSX(linesTSXConst);
+    setCirclesTSX(circlesTSXConst);
+  }, [statisticFromDB, statistic, timeRange, chartWordsAddOn, chartWordsRepOn, chartSessionOn, chartTimeOn]);
 
   const sceletonOrChart = () => {
-    if (true) {
+    if (statisticFromDB) {
       return (
         <>
           <svg width='100%' height='100%' strokeWidth={lineWidth} strokeLinecap='round'>
-            {linesTSX}
-            {circlesTSX}
+            {...linesTSX}
+            {...circlesTSX}
           </svg>
 
-          {dotDay(wordsAddSlice, 'var(--wordsAdded-btnSttstc-color)', chartWordsAddOn, step, lineWidth)}
-          {dotDay(wordsRepWeekS, 'var(--session-btnSttstc-color)', chartWordsRepOn, step, lineWidth)}
-          {dotDay(sessionWeekS, 'var(--wordsRep-btnSttstc-color)', chartSessionOn, step, lineWidth)}
-          {dotDay(timeSlice, 'var(--time-btnSttstc-color)', chartTimeOn, step, lineWidth)}
+          {dotDay(
+            wordsAddSliceRef.current,
+            'var(--wordsAdded-btnSttstc-color)',
+            chartWordsAddOn,
+            step,
+            lineWidth
+          )}
+          {dotDay(wordsRepSliceRef.current, 'var(--session-btnSttstc-color)', chartWordsRepOn, step, lineWidth)}
+          {dotDay(sessionSliceRef.current, 'var(--wordsRep-btnSttstc-color)', chartSessionOn, step, lineWidth)}
+          {dotDay(timeSliceRef.current, 'var(--time-btnSttstc-color)', chartTimeOn, step, lineWidth)}
 
-          {maxVal(wordsAddSlice, 'var(--wordsAdded-btnSttstc-color)', chartWordsAddOn, '', 0)}
-          {maxVal(wordsRepWeekS, 'var(--session-btnSttstc-color)', chartWordsRepOn, '', 1)}
-          {maxVal(sessionWeekS, 'var(--wordsRep-btnSttstc-color)', chartSessionOn, '', 2)}
-          {maxVal(timeSlice, 'var(--time-btnSttstc-color)', chartTimeOn, 'm.', 3)}
+          {maxValRef.current(
+            wordsAddSliceRef.current,
+            'var(--wordsAdded-btnSttstc-color)',
+            chartWordsAddOn,
+            '',
+            0
+          )}
+          {maxValRef.current(wordsRepSliceRef.current, 'var(--session-btnSttstc-color)', chartWordsRepOn, '', 1)}
+          {maxValRef.current(sessionSliceRef.current, 'var(--wordsRep-btnSttstc-color)', chartSessionOn, '', 2)}
+          {/* //TODO use FullSatatistic func sec => dd:hh:mm:ss */}
+          {maxValRef.current(timeSliceRef.current, 'var(--time-btnSttstc-color)', chartTimeOn, 's.', 3)}
         </>
       );
     } else {
@@ -313,10 +406,7 @@ export default function Chart({
     <div className={`${cssChart.container}`}>
       <header className={`${cssChart.timeRange} ${page !== 'statistics' ? cssChart.timeRangeOff : ''}`}>
         {headerRange}
-        <button
-          onClick={() => timeRangeSwitch(timeRange, setTimeRange)}
-          className={`${cssChart.timeSwitch} `}
-        >
+        <button onClick={() => timeRangeSwitch(timeRange, setTimeRange)} className={`${cssChart.timeSwitch} `}>
           {timeRange}.
         </button>
       </header>
@@ -327,7 +417,7 @@ export default function Chart({
       >
         {sceletonOrChart()}
 
-        {dayLettersTSX}
+        {...dayLettersTSX}
       </section>
       <div
         className={`${cssChart.btnWrap} ${cssStatistics.opacity} ${
@@ -343,6 +433,7 @@ export default function Chart({
           setChartSessionOn={setChartSessionOn}
           chartTimeOn={chartTimeOn}
           setChartTimeOn={setChartTimeOn}
+          sliceSumIsNotNUllRef={sliceSumIsNotNUllRef}
         />
       </div>
     </div>

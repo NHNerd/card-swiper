@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import Chart from './components/chart/Chart';
 import BriefStatistic from './components/briefStatistic/BriefStatistic';
@@ -7,9 +7,11 @@ import BtnArrow from '../../components/btnArrow/BtnArrow';
 import { useUiState } from '../../zustand';
 import cssStatistics from './Statistics.module.css';
 
-type Props = {};
+type Props = {
+  statistic: any;
+};
 
-export default function Statistics({}: Props) {
+export default function Statistics({ statistic }: Props) {
   const { page, setPage } = useUiState();
 
   const [chartWordsAddOn, setChartWordsAddOn] = React.useState<boolean>(false);
@@ -63,7 +65,9 @@ export default function Statistics({}: Props) {
         setKnowPrsntClc={setKnowPrsntClc}
         setSessionAvgClc={setSessionAvgClc}
         setComboAvgClc={setComboAvgClc}
+        statistic={statistic}
       />
+
       <div className={`${cssStatistics.opacity} ${page === 'menu' ? '' : cssStatistics.opacityOff}`}>
         <BriefStatistic wordsRepClc={wordsRepClc} />
       </div>

@@ -1,4 +1,10 @@
-const monthDayLetters = (monthDays) => {
+const monthDayLetters = (lastStatisticDate: string) => {
+  const monthDays = new Date(
+    new Date(lastStatisticDate).getFullYear(),
+    new Date(lastStatisticDate).getMonth() + 1,
+    0
+  ).getDate();
+
   const dayLetters = [
     '01',
     ' ',

@@ -1,5 +1,5 @@
 export type SessionStatistic = {
-  date: Date;
+  date: string;
   session: number;
   timeSec: number;
   comboMax: number;

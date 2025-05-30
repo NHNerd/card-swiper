@@ -1,6 +1,21 @@
 import cssChartBtn from './ChartBtn.module.css';
 
-type Props = {};
+type Props = {
+  chartWordsRepOn: boolean;
+  setChartWordsRepOn: React.Dispatch<React.SetStateAction<boolean>>;
+  chartWordsAddOn: boolean;
+  setChartWordsAddOn: React.Dispatch<React.SetStateAction<boolean>>;
+  chartSessionOn: boolean;
+  setChartSessionOn: React.Dispatch<React.SetStateAction<boolean>>;
+  chartTimeOn: boolean;
+  setChartTimeOn: React.Dispatch<React.SetStateAction<boolean>>;
+  sliceSumIsNotNUllRef: React.RefObject<{
+    add: boolean;
+    rep: boolean;
+    session: boolean;
+    time: boolean;
+  }>;
+};
 
 export default function ChartBtn({
   chartWordsRepOn,
@@ -11,8 +26,20 @@ export default function ChartBtn({
   setChartSessionOn,
   chartTimeOn,
   setChartTimeOn,
+  sliceSumIsNotNUllRef,
 }: Props) {
-  const switchBtnHndler = (btn, other1, other2, other3, btnSet) => {
+  const switchBtnHndler = (
+    btn: boolean,
+    other1: boolean,
+    other2: boolean,
+    other3: boolean,
+    btnSet: React.Dispatch<React.SetStateAction<boolean>>,
+    isLineExist: boolean
+  ) => {
+    if (!isLineExist) {
+      btnSet(false);
+      return;
+    }
     if (!other1 && !other2 && !other3 && btn) btnSet(true);
     else btnSet(!btn);
   };
@@ -29,7 +56,8 @@ export default function ChartBtn({
             chartWordsRepOn,
             chartSessionOn,
             chartTimeOn,
-            setChartWordsAddOn
+            setChartWordsAddOn,
+            sliceSumIsNotNUllRef.current.add
           )
         }
       >
@@ -45,7 +73,8 @@ export default function ChartBtn({
             chartWordsAddOn,
             chartSessionOn,
             chartTimeOn,
-            setChartWordsRepOn
+            setChartWordsRepOn,
+            sliceSumIsNotNUllRef.current.rep
           )
         }
       >
@@ -61,7 +90,8 @@ export default function ChartBtn({
             chartWordsAddOn,
             chartWordsRepOn,
             chartTimeOn,
-            setChartSessionOn
+            setChartSessionOn,
+            sliceSumIsNotNUllRef.current.session
           )
         }
       >
@@ -70,7 +100,14 @@ export default function ChartBtn({
       <button
         className={`${cssChartBtn.btn} ${cssChartBtn.btnTime} ${chartTimeOn ? cssChartBtn.btnOn : ''}`}
         onClick={() =>
-          switchBtnHndler(chartTimeOn, chartWordsRepOn, chartWordsAddOn, chartSessionOn, setChartTimeOn)
+          switchBtnHndler(
+            chartTimeOn,
+            chartWordsRepOn,
+            chartWordsAddOn,
+            chartSessionOn,
+            setChartTimeOn,
+            sliceSumIsNotNUllRef.current.time
+          )
         }
       >
         time

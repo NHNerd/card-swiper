@@ -1,61 +1,35 @@
-import { statisticDays2024, statisticDays2025 } from '../tempData';
 import { ClcData } from '../../../types.ts';
-import { getStatistic } from '../../../../../axios/statistic.ts';
+import dateToLocalUtcOffset from '../../../../../handlers/dateToLocalUtcOffset.ts';
 
-// Дата в ISO-формате:
+export const processingDate = (statisticFromDB: any[]) => {
+  if (!statisticFromDB)
+    return { days: null, firstDate: null, lastDate: dateToLocalUtcOffset(new Date()), daysCount: 0 };
 
-//* I have array of all user years
+  const days: any[] = [];
+  for (let i = statisticFromDB.length - 1; i >= 0; i--) {
+    days.push(...statisticFromDB[i].days);
+  }
 
-export const processingDate = () => {
-  const years: any[] = [];
+  const firstDate: string = days[0].date;
 
-  years.push(statisticDays2024);
-  years.push(statisticDays2025);
-
-  //TODO problem with await😡😡😡
-  // const statistic = await getStatistic();
-
-  // for (let i = statistic.length - 1; i >= 0; i--) {
-  //   years.push(statistic[i]);
-  // }
-
-  const days: any[] = [...years[0].days, ...years[years.length - 1].days];
-
-  const firstDate: Date = new Date(days[0].date);
-
-  const lastDate: Date = new Date(days[days.length - 1].date);
+  const lastDate: string = days[days.length - 1].date;
 
   // Diffirence в миллисекундах
-  const diffInMilliseconds = lastDate - firstDate;
-  const daysCount = diffInMilliseconds / (1000 * 60 * 60 * 24);
+  const diffInMilliseconds = new Date(lastDate) - new Date(firstDate);
+  const daysCount = Math.max(Math.ceil(diffInMilliseconds / (1000 * 60 * 60 * 24)) + 1, 0);
 
   return { days, firstDate, lastDate, daysCount };
 };
 
 //For debug
 const forConsole = (i, userDaysI, dateStep, daysInput) => {
-  const days = dateStep.toISOString().split('T')[0];
+  const days = dateStep;
   const userDays = daysInput[userDaysI]?.date;
   let emoji = '❌';
-  if (days === userDays) {
-    emoji = '✅';
-  }
+  if (days === userDays) emoji = '✅';
+
   console.log(emoji, 'days: ', days, ' | ', 'userDays: ', userDays, '   (', i, ')');
 };
-
-const createClcData = (): ClcData => ({ w: 0, m: 0, y: 0, all: 0 });
-const wordAddClc: ClcData = createClcData();
-const wordsRepClc: ClcData = createClcData();
-const sessionClc: ClcData = createClcData();
-const timeClc: ClcData = createClcData();
-const correctClc: ClcData = createClcData();
-const wrongClc: ClcData = createClcData();
-const knowPrsntClc: ClcData = createClcData();
-const sessionAvgClc: ClcData = createClcData();
-const comboClc: ClcData = createClcData();
-const comboAvgClc: ClcData = createClcData();
-
-//TODO Add in this ForEach calc logic
 
 export const daysForEach = (
   wordsAdd,
@@ -71,15 +45,29 @@ export const daysForEach = (
 ) => {
   type RangeKey = keyof ClcData;
 
+  const createClcData = (): ClcData => ({ w: 0, m: 0, y: 0, all: 0 });
+  const wordAddClc: ClcData = createClcData();
+  const wordsRepClc: ClcData = createClcData();
+  const sessionClc: ClcData = createClcData();
+  const timeClc: ClcData = createClcData();
+  const correctClc: ClcData = createClcData();
+  const wrongClc: ClcData = createClcData();
+  const comboClc: ClcData = createClcData();
+
+  const knowPrsntClc: ClcData = createClcData();
+  const sessionAvgClc: ClcData = createClcData();
+  const comboAvgClc: ClcData = createClcData();
+
   const dateStep = new Date(firstDate);
+
   let userDaysI = 0;
   const daysActiveCount = { w: 0, m: 0, y: 0 };
 
-  for (let i = 0; daysCount >= i; i++) {
+  for (let i = 0; daysCount - 1 >= i; i++) {
     //For debug
-    // forConsole(i, userDaysI, dateStep, days);
+    // forConsole(i, userDaysI, dateToLocalUtcOffset(dateStep), days);
 
-    if (days[userDaysI]?.date === dateStep.toISOString().split('T')[0]) {
+    if (days[userDaysI]?.date === dateToLocalUtcOffset(dateStep)) {
       const { wordAdd, correct, wrong, session, timeSec, comboMax } = days[userDaysI];
 
       wordsAdd[i] = wordAdd;
@@ -88,6 +76,7 @@ export const daysForEach = (
       time[i] = timeSec;
 
       //Calc Statistic📜
+
       const toCalcData = (range: RangeKey) => {
         wordAddClc[range] += wordAdd;
         wordsRepClc[range] += correct + wrong;
@@ -98,22 +87,19 @@ export const daysForEach = (
         comboClc[range] += comboMax;
       };
 
-      //All
+      //all
       toCalcData('all');
-
+      //week
       const crrntDayForComparison = new Date(days[userDaysI].date).getTime();
-
       if (new Date(weekStart).getTime() <= crrntDayForComparison) {
         toCalcData('w');
         daysActiveCount.w++;
       }
-
       //month
       if (new Date(monthStart).getTime() <= crrntDayForComparison) {
         toCalcData('m');
         daysActiveCount.m++;
       }
-
       //year
       if (new Date(yearStart).getTime() <= crrntDayForComparison) {
         toCalcData('y');
