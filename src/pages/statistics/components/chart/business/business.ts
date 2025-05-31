@@ -1,5 +1,12 @@
 import { ClcData } from '../../../types.ts';
 import dateToLocalUtcOffset from '../../../../../handlers/dateToLocalUtcOffset.ts';
+import calcYearRange12Month from '../hndlrs/calcYearRange12Month.ts';
+
+const difDaysHndlr = (firstDate: string, lastDate: string): number => {
+  const diffInMilliseconds = new Date(lastDate) - new Date(firstDate);
+  const daysCount = Math.max(Math.ceil(diffInMilliseconds / (1000 * 60 * 60 * 24)) + 1, 0);
+  return daysCount;
+};
 
 export const processingDate = (statisticFromDB: any[]) => {
   if (!statisticFromDB)
@@ -14,15 +21,13 @@ export const processingDate = (statisticFromDB: any[]) => {
 
   const lastDate: string = days[days.length - 1].date;
 
-  // Diffirence в миллисекундах
-  const diffInMilliseconds = new Date(lastDate) - new Date(firstDate);
-  const daysCount = Math.max(Math.ceil(diffInMilliseconds / (1000 * 60 * 60 * 24)) + 1, 0);
+  const daysCount = difDaysHndlr(firstDate, lastDate);
 
   return { days, firstDate, lastDate, daysCount };
 };
 
 //For debug
-const forConsole = (i, userDaysI, dateStep, daysInput) => {
+const forConsole = (i: number, userDaysI, dateStep, daysInput) => {
   const days = dateStep;
   const userDays = daysInput[userDaysI]?.date;
   let emoji = '❌';
@@ -32,16 +37,21 @@ const forConsole = (i, userDaysI, dateStep, daysInput) => {
 };
 
 export const daysForEach = (
-  wordsAdd,
-  wordsRep,
-  sessionInput,
-  time,
-  days,
-  firstDate,
-  daysCount,
-  weekStart,
-  monthStart,
-  yearStart
+  wordsAdd: number[],
+  wordsRep: number[],
+  sessionInput: number[],
+  time: number[],
+  wordsAdd12month: Record<string, number[]>,
+  wordsRep12month: Record<string, number[]>,
+  sessionInput12month: Record<string, number[]>,
+  time12month: Record<string, number[]>,
+  days: object[],
+  firstDate: string,
+  daysCount: number,
+  weekStart: string,
+  monthStart: string,
+  yearStart: string,
+  lastdate: string
 ) => {
   type RangeKey = keyof ClcData;
 
@@ -128,6 +138,20 @@ export const daysForEach = (
   calcAvgData('m', daysActiveCount.m);
   calcAvgData('y', daysActiveCount.y);
   calcAvgData('all', Array.isArray(days) ? days.length : 0);
+
+  calcYearRange12Month(
+    wordsAdd,
+    wordsRep,
+    sessionInput,
+    time,
+    wordsAdd12month,
+    wordsRep12month,
+    sessionInput12month,
+    time12month,
+    firstDate,
+    lastdate,
+    difDaysHndlr
+  );
 
   return { wordAddClc, wordsRepClc, sessionClc, timeClc, knowPrsntClc, sessionAvgClc, comboAvgClc };
 };

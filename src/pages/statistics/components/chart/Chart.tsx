@@ -12,14 +12,10 @@ import { ClcData } from '../../types';
 import { getStatistic } from '../../../../axios/statistic';
 import { DayStats } from '../../types';
 import dateToLocalUtcOffset from '../../../../handlers/dateToLocalUtcOffset.ts';
+import BtnArrow from '../../../../components/btnArrow/BtnArrow.tsx';
 
 import cssChart from './Chart.module.css';
 import cssStatistics from '../../Statistics.module.css';
-
-const wordsAdd: number[] = [];
-const wordsRep: number[] = [];
-const session: number[] = [];
-const time: number[] = [];
 
 const headerRangeHndlr = (first: string | null, last: string | null) => {
   if (!first || !last) return null;
@@ -31,6 +27,50 @@ const difDays = (start: string | null, end: string | null) => {
 
   const difSec = new Date(end).getTime() - new Date(start).getTime();
   return Math.round(difSec / (1000 * 60 * 60 * 24));
+};
+
+const weekScroller = (date, offsetWeeks) => {
+  const inputDate = new Date(date);
+
+  // День недели (0 - воскресенье, 1 - понедельник, ..., 6 - суббота)
+  const day = inputDate.getDay();
+
+  // Смещаем на понедельник (если неделя начинается с понедельника)
+  const diffToMonday = day === 0 ? -6 : 1 - day;
+
+  // Смещаем к началу нужной недели
+  inputDate.setDate(inputDate.getDate() + diffToMonday + offsetWeeks * 7);
+
+  inputDate.setHours(0, 0, 0, 0);
+
+  const startWeekScroll = dateToLocalUtcOffset(inputDate);
+
+  const endWeekScroll = new Date(startWeekScroll);
+  endWeekScroll.setDate(new Date(startWeekScroll).getDate() + 6);
+  endWeekScroll.setHours(0, 0, 0, 0);
+
+  return { startWeekScroll: startWeekScroll, endWeekScroll: dateToLocalUtcOffset(endWeekScroll) };
+};
+
+const monthScroller = (date, offsetMonths) => {
+  const inputDate = new Date(date);
+
+  // Смещаем месяц
+  inputDate.setMonth(inputDate.getMonth() + offsetMonths);
+
+  // Устанавливаем на первое число месяца
+  inputDate.setDate(1);
+  inputDate.setHours(0, 0, 0, 0);
+
+  const startMonthScroll = dateToLocalUtcOffset(inputDate);
+
+  // Получаем конец месяца
+  const endMonthScroll = new Date(startMonthScroll);
+  endMonthScroll.setMonth(endMonthScroll.getMonth() + 1);
+  endMonthScroll.setDate(0); // 0-й день следующего месяца = последний день текущего
+  endMonthScroll.setHours(0, 0, 0, 0);
+
+  return { startMonthScroll, endMonthScroll: dateToLocalUtcOffset(endMonthScroll) };
 };
 
 type RefsType = {
@@ -97,6 +137,28 @@ export default function Chart({
   const [circlesTSX, setCirclesTSX] = React.useState<any[]>([]);
   const [headerRange, setHeaderRange] = React.useState<string | null>('2000-01-01');
   const [step, setStep] = React.useState<number>(18);
+  const [year, setYear] = React.useState<string>('2025');
+  const [scrollRangeOffset, setScrollRangeOffset] = React.useState<number>(0);
+
+  const ChartDataRef = React.useRef<{
+    wordsAdd: number[];
+    wordsRep: number[];
+    session: number[];
+    time: number[];
+    wordsAdd12month: Record<string, number[]>;
+    wordsRep12month: Record<string, number[]>;
+    session12month: Record<string, number[]>;
+    time12month: Record<string, number[]>;
+  }>({
+    wordsAdd: [],
+    wordsRep: [],
+    session: [],
+    time: [],
+    wordsAdd12month: {},
+    wordsRep12month: {},
+    session12month: {},
+    time12month: {},
+  });
 
   const Refs = React.useRef<RefsType>({
     data: [],
@@ -154,16 +216,21 @@ export default function Chart({
 
       //? filling empty days
       const culcStatistic = daysForEach(
-        wordsAdd,
-        wordsRep,
-        session,
-        time,
+        ChartDataRef.current.wordsAdd,
+        ChartDataRef.current.wordsRep,
+        ChartDataRef.current.session,
+        ChartDataRef.current.time,
+        ChartDataRef.current.wordsAdd12month,
+        ChartDataRef.current.wordsRep12month,
+        ChartDataRef.current.session12month,
+        ChartDataRef.current.time12month,
         days,
         firstDate,
         daysCount,
         weekStart,
         monthStart,
-        yearStart
+        yearStart,
+        result.lastDate
       );
 
       const setData = (setData: any, data: ClcData) =>
@@ -196,7 +263,8 @@ export default function Chart({
       Refs.current.chartRange = 7;
       rangeOffset = Refs.current.chartRange - 1 - difDays(weekStart, lastDate);
       dayLettersRef.current = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-      setHeaderRange(headerRangeHndlr(weekStart, weekEnd));
+      const { startWeekScroll, endWeekScroll } = weekScroller(weekStart, -scrollRangeOffset / 7);
+      setHeaderRange(headerRangeHndlr(startWeekScroll, endWeekScroll));
     } else if (timeRange === 'm') {
       Refs.current.chartRange = Number(monthEnd.slice(8));
       rangeOffset = Refs.current.chartRange - 1 - difDays(monthStart, lastDate);
@@ -221,12 +289,22 @@ export default function Chart({
     const stepConst = 100 / (Refs.current.chartRange - 1);
     setStep(stepConst);
 
-    const sliceHndlr = (words: number[]) => words.slice(-Refs.current.chartRange + rangeOffset);
+    // console.log(
+    //   ChartDataRef.current.wordsRep.slice(
+    //     ChartDataRef.current.wordsRep.length - Refs.current.chartRange + rangeOffset - scrollRangeOffset,
+    //     ChartDataRef.current.wordsRep.length - (scrollRangeOffset - rangeOffset)
+    //   )
+    // );
+    const sliceHndlr = (words: number[]) =>
+      words.slice(
+        ChartDataRef.current.wordsRep.length - Refs.current.chartRange + rangeOffset - scrollRangeOffset,
+        ChartDataRef.current.wordsRep.length - (scrollRangeOffset - rangeOffset)
+      );
 
-    wordsAddSliceRef.current = sliceHndlr(wordsAdd);
-    wordsRepSliceRef.current = sliceHndlr(wordsRep);
-    sessionSliceRef.current = sliceHndlr(session);
-    timeSliceRef.current = sliceHndlr(time);
+    wordsAddSliceRef.current = sliceHndlr(ChartDataRef.current.wordsAdd);
+    wordsRepSliceRef.current = sliceHndlr(ChartDataRef.current.wordsRep);
+    sessionSliceRef.current = sliceHndlr(ChartDataRef.current.session);
+    timeSliceRef.current = sliceHndlr(ChartDataRef.current.time);
 
     const isSliceSumNotNull = (arr: number[]) => arr.reduce((acc, curr) => acc + curr, 0) !== 0;
     sliceSumIsNotNUllRef.current = {
@@ -283,10 +361,12 @@ export default function Chart({
       );
     };
 
+    // console.log(wordsRepSliceRef.current);
+
     // First Time Render - statisticFromDB
     // Change chart range Re:Render - timeRange
     // End of session Re:Render - statistic
-  }, [statisticFromDB, timeRange, statistic]);
+  }, [statisticFromDB, timeRange, statistic, scrollRangeOffset]);
 
   //Update svg when user choise chart  on/off
   React.useEffect(() => {
@@ -299,7 +379,7 @@ export default function Chart({
 
     const linesAndCircles = (array: number[], color: string, i: number, key: string) => {
       if (array.length > i) {
-        const dotMonth = timeRange === 'm' ? (i % 3 === 0 ? 1.4 : 0) : 1;
+        const dotMonth = timeRange === 'm' ? (i % 3 === 0 ? 1.5 : 0) : 1;
         circlesTSXConst.push(
           <circle
             key={`${key}${i}`}
@@ -327,15 +407,31 @@ export default function Chart({
       }
     };
 
+    let chartSliceAdd = wordsAddSliceRef.current;
+    let chartSliceRep = wordsRepSliceRef.current;
+    let chartSliceSession = sessionSliceRef.current;
+    let chartSliceRepTime = timeSliceRef.current;
+    if (timeRange === 'y') {
+      chartSliceAdd = ChartDataRef.current.wordsAdd12month[year];
+      chartSliceRep = ChartDataRef.current.wordsRep12month[year];
+      chartSliceSession = ChartDataRef.current.session12month[year];
+      chartSliceRepTime = ChartDataRef.current.time12month[year];
+    } else {
+      chartSliceAdd = wordsAddSliceRef.current;
+      chartSliceRep = wordsRepSliceRef.current;
+      chartSliceSession = sessionSliceRef.current;
+      chartSliceRepTime = timeSliceRef.current;
+    }
+
     for (let i = 0; i < Refs.current.chartRange; i++) {
       if (sliceSumIsNotNUllRef.current.add && chartWordsAddOn)
-        linesAndCircles(wordsAddSliceRef.current, 'var(--wordsAdded-btnSttstc-color)', i, 'add-');
+        linesAndCircles(chartSliceAdd, 'var(--wordsAdded-btnSttstc-color)', i, 'add-');
       if (sliceSumIsNotNUllRef.current.rep && chartWordsRepOn)
-        linesAndCircles(wordsRepSliceRef.current, 'var(--session-btnSttstc-color)', i, 'rep-');
+        linesAndCircles(chartSliceRep, 'var(--session-btnSttstc-color)', i, 'rep-');
       if (sliceSumIsNotNUllRef.current.session && chartSessionOn)
-        linesAndCircles(sessionSliceRef.current, 'var(--wordsRep-btnSttstc-color)', i, 'session-');
+        linesAndCircles(chartSliceSession, 'var(--wordsRep-btnSttstc-color)', i, 'session-');
       if (sliceSumIsNotNUllRef.current.time && chartTimeOn)
-        linesAndCircles(timeSliceRef.current, 'var(--time-btnSttstc-color)', i, 'time-');
+        linesAndCircles(chartSliceRepTime, 'var(--time-btnSttstc-color)', i, 'time-');
 
       dayLettersTSXConst.push(
         <div
@@ -343,8 +439,8 @@ export default function Chart({
           className={`${cssChart.dayLetter}`}
           style={{
             left: `${i * stepConst}%`,
-            color: `${i === wordsAdd.length - 1 ? '#d9d9d9' : '#d9d9d983'}`,
-            textShadow: `${i === wordsAdd.length - 1 ? 'rgb(255, 255, 255) 0px 0 1px' : ''}`,
+            color: `${i === chartSliceAdd.length - 1 ? '#d9d9d9' : '#d9d9d983'}`,
+            textShadow: `${i === chartSliceAdd.length - 1 ? 'rgb(255, 255, 255) 0px 0 1px' : ''}`,
           }}
         >
           {dayLettersRef.current[i]}
@@ -355,7 +451,17 @@ export default function Chart({
     setDayLettersTSX(dayLettersTSXConst);
     setLinesTSX(linesTSXConst);
     setCirclesTSX(circlesTSXConst);
-  }, [statisticFromDB, statistic, timeRange, chartWordsAddOn, chartWordsRepOn, chartSessionOn, chartTimeOn]);
+  }, [
+    statisticFromDB,
+    statistic,
+    timeRange,
+    year,
+    scrollRangeOffset,
+    chartWordsAddOn,
+    chartWordsRepOn,
+    chartSessionOn,
+    chartTimeOn,
+  ]);
 
   const sceletonOrChart = () => {
     if (statisticFromDB) {
@@ -402,6 +508,41 @@ export default function Chart({
     }
   };
 
+  const chartBtnsHndlr = (dirrection: string) => {
+    if (timeRange === 'y') {
+      let yearFresh: string;
+      if (dirrection === 'left') {
+        console.log('left y');
+
+        yearFresh = String(Number(year) - 1);
+        if (Number(Refs.current.firstDate?.slice(0, 4)) > Number(yearFresh))
+          yearFresh = Refs.current.lastDate?.slice(0, 4) || '0';
+
+        setYear(yearFresh);
+      } else {
+        console.log('right y');
+        yearFresh = String(Number(year) + 1);
+        if (Number(Refs.current.lastDate?.slice(0, 4)) < Number(yearFresh))
+          yearFresh = Refs.current.firstDate?.slice(0, 4) || '0';
+
+        setYear(yearFresh);
+      }
+
+      setHeaderRange(`${yearFresh}.01.01 - ${yearFresh}.12.31`);
+    } else if (timeRange === 'w') {
+      if (dirrection === 'left') {
+        //! нет ограничителя в скроле назад
+        setScrollRangeOffset((prev) => prev + 7);
+        console.log('left w');
+      } else {
+        setScrollRangeOffset((prev) => Math.max(prev - 7, 0));
+        console.log('right w');
+      }
+    } else if (timeRange === 'm') {
+      //TODO
+    }
+  };
+
   return (
     <div className={`${cssChart.container}`}>
       <header className={`${cssChart.timeRange} ${page !== 'statistics' ? cssChart.timeRangeOff : ''}`}>
@@ -410,6 +551,11 @@ export default function Chart({
           {timeRange}.
         </button>
       </header>
+
+      <div className={timeRange === 'all' || page !== 'statistics' ? cssChart.btnArrowOff : ''}>
+        <BtnArrow onClick={() => chartBtnsHndlr('left')} direct='left' />
+      </div>
+
       <section
         className={`${cssChart.miniChart} ${
           page === 'menu' || page === 'statistics' || page === 'settings' ? '' : cssChart.miniChartOff
@@ -419,6 +565,11 @@ export default function Chart({
 
         {...dayLettersTSX}
       </section>
+
+      <div className={timeRange === 'all' || page !== 'statistics' ? cssChart.btnArrowOff : ''}>
+        <BtnArrow onClick={() => chartBtnsHndlr('right')} direct='right' />
+      </div>
+
       <div
         className={`${cssChart.btnWrap} ${cssStatistics.opacity} ${
           page === 'statistics' ? '' : cssStatistics.opacityOff

@@ -193,3 +193,7 @@
     opacity: 1;
   }
 }
+
+.btnArrowOff {
+  opacity: 0;
+}

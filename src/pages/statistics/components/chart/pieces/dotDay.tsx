@@ -1,13 +1,7 @@
 import { y2Calc } from '../hndlrs/math';
 import cssChart from '../Chart.module.css';
 
-export const dotDay = (
-  array: number[],
-  color: string,
-  isOn: boolean,
-  step: number,
-  lineWidth: number
-) => {
+export const dotDay = (array: number[], color: string, isOn: boolean, step: number, lineWidth: number) => {
   return (
     <div
       className={`${cssChart.dayDot}`}
