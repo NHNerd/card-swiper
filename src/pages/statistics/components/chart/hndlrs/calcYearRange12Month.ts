@@ -47,11 +47,12 @@ const calcYearRange12Month = (
       let daysSumRep = 0;
       let daysSumSession = 0;
       let daysSumTime = 0;
+
       for (let iDay = 0; iDay < monthDaysCount; iDay++) {
-        daysSumAdd += currentMonthAdd[iDay];
-        daysSumRep += currentMonthRep[iDay];
-        daysSumSession += currentMonthSession[iDay];
-        daysSumTime += currentMonthTime[iDay];
+        daysSumAdd += currentMonthAdd[iDay] || 0;
+        daysSumRep += currentMonthRep[iDay] || 0;
+        daysSumSession += currentMonthSession[iDay] || 0;
+        daysSumTime += currentMonthTime[iDay] || 0;
       }
 
       wordsAdd12month[String(year)].push(daysSumAdd);
