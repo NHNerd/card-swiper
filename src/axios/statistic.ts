@@ -23,8 +23,7 @@ export const patchSessionDays = async (session: SessionStatistic[]): Promise<str
     .patch(src, { userId, session })
     .then((data) => {
       console.log(data.data.message);
-      if (data.status == 200 || data.status == 201)
-        localStorage.removeItem('card-swiper:sessionAddStatistic');
+      if (data.status == 200 || data.status == 201) localStorage.removeItem('card-swiper:sessionAddStatistic');
 
       return data.data.statistic;
     })
@@ -61,8 +60,7 @@ export const getStatistic = async () => {
     .then((data) => {
       const statistic = data.data.statistic;
 
-      //? convert object to string: JSON.stringify
-      // if (setLS) localStorage.setItem('card-swiper:allLists', JSON.stringify(allLists));
+      localStorage.setItem('card-swiper:statistics', JSON.stringify(statistic));
 
       return statistic;
     })

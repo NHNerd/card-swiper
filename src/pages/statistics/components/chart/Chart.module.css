@@ -200,3 +200,18 @@
 .dorOff {
   opacity: 0;
 }
+
+.empty {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3.2dvh;
+  letter-spacing: 1.6dvw;
+  opacity: 0.2;
+  transition: opacity 0.2s;
+}
+
+.emptyOff {
+  opacity: 0;
+}

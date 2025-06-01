@@ -29,15 +29,15 @@ const difDays = (start: string | null, end: string | null) => {
   return Math.round(difSec / (1000 * 60 * 60 * 24));
 };
 
+// of SVG if array sum === 0
+const isSliceSumNotNull = (arr: number[]) => arr.reduce((acc, curr) => acc + curr, 0) !== 0;
+
 const weekScroller = (date: string, offsetWeeks: number) => {
   const inputDate = new Date(date);
-
   // День недели (0 - воскресенье, 1 - понедельник, ..., 6 - суббота)
   const day = inputDate.getDay();
-
   // Смещаем на понедельник (если неделя начинается с понедельника)
   const diffToMonday = day === 0 ? -6 : 1 - day;
-
   // Смещаем к началу нужной недели
   inputDate.setDate(inputDate.getDate() + diffToMonday + offsetWeeks * 7);
 
@@ -58,7 +58,6 @@ const monthScroller = (date: string, offsetMonths: number) => {
   // Смещаем месяц
   inputDate.setHours(0, 0, 0, 0);
   inputDate.setMonth(inputDate.getMonth() + offsetMonths);
-
   // Устанавливаем на первое число месяца
   inputDate.setDate(1);
   inputDate.setHours(0, 0, 0, 0);
@@ -140,14 +139,13 @@ export default function Chart({
   const [step, setStep] = React.useState<number>(18);
   const [year, setYear] = React.useState<string>('2025');
   const [scrollRangeOffsetW, setScrollRangeOffsetW] = React.useState<number>(0);
+  const [isScollRngLast, setIsScollRngLast] = React.useState<boolean>(true);
 
   const [scrollDateM, setScrollDateM] = React.useState<{ start: string; end: string }>({
     start: new Date().toISOString().split('T')[0],
     end: new Date().toISOString().split('T')[0],
   });
   const scrollRangeOffsetMRef = React.useRef<number>(0);
-
-  const isRangeLast = React.useRef<boolean>(true);
 
   const ChartDataRef = React.useRef<{
     wordsAdd: number[];
@@ -202,6 +200,19 @@ export default function Chart({
   const maxValRef = React.useRef<any>(() => <div>0</div>);
 
   const lineWidth: number = 2;
+
+  // Clear
+  const prevPageRef = React.useRef<string>('');
+  React.useEffect(() => {
+    if (page === 'menu' && prevPageRef.current === 'statistics') {
+      if (scrollRangeOffsetW !== 0) setScrollRangeOffsetW(0);
+      if (!isScollRngLast) setIsScollRngLast(true);
+      if (scrollRangeOffsetMRef.current !== 0) scrollRangeOffsetMRef.current = 0;
+      //! Position the maxVal uncorrect
+      // if (timeRange !== 'w') setTimeRange('w');
+    }
+    prevPageRef.current = page;
+  }, [page]);
 
   // Get DB, then calc
   React.useEffect(() => {
@@ -264,8 +275,7 @@ export default function Chart({
   React.useEffect(() => {
     if (!statisticFromDB) return;
 
-    const { firstDate, lastDate, daysCount, weekStart, weekEnd, monthStart, monthEnd, yearStart, yearEnd } =
-      Refs.current;
+    const { firstDate, lastDate, daysCount, weekStart, monthStart, monthEnd, yearStart, yearEnd } = Refs.current;
 
     let rangeOffset = Refs.current.chartRange - 1 - difDays(weekStart, lastDate);
 
@@ -278,17 +288,13 @@ export default function Chart({
       setHeaderRange(headerRangeHndlr(startWeekScroll, endWeekScroll));
       // Clear
       setYear('2025');
-      // setScrollRangeOffsetM({ offset: 0, date: monthEnd });
     } else if (timeRange === 'm') {
-      // Refs.current.chartRange = Number(monthEnd.slice(8));
       Refs.current.chartRange = Number(scrollDateM.end.slice(8));
 
       rangeOffset = Refs.current.chartRange - 1 - difDays(monthStart, lastDate);
-      //? I can show через 1 или 2 like: 1, 3, 5 || 1, 4, 7, 10
-      // dayLettersRef.current = monthDayLetters(monthEnd);
+      //? Display last letters with more large offset - for mobile screen
       dayLettersRef.current = monthDayLetters(scrollDateM.end);
 
-      //!
       setHeaderRange(headerRangeHndlr(scrollDateM.start, scrollDateM.end));
       // Clear
       setYear('2025');
@@ -311,19 +317,12 @@ export default function Chart({
       // Clear
       setYear('2025');
       setScrollRangeOffsetW(0);
-      //! infiniti
-      // setScrollRangeOffsetM({ offset: 0, date: monthEnd });
+      setScrollDateM({ start: monthStart, end: monthEnd });
+      scrollRangeOffsetMRef.current = 0;
     }
 
     const stepConst = 100 / (Refs.current.chartRange - 1);
     setStep(stepConst);
-
-    // console.log(
-    //   ChartDataRef.current.wordsRep.slice(
-    //     ChartDataRef.current.wordsRep.length - Refs.current.chartRange + rangeOffset - scrollRangeOffsetW,
-    //     ChartDataRef.current.wordsRep.length - (scrollRangeOffsetW - rangeOffset)
-    //   )
-    // );
 
     const sliceHndlr = (words: number[]) =>
       words.slice(
@@ -339,14 +338,6 @@ export default function Chart({
     wordsRepSliceRef.current = sliceHndlr(ChartDataRef.current.wordsRep);
     sessionSliceRef.current = sliceHndlr(ChartDataRef.current.session);
     timeSliceRef.current = sliceHndlr(ChartDataRef.current.time);
-
-    const isSliceSumNotNull = (arr: number[]) => arr.reduce((acc, curr) => acc + curr, 0) !== 0;
-    sliceSumIsNotNUllRef.current = {
-      add: isSliceSumNotNull(wordsAddSliceRef.current),
-      rep: isSliceSumNotNull(wordsRepSliceRef.current),
-      session: isSliceSumNotNull(sessionSliceRef.current),
-      time: isSliceSumNotNull(timeSliceRef.current),
-    };
 
     const maxIndexFunc = (array: number[]) => {
       return array.reduce((maxIdx, current, idx, arr) => {
@@ -369,7 +360,8 @@ export default function Chart({
         arrayMargin[i] = (arrayMargin[1] ? 1 : 0) + (arrayMargin[2] ? 1 : 0) + 1;
     });
 
-    //TODO add - correct for Year, fix - few in one place
+    //TODO add - correct position for Year
+    //TODO fix - position few in one place
     maxValRef.current = (
       array: number[],
       color: string,
@@ -396,8 +388,6 @@ export default function Chart({
       );
     };
 
-    // console.log(wordsRepSliceRef.current);
-
     // First Time Render - statisticFromDB
     // Change chart range Re:Render - timeRange
     // End of session Re:Render - statistic
@@ -412,6 +402,7 @@ export default function Chart({
 
     const stepConst = 100 / (Refs.current.chartRange - 1);
 
+    //TODO add - for 'all' steps(12, 24 maybe🤔), instead drawing all day😵😵😵
     const linesAndCircles = (array: number[], color: string, i: number, key: string) => {
       if (array.length > i) {
         const dotMonth = timeRange === 'm' ? (i % 3 === 0 ? 1.5 : 0) : 1;
@@ -458,6 +449,22 @@ export default function Chart({
       chartSliceRepTime = timeSliceRef.current;
     }
 
+    if (timeRange == 'y') {
+      sliceSumIsNotNUllRef.current = {
+        add: isSliceSumNotNull(ChartDataRef.current.wordsAdd12month[year]),
+        rep: isSliceSumNotNull(ChartDataRef.current.wordsRep12month[year]),
+        session: isSliceSumNotNull(ChartDataRef.current.session12month[year]),
+        time: isSliceSumNotNull(ChartDataRef.current.time12month[year]),
+      };
+    } else {
+      sliceSumIsNotNUllRef.current = {
+        add: isSliceSumNotNull(wordsAddSliceRef.current),
+        rep: isSliceSumNotNull(wordsRepSliceRef.current),
+        session: isSliceSumNotNull(sessionSliceRef.current),
+        time: isSliceSumNotNull(timeSliceRef.current),
+      };
+    }
+
     for (let i = 0; i < Refs.current.chartRange; i++) {
       if (sliceSumIsNotNUllRef.current.add && chartWordsAddOn)
         linesAndCircles(chartSliceAdd, 'var(--wordsAdded-btnSttstc-color)', i, 'add-');
@@ -474,9 +481,10 @@ export default function Chart({
           className={`${cssChart.dayLetter}`}
           style={{
             left: `${i * stepConst}%`,
-            //TODO need boolead - isChart === last range
-            color: `${i === chartSliceAdd.length - 1 && true ? '#d9d9d9' : '#d9d9d983'}`,
-            textShadow: `${i === chartSliceAdd.length - 1 && true ? 'rgb(255, 255, 255) 0px 0 1px' : ''}`,
+            color: `${i === chartSliceAdd.length - 1 && isScollRngLast ? '#d9d9d9' : '#d9d9d983'}`,
+            textShadow: `${
+              i === chartSliceAdd.length - 1 && isScollRngLast ? 'rgb(255, 255, 255) 0px 0 1px' : ''
+            }`,
           }}
         >
           {dayLettersRef.current[i]}
@@ -509,8 +517,7 @@ export default function Chart({
             {...circlesTSX}
           </svg>
 
-          {/* //TODO need boolead - isChart === last range */}
-          <div className={false ? cssChart.dorOff : ''}>
+          <div className={isScollRngLast ? '' : cssChart.dorOff}>
             {dotDay(
               timeRange === 'y'
                 ? ChartDataRef.current.wordsAdd12month[headerRange?.slice(0, 4)]
@@ -548,41 +555,54 @@ export default function Chart({
               lineWidth
             )}
           </div>
-          {maxValRef.current(
-            timeRange === 'y'
-              ? ChartDataRef.current.wordsAdd12month[headerRange?.slice(0, 4)]
-              : wordsAddSliceRef.current,
-            'var(--wordsAdded-btnSttstc-color)',
-            chartWordsAddOn,
-            '',
-            0
-          )}
-          {maxValRef.current(
-            timeRange === 'y'
-              ? ChartDataRef.current.wordsRep12month[headerRange?.slice(0, 4)]
-              : wordsRepSliceRef.current,
-            'var(--session-btnSttstc-color)',
-            chartWordsRepOn,
-            '',
-            1
-          )}
-          {maxValRef.current(
-            timeRange === 'y'
-              ? ChartDataRef.current.session12month[headerRange?.slice(0, 4)]
-              : sessionSliceRef.current,
-            'var(--wordsRep-btnSttstc-color)',
-            chartSessionOn,
-            '',
-            2
-          )}
+
+          {/* Max Value  */}
+          {sliceSumIsNotNUllRef.current.add
+            ? maxValRef.current(
+                timeRange === 'y'
+                  ? ChartDataRef.current.wordsAdd12month[headerRange?.slice(0, 4)]
+                  : wordsAddSliceRef.current,
+                'var(--wordsAdded-btnSttstc-color)',
+                chartWordsAddOn,
+                '',
+                0
+              )
+            : ''}
+          {sliceSumIsNotNUllRef.current.rep
+            ? maxValRef.current(
+                timeRange === 'y'
+                  ? ChartDataRef.current.wordsRep12month[headerRange?.slice(0, 4)]
+                  : wordsRepSliceRef.current,
+                'var(--session-btnSttstc-color)',
+                chartWordsRepOn,
+                '',
+                1
+              )
+            : ''}
+
+          {sliceSumIsNotNUllRef.current.session
+            ? maxValRef.current(
+                timeRange === 'y'
+                  ? ChartDataRef.current.session12month[headerRange?.slice(0, 4)]
+                  : sessionSliceRef.current,
+                'var(--wordsRep-btnSttstc-color)',
+                chartSessionOn,
+                '',
+                2
+              )
+            : ''}
           {/* //TODO use FullSatatistic func sec => dd:hh:mm:ss */}
-          {maxValRef.current(
-            timeRange === 'y' ? ChartDataRef.current.time12month[headerRange?.slice(0, 4)] : timeSliceRef.current,
-            'var(--time-btnSttstc-color)',
-            chartTimeOn,
-            's.',
-            3
-          )}
+          {sliceSumIsNotNUllRef.current.time
+            ? maxValRef.current(
+                timeRange === 'y'
+                  ? ChartDataRef.current.time12month[headerRange?.slice(0, 4)]
+                  : timeSliceRef.current,
+                'var(--time-btnSttstc-color)',
+                chartTimeOn,
+                's.',
+                3
+              )
+            : ''}
         </>
       );
     } else {
@@ -597,6 +617,7 @@ export default function Chart({
     }
   };
 
+  //TODO refractoring😤😤😤
   const chartBtnsHndlr = (dirrection: string) => {
     if (timeRange === 'y') {
       let yearFresh: string;
@@ -614,24 +635,80 @@ export default function Chart({
         setYear(yearFresh);
       }
 
+      if (yearFresh === Refs.current.lastDate.slice(0, 4)) {
+        if (!isScollRngLast) setIsScollRngLast(true);
+      } else {
+        if (isScollRngLast) setIsScollRngLast(false);
+      }
+
       setHeaderRange(`${yearFresh}.01.01 - ${yearFresh}.12.31`);
     } else if (timeRange === 'w') {
       if (dirrection === 'left') {
-        //! нет ограничителя в скроле назад
-        setScrollRangeOffsetW((prev) => prev + 7);
+        setScrollRangeOffsetW((prev) => {
+          const fresh = prev + 7;
+
+          //TODO need check - is correct?
+          if (Refs.current.daysCount < fresh) {
+            setIsScollRngLast(true);
+            return 0;
+          } else {
+            if (fresh === 0) {
+              if (!isScollRngLast) setIsScollRngLast(true);
+            } else {
+              if (isScollRngLast) setIsScollRngLast(false);
+            }
+          }
+
+          return fresh;
+        });
       } else {
-        setScrollRangeOffsetW((prev) => Math.max(prev - 7, 0));
+        setScrollRangeOffsetW((prev) => {
+          const fresh = Math.max(prev - 7, 0);
+
+          if (fresh === 0) {
+            if (!isScollRngLast) setIsScollRngLast(true);
+          } else {
+            if (isScollRngLast) setIsScollRngLast(false);
+          }
+
+          return fresh;
+        });
       }
     } else if (timeRange === 'm') {
       if (dirrection === 'left') {
         const { startMonthScroll, endMonthScroll } = monthScroller(scrollDateM.start, -1);
+        if (
+          new Date(Refs.current.firstDate).setHours(0, 0, 0, 0) > new Date(endMonthScroll).setHours(0, 0, 0, 0)
+        ) {
+          scrollRangeOffsetMRef.current = 0;
+          setScrollDateM({ start: Refs.current.monthStart, end: Refs.current.monthEnd });
 
-        scrollRangeOffsetMRef.current += Number(endMonthScroll.slice(8, 10));
-        setScrollDateM({ start: startMonthScroll, end: endMonthScroll });
+          setIsScollRngLast(true);
+        } else {
+          scrollRangeOffsetMRef.current += Number(endMonthScroll.slice(8, 10));
+          setScrollDateM({ start: startMonthScroll, end: endMonthScroll });
+
+          if (
+            new Date(Refs.current.monthStart).setHours(0, 0, 0, 0) ===
+            new Date(startMonthScroll).setHours(0, 0, 0, 0)
+          ) {
+            if (!isScollRngLast) setIsScollRngLast(true);
+          } else {
+            if (isScollRngLast) setIsScollRngLast(false);
+          }
+        }
       } else {
         const { startMonthScroll, endMonthScroll } = monthScroller(scrollDateM.start, 1);
-
         if (new Date(Refs.current.lastDate) < new Date(startMonthScroll)) return;
+
+        if (
+          new Date(Refs.current.monthStart).setHours(0, 0, 0, 0) ===
+          new Date(startMonthScroll).setHours(0, 0, 0, 0)
+        ) {
+          if (!isScollRngLast) setIsScollRngLast(true);
+        } else {
+          if (isScollRngLast) setIsScollRngLast(false);
+        }
 
         scrollRangeOffsetMRef.current -= Number(scrollDateM.end.slice(8, 10));
         setScrollDateM({ start: startMonthScroll, end: endMonthScroll });
@@ -643,7 +720,12 @@ export default function Chart({
     <div className={`${cssChart.container}`}>
       <header className={`${cssChart.timeRange} ${page !== 'statistics' ? cssChart.timeRangeOff : ''}`}>
         {headerRange}
-        <button onClick={() => timeRangeSwitch(timeRange, setTimeRange)} className={`${cssChart.timeSwitch} `}>
+        <button
+          onClick={() => {
+            timeRangeSwitch(timeRange, setTimeRange), setIsScollRngLast(true);
+          }}
+          className={`${cssChart.timeSwitch} `}
+        >
           {timeRange}.
         </button>
       </header>
@@ -657,8 +739,19 @@ export default function Chart({
           page === 'menu' || page === 'statistics' || page === 'settings' ? '' : cssChart.miniChartOff
         }`}
       >
+        <div
+          className={`${cssChart.empty} ${
+            sliceSumIsNotNUllRef.current.add ||
+            sliceSumIsNotNUllRef.current.rep ||
+            sliceSumIsNotNUllRef.current.session ||
+            sliceSumIsNotNUllRef.current.time
+              ? cssChart.emptyOff
+              : ''
+          }`}
+        >
+          EMPTY
+        </div>
         {sceletonOrChart()}
-
         {...dayLettersTSX}
       </section>
 

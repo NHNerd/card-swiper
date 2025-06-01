@@ -8,7 +8,7 @@ import Session from './pages/session/Session.tsx';
 import Settings from './pages/settings/Settings.tsx';
 import Burger from './components/burger/Burger.tsx';
 import Statistics from './pages/statistics/Statistics.tsx';
-import { DayStats } from '../statistics/types.ts';
+import { DayStats } from './types/types.ts';
 
 import { useUiState } from './zustand.ts';
 
