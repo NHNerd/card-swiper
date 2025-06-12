@@ -147,6 +147,8 @@ export default function Chart({
   });
   const scrollRangeOffsetMRef = React.useRef<number>(0);
 
+  const warningRef = React.useRef(null);
+
   const ChartDataRef = React.useRef<{
     wordsAdd: number[];
     wordsRep: number[];
@@ -740,7 +742,7 @@ export default function Chart({
         }`}
       >
         <div
-          className={`${cssChart.empty} ${
+          className={`${cssChart.empty} ${cssChart.warning} ${
             sliceSumIsNotNUllRef.current.add ||
             sliceSumIsNotNUllRef.current.rep ||
             sliceSumIsNotNUllRef.current.session ||
@@ -748,6 +750,8 @@ export default function Chart({
               ? cssChart.emptyOff
               : ''
           }`}
+          data-text='EMPTY'
+          ref={warningRef}
         >
           EMPTY
         </div>
@@ -774,6 +778,15 @@ export default function Chart({
           chartTimeOn={chartTimeOn}
           setChartTimeOn={setChartTimeOn}
           sliceSumIsNotNUllRef={sliceSumIsNotNUllRef}
+          empty={
+            sliceSumIsNotNUllRef.current.add ||
+            sliceSumIsNotNUllRef.current.rep ||
+            sliceSumIsNotNUllRef.current.session ||
+            sliceSumIsNotNUllRef.current.time
+              ? true
+              : false
+          }
+          warningRef={warningRef}
         />
       </div>
     </div>

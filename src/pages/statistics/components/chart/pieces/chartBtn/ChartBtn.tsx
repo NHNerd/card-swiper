@@ -1,3 +1,5 @@
+import React from 'react';
+import { emptyBtnWarning, warningEmpty } from './hndlr/warning';
 import cssChartBtn from './ChartBtn.module.css';
 
 type Props = {
@@ -15,6 +17,8 @@ type Props = {
     session: boolean;
     time: boolean;
   }>;
+  empty: boolean;
+  warningRef: any;
 };
 
 export default function ChartBtn({
@@ -27,7 +31,14 @@ export default function ChartBtn({
   chartTimeOn,
   setChartTimeOn,
   sliceSumIsNotNUllRef,
+  empty,
+  warningRef,
 }: Props) {
+  const btnAddEmptyRef = React.useRef(null);
+  const btnRepEmptyRef = React.useRef(null);
+  const btnSessionEmptyRef = React.useRef(null);
+  const btnTimeEmptyRef = React.useRef(null);
+
   const switchBtnHndler = (
     btn: boolean,
     other1: boolean,
@@ -36,20 +47,23 @@ export default function ChartBtn({
     btnSet: React.Dispatch<React.SetStateAction<boolean>>,
     isLineExist: boolean
   ) => {
-    if (!isLineExist) {
-      btnSet(false);
+    if (!isLineExist && empty) {
+      // Warning "Empty" if line don't existe
+      if (!sliceSumIsNotNUllRef.current?.add) emptyBtnWarning(btnAddEmptyRef);
+      if (!sliceSumIsNotNUllRef.current?.rep) emptyBtnWarning(btnRepEmptyRef);
+      if (!sliceSumIsNotNUllRef.current?.session) emptyBtnWarning(btnSessionEmptyRef);
+      if (!sliceSumIsNotNUllRef.current?.time) emptyBtnWarning(btnTimeEmptyRef);
       return;
     }
-    if (!other1 && !other2 && !other3 && btn) btnSet(true);
-    else btnSet(!btn);
+    if (!other1 && !other2 && !other3 && btn) warningEmpty(warningRef);
+    else if (empty) btnSet(!btn);
+    else warningEmpty(warningRef);
   };
 
   return (
     <div className={`${cssChartBtn.btnContainer} `}>
       <button
-        className={`${cssChartBtn.btn} ${cssChartBtn.btnWordsAdded} ${
-          chartWordsAddOn ? cssChartBtn.btnOn : ''
-        }`}
+        className={`${cssChartBtn.btn} ${cssChartBtn.btnWordsAdded} ${chartWordsAddOn ? cssChartBtn.btnOn : ''}`}
         onClick={() =>
           switchBtnHndler(
             chartWordsAddOn,
@@ -61,12 +75,13 @@ export default function ChartBtn({
           )
         }
       >
+        <div className={`${cssChartBtn.btnEmpty}`} ref={btnAddEmptyRef} data-text='EMPTY'>
+          EMPTY
+        </div>
         words added
       </button>
       <button
-        className={`${cssChartBtn.btn} ${cssChartBtn.btnWordsRep} ${
-          chartWordsRepOn ? cssChartBtn.btnOn : ''
-        }`}
+        className={`${cssChartBtn.btn} ${cssChartBtn.btnWordsRep} ${chartWordsRepOn ? cssChartBtn.btnOn : ''}`}
         onClick={() =>
           switchBtnHndler(
             chartWordsRepOn,
@@ -78,12 +93,13 @@ export default function ChartBtn({
           )
         }
       >
+        <div className={`${cssChartBtn.btnEmpty}`} ref={btnRepEmptyRef} data-text='EMPTY'>
+          EMPTY
+        </div>
         words repiated
       </button>
       <button
-        className={`${cssChartBtn.btn} ${cssChartBtn.btnSession} ${
-          chartSessionOn ? cssChartBtn.btnOn : ''
-        }`}
+        className={`${cssChartBtn.btn} ${cssChartBtn.btnSession} ${chartSessionOn ? cssChartBtn.btnOn : ''}`}
         onClick={() =>
           switchBtnHndler(
             chartSessionOn,
@@ -95,6 +111,9 @@ export default function ChartBtn({
           )
         }
       >
+        <div className={`${cssChartBtn.btnEmpty}`} ref={btnSessionEmptyRef} data-text='EMPTY'>
+          EMPTY
+        </div>
         sessions
       </button>
       <button
@@ -110,6 +129,9 @@ export default function ChartBtn({
           )
         }
       >
+        <div className={`${cssChartBtn.btnEmpty}`} ref={btnTimeEmptyRef} data-text='EMPTY'>
+          EMPTY
+        </div>
         time
       </button>
     </div>

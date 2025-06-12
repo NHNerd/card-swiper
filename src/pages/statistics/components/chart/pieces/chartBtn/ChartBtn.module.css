@@ -72,3 +72,28 @@
   background-color: rgba(255, 255, 255, 0.06);
   filter: blur(10px);
 }
+
+.btnEmpty {
+  position: absolute;
+  inset: 0 4px;
+  font-size: 2.6dvh;
+  background-color: var(--bg-color);
+  border-radius: 16px;
+  opacity: var(--btnEmpty-opacity, 0); /* read from js variable */
+  transform: scale(var(--btnEmpty-after-scale, 0.96, 0.82));
+  transition: var(--btnEmpty-transition, opacity 0.2s ease-out),
+    transform var(--btnEmpty-after-scale-transition, 0.4s ease-out);
+}
+
+.btnEmpty::before,
+.btnEmpty::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  opacity: var(--btnEmpty-after-opacity, 1); /* read from js variable */
+
+  transition: opacity var(--btnEmpty-after-transition, 0.4s ease-out);
+}
+.btnEmpty::after {
+  filter: blur(12px);
+}

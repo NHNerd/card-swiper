@@ -45,7 +45,6 @@
   font-size: 2dvh;
   color: #d9d9d9a4;
   transition: 0.5s;
-  /* background-color: hotpink; */
 }
 .timeSwitch {
   position: absolute;
@@ -196,6 +195,8 @@
 
 .btnArrowOff {
   opacity: 0;
+  pointer-events: none;
+  user-select: none;
 }
 .dorOff {
   opacity: 0;
@@ -208,10 +209,25 @@
   transform: translate(-50%, -50%);
   font-size: 3.2dvh;
   letter-spacing: 1.6dvw;
-  opacity: 0.2;
-  transition: opacity 0.2s;
+  opacity: var(--empty-opacity, 0); /* читаем из переменной */
+  transition: var(--empty-transition, opacity 0.2s);
 }
 
 .emptyOff {
   opacity: 0;
+}
+
+.warning::before,
+.warning::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  filter: blur(110%);
+  opacity: var(--before-opacity, 0); /* читаем из переменной */
+  text-shadow: 0 0 4px;
+  transition: var(--before-transition, opacity 0.4s ease-out);
+}
+
+.warning::after {
+  filter: blur(10px);
 }

@@ -72,9 +72,7 @@ export default function Statistics({ statistic }: Props) {
         <BriefStatistic wordsRepClc={wordsRepClc} />
       </div>
 
-      <div
-        className={`${cssStatistics.opacity} ${page === 'statistics' ? '' : cssStatistics.opacityOff}`}
-      >
+      <div className={`${cssStatistics.opacity} ${page === 'statistics' ? '' : cssStatistics.opacityOff}`}>
         <FullStatistic
           page={page}
           timeRange={timeRange}

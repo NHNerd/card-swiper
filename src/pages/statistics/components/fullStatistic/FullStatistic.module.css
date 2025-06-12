@@ -1,15 +1,16 @@
 .container {
-  position: relative;
-  top: 6dvh;
+  margin-top: 1dvh;
+  position: absolute;
+  top: 46dvh;
   width: 58dvw;
   min-width: 200px;
-  height: 30dvh;
+  height: 36dvh;
+
   left: 50%;
   transform: translateX(-50%);
-
-  border: dotted 1px rgba(255, 0, 0, 0.308);
-  box-sizing: border-box;
-
+  /* background-color: lawngreen; */
+  /* border: dotted 1px rgba(255, 0, 0, 0.308);
+  box-sizing: border-box; */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -18,6 +19,26 @@
 }
 .off {
   opacity: 0;
+}
+
+.header {
+  padding-bottom: 1dvh;
+  font-size: 3dvh;
+  text-align: center;
+}
+
+@media screen and (max-height: 860px) {
+  .header {
+    font-size: 26px;
+  }
+}
+@media screen and (min-height: 1080px) {
+  .header {
+    font-size: 32px;
+  }
+  .container {
+    height: 370px;
+  }
 }
 
 .stringContainer {

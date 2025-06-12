@@ -65,8 +65,7 @@ export default function ListOfList({ scrollSectionLolRef, children, parrent, hnd
           <Btn parrent='lol' type='edit' hndlr={() => toEdit(list.order)} />
           <div
             onClick={() => {
-              if (page === 'lol')
-                changeOrderHndlr({ dataZus, setDataZus, order: list.order }), setPage('menu');
+              if (page === 'lol') changeOrderHndlr({ dataZus, setDataZus, order: list.order }), setPage('menu');
             }}
             className={cssListOfList.flopWrap + ' ' + (page !== 'le' ? 'flopOn' : 'flopOff')}
           >
@@ -83,11 +82,12 @@ export default function ListOfList({ scrollSectionLolRef, children, parrent, hnd
               <div className={cssListOfList.h3Text + ' color2'}>game count:</div>
               <div className={cssListOfList.h3Value}>{list.gameCount}</div>
             </h3>
-            {/* <div
-          className={
-            cssListOfList.line + ' bg-color3' + (parrent === 'menu' ? ' ' + cssList.lineMenu : '')
-          }
-        ></div> */}
+            {/* bg-color3 ${parrent === 'menu' ? cssListOfList.lineMenu : ''} */}
+            <div
+              className={`${cssListOfList.line} ${
+                page !== 'menu' ? cssListOfList.lineOn : cssListOfList.lineOff
+              }`}
+            ></div>
           </div>
         </section>
       ))}
