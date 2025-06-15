@@ -36,7 +36,6 @@ export default function Statistics({ statistic, wordAddedUpdated, allDateLoaded,
   const [timeRange, setTimeRange] = React.useState<'w' | 'm' | 'y' | 'all'>('w');
 
   const btnArrowHndlr = () => {
-    console.log('btnArrowHndl');
     setPage('statistics');
   };
 

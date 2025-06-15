@@ -1,0 +1,226 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+
+  top: 0;
+  bottom: 0;
+  left: 16%;
+  right: 16%;
+  background-color: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+
+  /* horizontal + vertical gradient */
+  -webkit-mask-image: linear-gradient(to right, transparent, black 40%, black 60%, transparent),
+    linear-gradient(to bottom, transparent, black 40%, black 60%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 40%, black 60%, transparent),
+    linear-gradient(to bottom, transparent, black 40%, black 60%, transparent);
+
+  -webkit-mask-composite: intersect;
+  mask-composite: intersect; /* For Firefox, it's `intersect` or `add` depending on spec */
+
+  /* fallback if needed */
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+
+  animation: bgColor 10s ease-in-out infinite;
+}
+
+@keyframes bgColor {
+  0% {
+    background-color: rgba(255, 255, 255, 0);
+  }
+  25% {
+    background-color: rgba(255, 255, 255, 0.06);
+  }
+  50% {
+    background-color: rgba(255, 255, 255, 0);
+  }
+  75% {
+    background-color: rgba(255, 255, 255, 0.14);
+  }
+  100% {
+    background-color: rgba(255, 255, 255, 0);
+  }
+}
+
+@keyframes scale1 {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.16);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+@keyframes scale2 {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.text {
+  position: absolute;
+  font-size: 28px;
+  letter-spacing: 8px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-42%, -50%);
+  color: rgba(255, 255, 255, 0.3);
+  opacity: 0.86;
+}
+.text::before,
+.text::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+.text::before {
+  animation: scale2 20s ease-in-out infinite;
+  color: rgba(255, 255, 255, 0.7);
+}
+.text::after {
+  animation: scale1 20s ease-in-out infinite;
+  color: rgb(255, 255, 255);
+}
+
+.text:hover {
+  opacity: 1;
+}
+.text:hover::before {
+  animation: scale2 0.5s ease-in-out infinite;
+  text-shadow: 0px 0px 30px rgb(255, 255, 255);
+}
+.text:hover::after {
+  animation: scale1 0.5s ease-in-out infinite;
+}
+
+.textBG1,
+.textBG2,
+.textBG3,
+.textBG1clone,
+.textBG2clone,
+.textBG3clone {
+  position: absolute;
+  white-space: nowrap;
+  width: fit-content;
+
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+
+  letter-spacing: 14px;
+}
+
+.textBG1,
+.textBG1clone {
+  rotate: 10deg;
+  animation-duration: 500s;
+  opacity: 0.4;
+}
+.textBG2,
+.textBG2clone {
+  rotate: -24deg;
+  animation-duration: 1400s;
+  opacity: 0.6;
+}
+.textBG3,
+.textBG3clone {
+  rotate: -7deg;
+  animation-duration: 300s;
+  opacity: 0.2;
+}
+
+.textBG1,
+.textBG2,
+.textBG3 {
+  animation-name: scrollText1;
+}
+
+.textBG1clone,
+.textBG2clone,
+.textBG3clone {
+  animation-name: scrollText1clone;
+}
+
+.textBGRotate1,
+.textBGRotate2,
+.textBGRotate3 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  inset: 0;
+
+  animation-name: rotate;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.textBGRotate1 {
+  animation-duration: 100s;
+}
+.textBGRotate2 {
+  animation-duration: 160s;
+}
+.textBGRotate3 {
+  animation-name: rotateRev;
+  animation-duration: 140s;
+}
+
+@keyframes scrollText1 {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+@keyframes scrollText1clone {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  50.00001% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotateRev {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-180deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}

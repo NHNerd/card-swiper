@@ -1,19 +1,20 @@
-import React from 'react';
-
 import sccBtnback from './Btnback.module.css';
 
 import { useUiState } from '../../zustand';
 
-type Props = {};
+type Props = {
+  hndlr;
+  isOnSetting: boolean;
+};
 
-const Btnback = (props: Props) => {
+const Btnback = ({ hndlr, isOnSetting }: Props) => {
   const { page, setPage } = useUiState();
 
   return (
     <button
-      className={`${sccBtnback.back} ${page === 'le' || page === 'edit' ? '' : sccBtnback.off}`}
+      className={`${sccBtnback.back} ${page === 'le' || page === 'edit' || isOnSetting ? '' : sccBtnback.off}`}
       onClick={() => {
-        setPage('lol');
+        hndlr();
       }}
     >
       <div className={sccBtnback.image}></div>

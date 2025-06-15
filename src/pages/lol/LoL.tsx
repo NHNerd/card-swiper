@@ -27,7 +27,8 @@ const debouncePutRefreshOrders = debounce(remove, 500);
 
 export default function LoL({ scrollSectionLolRef }: Props) {
   //Zustand
-  const { page } = useUiState();
+  const { page, setPage } = useUiState();
+
   const { dataZus, setDataZus } = zustandData();
 
   const [opacity, setOpacity] = React.useState(cssLoL.opacity1);
@@ -81,12 +82,8 @@ export default function LoL({ scrollSectionLolRef }: Props) {
   } else {
     return (
       <>
-        <Btnback />
-        <div
-          className={
-            cssLoL.containerLol + ' ' + (page !== 'le' ? cssLoL.lol : cssLoL.le) + ' ' + opacity
-          }
-        >
+        <Btnback hndlr={() => setPage('lol')} parrent='LoL' />
+        <div className={cssLoL.containerLol + ' ' + (page !== 'le' ? cssLoL.lol : cssLoL.le) + ' ' + opacity}>
           <ForkLoL />
 
           <div className={cssLoL.scrollFade}></div>

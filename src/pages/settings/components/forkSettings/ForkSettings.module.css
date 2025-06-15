@@ -1,0 +1,106 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+
+  position: absolute;
+  inset: 0;
+
+  font-size: 24px;
+}
+
+.contacts {
+  position: relative;
+}
+
+.line {
+  position: relative;
+  width: 1px;
+  height: 40%;
+  background: linear-gradient(to bottom, transparent 0%, white 20%, white 80%, transparent 100%);
+  border-radius: 50%;
+  opacity: 0.2;
+}
+
+.donate {
+  position: relative;
+}
+
+.drawerBG {
+  position: fixed;
+  bottom: 0;
+  width: 100dvw;
+  height: 100dvh;
+  background: linear-gradient(to top, black 30%, transparent);
+  transition: transform 0.5s, opacity 0.5s;
+}
+
+.drawerBGOff {
+  transform: translateY(100dvh);
+  opacity: 0.2;
+}
+
+.drawer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  gap: 2dvh;
+  position: absolute;
+  bottom: 134%;
+  height: 30dvh;
+  width: fit-content;
+  left: 50%;
+  transform: translate(-50%);
+  opacity: 1;
+  will-change: height, gap, bottom, opacity;
+  transition: height 0.5s, gap 0.5s, bottom 0.5s, opacity 0.5s;
+  /* background-color: rgba(255, 105, 180, 0.2); */
+}
+.drawerOff {
+  height: 0;
+  gap: 0;
+  bottom: 50%;
+  pointer-events: none;
+  user-select: none;
+  cursor: none;
+  opacity: 0;
+}
+
+.img {
+  /* margin-bottom: 20px; */
+  position: relative;
+  height: 50px;
+  width: 50px;
+  background-repeat: no-repeat;
+  background-size: 80%;
+  background-position: center;
+  z-index: 11110 !important;
+
+  pointer-events: all;
+  user-select: all;
+  cursor: pointer;
+}
+.inst {
+  background-image: url('/public/icons/instagram.svg');
+}
+.gmail {
+  background-image: url('/public/icons/gmail.svg');
+}
+.tg {
+  background-image: url('/public/icons/telegram.svg');
+}
+
+.patreon {
+  background-image: url('/public/icons/patreon.svg');
+}
+.kofi {
+  background-image: url('/public/icons/coFi.svg');
+}
+.gpay {
+  background-image: url('/public/icons/googlePay.svg');
+}
+.paipal {
+  background-image: url('/public/icons/payPal.svg');
+}

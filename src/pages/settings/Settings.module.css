@@ -1,7 +1,35 @@
+.header {
+  position: fixed;
+  height: 22dvh;
+  width: 100dvw;
+  top: 0;
+  /* background-color: rgba(255, 0, 0, 0.196); */
+}
+.body {
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  height: 60dvh;
+  width: 100dvw;
+  top: 22dvh;
+  /* background-color: rgba(255, 234, 0, 0.155); */
+}
+.footer {
+  position: fixed;
+  height: 18dvh;
+  width: 100dvw;
+  bottom: 0;
+  /* background-color: rgba(89, 255, 0, 0.155); */
+  transition: opacity 0.2s;
+}
+.footerOff {
+  opacity: 0;
+}
+
 .settingsBg {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(12px);
   transition: 0.5s;
 }

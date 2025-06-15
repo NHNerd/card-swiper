@@ -1,0 +1,90 @@
+.container {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  inset: 0;
+  z-index: 100012012120;
+}
+
+.exportBtn {
+  margin: 2dvh 0;
+  padding: 0 24px;
+  position: relative;
+  white-space: nowrap;
+
+  width: fit-content;
+
+  min-width: 30px;
+  height: 4dvh;
+  min-height: 20px;
+
+  border-left: 1px solid rgb(129, 129, 129);
+  border-right: 1px solid rgb(129, 129, 129);
+  border-radius: 8px;
+  text-align: center;
+  font-size: 18px;
+
+  text-shadow: 0 0 50px rgb(0, 0, 0);
+
+  animation-name: swing;
+  /* animation-duration: 2s; */
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@keyframes swing {
+  0% {
+    transform: translateX(-10dvw);
+  }
+  50% {
+    transform: translateX(10dvw);
+  }
+  100% {
+    transform: translateX(-10dvw);
+  }
+}
+
+.line {
+  position: relative;
+  height: 1px;
+  width: 64%;
+  border-radius: 50%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  opacity: 0.1;
+}
+
+.optionPage {
+  position: fixed;
+  background-color: rgb(0, 0, 0, 0.9);
+  border-radius: 20px;
+  transition: 0.2s;
+
+  backdrop-filter: blur(21px);
+}
+
+.optionPageOn {
+  inset: 0 !important;
+  height: 100% !important;
+  width: 100dvw !important;
+  border-radius: 0;
+}
+/* 
+@keyframes expand {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    transform: scale(10);
+  }
+} */
