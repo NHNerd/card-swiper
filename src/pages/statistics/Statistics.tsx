@@ -10,9 +10,11 @@ import cssStatistics from './Statistics.module.css';
 type Props = {
   statistic: any;
   wordAddedUpdated: Date;
+  allDateLoaded: boolean;
+  setAllDateLoaded: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function Statistics({ statistic, wordAddedUpdated }: Props) {
+export default function Statistics({ statistic, wordAddedUpdated, allDateLoaded, setAllDateLoaded }: Props) {
   const { page, setPage } = useUiState();
 
   const [chartWordsAddOn, setChartWordsAddOn] = React.useState<boolean>(false);
@@ -34,7 +36,6 @@ export default function Statistics({ statistic, wordAddedUpdated }: Props) {
   const [timeRange, setTimeRange] = React.useState<'w' | 'm' | 'y' | 'all'>('w');
 
   const btnArrowHndlr = () => {
-    console.log('btnArrowHndl');
     setPage('statistics');
   };
 
@@ -73,6 +74,8 @@ export default function Statistics({ statistic, wordAddedUpdated }: Props) {
         setDaysOfActivity={setDaysOfActivity}
         setTotalDaysFromStart={setTotalDaysFromStart}
         wordAddedUpdated={wordAddedUpdated}
+        allDateLoaded={allDateLoaded}
+        setAllDateLoaded={setAllDateLoaded}
       />
 
       <div className={`${cssStatistics.opacity} ${page === 'menu' ? '' : cssStatistics.opacityOff}`}>

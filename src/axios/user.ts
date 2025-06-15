@@ -31,7 +31,7 @@ export const login = (email: string, pass: string): Promise<string | void> => {
   return axiosUser
     .post(src, { email, pass })
     .then((data) => {
-      console.log(data.data._id);
+      localStorage.setItem('card-swiper:userId', data.data._id);
       return data.data._id;
     })
     .catch((error) => {

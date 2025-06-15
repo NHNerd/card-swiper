@@ -23,6 +23,9 @@ function App() {
   const scrollSectionLolRef = React.useRef<HTMLElement>(null);
   const scrollSectionLeRef = React.useRef<HTMLElement>(null);
 
+  // flag - loadingСomplete in first loading time
+  const [allDateLoaded, setAllDateLoaded] = React.useState(false);
+
   console.log('📕page: ', page);
 
   // refresh topScroll
@@ -38,12 +41,17 @@ function App() {
   if (page === 'auth') return <Auth />;
   return (
     <>
-      <Statistics statistic={statistic} wordAddedUpdated={wordAddedUpdated} />
+      <Statistics
+        statistic={statistic}
+        wordAddedUpdated={wordAddedUpdated}
+        allDateLoaded={allDateLoaded}
+        setAllDateLoaded={setAllDateLoaded}
+      />
       <Session endSession={endSession} setEndSession={setEndSession} setStatistic={setStatistic} />
       <LoL scrollSectionLolRef={scrollSectionLolRef} />
       <Le scrollSectionLeRef={scrollSectionLeRef} setWordAddedUpdated={setWordAddedUpdated} />
       <Menu />
-      <Settings />
+      <Settings setAllDateLoaded={setAllDateLoaded} />
       <Burger />
     </>
   );
