@@ -38,17 +38,10 @@ async function buildClientDate(email: string): Promise<ListData[]> {
   if (isFirstTime) return await buildClientDateFirstTime(data);
 
   // get all lists Id by user Id
-  const allLists =
-    JSON.parse(localStorage.getItem('card-swiper:allLists')) || (await getAllLists(userId, true));
+  const allLists = JSON.parse(localStorage.getItem('card-swiper:allLists')) || (await getAllLists(userId, true));
   if (!allLists) {
     const dateEnd = Date.now();
-    console.log(
-      'bild client date 33%: _id :(',
-      '|',
-      'Building time:',
-      (dateEnd - dateStart) / 1000,
-      's.'
-    );
+    console.log('bild client date 33%: _id :(', '|', 'Building time:', (dateEnd - dateStart) / 1000, 's.');
     return data;
   }
 
@@ -70,8 +63,7 @@ async function buildClientDate(email: string): Promise<ListData[]> {
   });
 
   // Write words and gameCount in lists
-  const Allwords =
-    JSON.parse(localStorage.getItem('card-swiper:allWords')) || (await getAllWords(userId));
+  const Allwords = JSON.parse(localStorage.getItem('card-swiper:allWords')) || (await getAllWords(userId));
   if (!Allwords) {
     const dateEnd = Date.now();
     console.log(

@@ -1,17 +1,10 @@
 import React from 'react';
 import { useUiState, zustandData } from '../../zustand';
-import {
-  getAllLists,
-  removeMany,
-  refreshOrdersSync,
-  addSync,
-  refreshFieldsSync,
-} from '../..//axios/list';
+import { getAllLists, removeMany, refreshOrdersSync, addSync, refreshFieldsSync } from '../..//axios/list';
 import compare from '../../business/list/compare';
 import cssSync from './Sync.module.css';
 import buildClientDate from '../../business/buildClientDate';
 
-let onMountFlag = true;
 export default function Sync() {
   const { dataZus, setDataZus } = zustandData();
   const { page, setPage } = useUiState();
@@ -21,25 +14,22 @@ export default function Sync() {
 
   //* Building data right here! ♡♡♡
   React.useEffect(() => {
-    if (onMountFlag) {
-      // first quick build
-      buildClientDate(email).then((data) => {
-        setDataZus(data);
+    // first quick build
+    buildClientDate(email).then((data) => {
+      setDataZus(data);
 
-        // second build after sync
-        compare(getAllLists, removeMany, refreshOrdersSync, addSync, refreshFieldsSync).then(() => {
-          buildClientDate(email)
-            .then((data) => {
-              setDataZus(data);
-              setStatus('sync');
-            })
-            .catch(() => {
-              setStatus('not');
-            });
-        });
+      // second build after sync
+      compare(getAllLists, removeMany, refreshOrdersSync, addSync, refreshFieldsSync).then(() => {
+        buildClientDate(email)
+          .then((data) => {
+            setDataZus(data);
+            setStatus('sync');
+          })
+          .catch(() => {
+            setStatus('not');
+          });
       });
-    }
-    onMountFlag = false;
+    });
   }, []);
 
   const refresh = async () => {
