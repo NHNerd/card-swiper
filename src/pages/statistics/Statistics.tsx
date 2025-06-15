@@ -9,9 +9,10 @@ import cssStatistics from './Statistics.module.css';
 
 type Props = {
   statistic: any;
+  wordAddedUpdated: Date;
 };
 
-export default function Statistics({ statistic }: Props) {
+export default function Statistics({ statistic, wordAddedUpdated }: Props) {
   const { page, setPage } = useUiState();
 
   const [chartWordsAddOn, setChartWordsAddOn] = React.useState<boolean>(false);
@@ -26,6 +27,9 @@ export default function Statistics({ statistic }: Props) {
   const [knowPrsntClc, setKnowPrsntClc] = React.useState<object>({ w: 0, m: 0, y: 0, all: 0 });
   const [sessionAvgClc, setSessionAvgClc] = React.useState<object>({ w: 0, m: 0, y: 0, all: 0 });
   const [comboAvgClc, setComboAvgClc] = React.useState<object>({ w: 0, m: 0, y: 0, all: 0 });
+
+  const [daysOfActivity, setDaysOfActivity] = React.useState<number>(0);
+  const [totalDaysFromStart, setTotalDaysFromStart] = React.useState<number>(0);
 
   const [timeRange, setTimeRange] = React.useState<'w' | 'm' | 'y' | 'all'>('w');
 
@@ -66,12 +70,14 @@ export default function Statistics({ statistic }: Props) {
         setSessionAvgClc={setSessionAvgClc}
         setComboAvgClc={setComboAvgClc}
         statistic={statistic}
+        setDaysOfActivity={setDaysOfActivity}
+        setTotalDaysFromStart={setTotalDaysFromStart}
+        wordAddedUpdated={wordAddedUpdated}
       />
 
       <div className={`${cssStatistics.opacity} ${page === 'menu' ? '' : cssStatistics.opacityOff}`}>
         <BriefStatistic wordsRepClc={wordsRepClc} />
       </div>
-
       <div className={`${cssStatistics.opacity} ${page === 'statistics' ? '' : cssStatistics.opacityOff}`}>
         <FullStatistic
           page={page}
@@ -83,6 +89,8 @@ export default function Statistics({ statistic }: Props) {
           knowPrsntClc={knowPrsntClc}
           sessionAvgClc={sessionAvgClc}
           comboAvgClc={comboAvgClc}
+          daysOfActivity={daysOfActivity}
+          totalDaysFromStart={totalDaysFromStart}
         />
       </div>
       <div

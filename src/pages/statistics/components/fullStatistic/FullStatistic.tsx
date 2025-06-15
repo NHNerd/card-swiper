@@ -16,6 +16,8 @@ export default function FullStatistic({
   knowPrsntClc,
   sessionAvgClc,
   comboAvgClc,
+  daysOfActivity,
+  totalDaysFromStart,
 }) {
   const { dataZus } = zustandData();
 
@@ -24,7 +26,9 @@ export default function FullStatistic({
   return (
     <>
       <div className={`${cssFullStatistic.container} ${page !== 'statistics' ? cssFullStatistic.off : ''}`}>
-        <header className={cssFullStatistic.header}>Range statistics</header>
+        <header className={cssFullStatistic.header1}>
+          Range statistics <div className={cssFullStatistic.line}></div>
+        </header>
         <h3 className={cssFullStatistic.stringContainer}>
           <div className={cssFullStatistic.text + ' color2'}>words added:</div>
           <div className={`${cssFullStatistic.value} ${cssFullStatistic.wordsAdded}`}>
@@ -51,20 +55,24 @@ export default function FullStatistic({
           <div className={cssFullStatistic.text + ' color2'}>avreg combo:</div>
           <div className={cssFullStatistic.value}>{comboAvgClc[timeRange]}</div>
         </h3>
-        <h3 className={cssFullStatistic.stringContainer}>
-          <div className={cssFullStatistic.text + ' color2'}>total time:</div>
+        <h3 className={cssFullStatistic.stringContainer + ' ' + cssFullStatistic.stringContainerLast}>
+          <div className={cssFullStatistic.text + ' color2'}>total session time:</div>
           <div className={`${cssFullStatistic.value} ${cssFullStatistic.time}`}>
             {secToHMS(timeClc[timeRange])}
           </div>
         </h3>
-        <hr></hr>
-        <header className={cssFullStatistic.header}>
-          Total statistics
-          <h3 className={cssFullStatistic.stringContainer}>
-            <div className={cssFullStatistic.text + ' color2'}>days:</div>
-            <div className={`${cssFullStatistic.value} ${cssFullStatistic.wordsAdded}`}>0</div>
-          </h3>
+
+        <header className={cssFullStatistic.header2}>
+          Total statistics <div className={cssFullStatistic.line}></div>{' '}
         </header>
+        <h3 className={cssFullStatistic.stringContainer}>
+          <div className={cssFullStatistic.text + ' color2'}>days of activity:</div>
+          <div className={`${cssFullStatistic.value} ${cssFullStatistic.time}`}>{`${daysOfActivity}d.`}</div>
+        </h3>
+        <h3 className={cssFullStatistic.stringContainer}>
+          <div className={cssFullStatistic.text + ' color2 '}>total days from start:</div>
+          <div className={`${cssFullStatistic.value} ${cssFullStatistic.time}`}>{`${totalDaysFromStart}d.`}</div>
+        </h3>
       </div>
     </>
   );

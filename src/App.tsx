@@ -18,6 +18,7 @@ function App() {
   const { page } = useUiState();
   const [endSession, setEndSession] = React.useState<boolean>(false);
   const [statistic, setStatistic] = React.useState<DayStats[] | any>([]);
+  const [wordAddedUpdated, setWordAddedUpdated] = React.useState<Date>(new Date());
 
   const scrollSectionLolRef = React.useRef<HTMLElement>(null);
   const scrollSectionLeRef = React.useRef<HTMLElement>(null);
@@ -37,10 +38,10 @@ function App() {
   if (page === 'auth') return <Auth />;
   return (
     <>
-      <Statistics statistic={statistic} />
+      <Statistics statistic={statistic} wordAddedUpdated={wordAddedUpdated} />
       <Session endSession={endSession} setEndSession={setEndSession} setStatistic={setStatistic} />
       <LoL scrollSectionLolRef={scrollSectionLolRef} />
-      <Le scrollSectionLeRef={scrollSectionLeRef} />
+      <Le scrollSectionLeRef={scrollSectionLeRef} setWordAddedUpdated={setWordAddedUpdated} />
       <Menu />
       <Settings />
       <Burger />

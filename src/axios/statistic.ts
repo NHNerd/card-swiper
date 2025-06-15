@@ -42,6 +42,34 @@ export const patchSessionDays = async (session: SessionStatistic[]): Promise<str
     });
 };
 
+export const patchAddWordDays = async (wordAdded: any[]): Promise<string | void> => {
+  const src = `/patchAddWord`;
+  const userId = localStorage.getItem('card-swiper:userId');
+
+  if (!userId) return console.error('User ID not found in localStorage');
+
+  return axiosStatistic
+    .patch(src, { userId, wordAdded })
+    .then((data) => {
+      if (data.status == 200 || data.status == 201) localStorage.removeItem('card-swiper:sessionAddStatistic');
+
+      return data.data.statistic;
+    })
+    .catch((error) => {
+      if (error.response) {
+        // Сервер ответил с кодом, отличным от 2xx
+        console.error(error.response?.data.message || 'Unknown error');
+        return error.response.status;
+      } else if (error.request) {
+        // Запрос был сделан, но ответ не был получен
+        console.error('No connection with server (getAllLists):', error.request);
+      } else {
+        // Произошло что-то еще
+        console.error('Error setting up request (getAllLists):', error.message);
+      }
+    });
+};
+
 type wordAdd = {
   date: Date;
   wordAdd: number;
@@ -51,7 +79,11 @@ export const getStatistic = async () => {
   const src = '/getStatistic';
   const userId = localStorage.getItem('card-swiper:userId');
 
-  if (!userId) return console.error('User ID not found in localStorage');
+  // In first time, this execute before ID
+  if (!userId) {
+    console.error('User ID not found in localStorage');
+    return null;
+  }
 
   const params = { userId };
 

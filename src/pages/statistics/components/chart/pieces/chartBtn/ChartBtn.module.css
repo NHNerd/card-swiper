@@ -1,6 +1,5 @@
 .btnContainer {
   position: relative;
-  top: 8dvh;
   width: 110%;
   left: 50%;
   transform: translateX(-50%);

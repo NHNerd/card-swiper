@@ -53,6 +53,7 @@ export default function ChartBtn({
       if (!sliceSumIsNotNUllRef.current?.rep) emptyBtnWarning(btnRepEmptyRef);
       if (!sliceSumIsNotNUllRef.current?.session) emptyBtnWarning(btnSessionEmptyRef);
       if (!sliceSumIsNotNUllRef.current?.time) emptyBtnWarning(btnTimeEmptyRef);
+      btnSet(false);
       return;
     }
     if (!other1 && !other2 && !other3 && btn) warningEmpty(warningRef);

@@ -1,5 +1,5 @@
 .container {
-  position: relative;
+  position: absolute;
   margin-top: 12dvh;
   margin-bottom: 170px;
   top: 0;
@@ -15,16 +15,6 @@
   width: 100%;
   height: 100%;
   transition: 0.5s;
-}
-.btnWrap {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-.timeRangeOff {
-  position: absolute;
-  opacity: 0;
-  translate: 0 -10dvh;
 }
 
 .miniChartOff {
@@ -66,10 +56,20 @@
   filter: brightness(1.2);
   border-radius: 100%;
 }
-.maxVal {
+
+.maxValContainer {
   position: absolute;
-  top: 0;
-  transform: translate(-50%, -3dvh);
+  display: flex;
+}
+
+.maxVal {
+  position: relative;
+  margin-right: 6px;
+
+  /* width: 100px;
+  height: 100px; */
+  /* transform: translateY(-100%); */
+  /* transform: translate(-50%, -3dvh); */
 }
 
 .dayDot::before {
@@ -92,15 +92,20 @@
   width: fit-content;
   text-align: center;
 }
-
-.btnContainer {
-  position: relative;
-
-  top: 8dvh;
-  width: 100%;
-
-  height: 100%;
+.timeRangeOff {
+  position: absolute;
+  opacity: 0;
+  translate: 0 -10dvh;
 }
+
+.btnWrap {
+  position: absolute;
+  top: 20.4dvh;
+  width: 100%;
+  height: 100%;
+  /* background-color: rgba(255, 105, 180, 0.205); */
+}
+
 .btn {
   position: absolute;
   width: fit-content;
@@ -209,7 +214,7 @@
   transform: translate(-50%, -50%);
   font-size: 3.2dvh;
   letter-spacing: 1.6dvw;
-  opacity: var(--empty-opacity, 0); /* читаем из переменной */
+  opacity: var(--empty-opacity, 0.2); /* читаем из переменной */
   transition: var(--empty-transition, opacity 0.2s);
 }
 
@@ -230,4 +235,30 @@
 
 .warning::after {
   filter: blur(10px);
+}
+
+.allChartInfo {
+  display: flex;
+  position: absolute;
+  left: 50%;
+  bottom: -50%;
+  transform: translateX(-50%);
+}
+
+.allChartInfoOff {
+  opacity: 0;
+}
+
+.rangeAllText {
+  opacity: 0.7;
+}
+.rangeAllBtn {
+  position: relative;
+  width: fit-content;
+  height: fit-content;
+
+  cursor: pointer;
+  pointer-events: all;
+  opacity: 1;
+  z-index: 9999;
 }

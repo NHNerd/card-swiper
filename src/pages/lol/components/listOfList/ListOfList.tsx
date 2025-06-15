@@ -69,7 +69,9 @@ export default function ListOfList({ scrollSectionLolRef, children, parrent, hnd
             }}
             className={cssListOfList.flopWrap + ' ' + (page !== 'le' ? 'flopOn' : 'flopOff')}
           >
-            <h1 className={cssListOfList.h1 + ' ' + attention}>
+            <h1
+              className={cssListOfList.h1 + ' ' + attention + ' ' + (list.wordCount ? '' : cssListOfList.h1Empty)}
+            >
               {list.listName}
               {/* arrow buttons */}
               {index === 0 ? children : null}
@@ -85,7 +87,7 @@ export default function ListOfList({ scrollSectionLolRef, children, parrent, hnd
             {/* bg-color3 ${parrent === 'menu' ? cssListOfList.lineMenu : ''} */}
             <div
               className={`${cssListOfList.line} ${
-                page !== 'menu' ? cssListOfList.lineOn : cssListOfList.lineOff
+                page !== 'menu' && index !== dataZus.length - 1 ? cssListOfList.lineOn : cssListOfList.lineOff
               }`}
             ></div>
           </div>

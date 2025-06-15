@@ -13,9 +13,10 @@ import cssLe from './Le.module.css';
 
 type Props = {
   scrollSectionLeRef: React.RefObject<HTMLElement>;
+  setWordAddedUpdated: React.Dispatch<React.SetStateAction<Date>>;
 };
 
-export default function Le({ scrollSectionLeRef }: Props) {
+export default function Le({ scrollSectionLeRef, setWordAddedUpdated }: Props) {
   //Zustand
   const { page } = useUiState();
   const { dataZus, setDataZus } = zustandData();
@@ -156,7 +157,7 @@ export default function Le({ scrollSectionLeRef }: Props) {
       {/* <div className={cssLe.warpLe + ' ' + cssLe.opacity0}> */}
       <div className={cssLe.warpLe + ' ' + (page === 'le' ? cssLe.opacity1 : cssLe.opacity0)}>
         <ListName />
-        <ForkLoL />
+        <ForkLoL setWordAddedUpdated={setWordAddedUpdated} />
 
         <Footer />
         <div className={cssLe.scrollFade}></div>

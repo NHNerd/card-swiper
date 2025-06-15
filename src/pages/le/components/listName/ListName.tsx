@@ -61,6 +61,7 @@ export default function ListName({}: Props) {
     // DB
     patchListField(listsLS[orderListEditZus]._id, newInputVal, newTime);
 
+    // Clear
     setIsOpen(false);
     setTrySubmitEmpty(false);
     inputRef.current?.setSelectionRange(0, 0);
@@ -72,18 +73,12 @@ export default function ListName({}: Props) {
       <section className={cssListName.container}>
         <div
           className={
-            cssListName.listName +
-            ' ' +
-            (page == 'le' ? cssListName.listNameOn : cssListName.listNameOff)
+            cssListName.listName + ' ' + (page == 'le' ? cssListName.listNameOn : cssListName.listNameOff)
           }
         >
           {dataZus[orderListEditZus].listName}
         </div>
-        <div
-          className={
-            cssListName.btnContainer + ' ' + (page == 'le' ? cssListName.btnOn : cssListName.btnOff)
-          }
-        >
+        <div className={cssListName.btnContainer + ' ' + (page == 'le' ? cssListName.btnOn : cssListName.btnOff)}>
           <Btn parrent='le' type='editListName' hndlr={hndlrListEdit} />
         </div>
       </section>

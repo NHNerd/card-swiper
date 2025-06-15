@@ -11,9 +11,7 @@ export default function BriefStatistic({ wordsRepClc }) {
   const [hardes, setHardes] = React.useState<string>('...');
 
   return (
-    <div
-      className={`${cssBriefStatistic.container} ${page === 'statistics' ? cssBriefStatistic.off : ''}`}
-    >
+    <div className={`${cssBriefStatistic.container} ${page === 'statistics' ? cssBriefStatistic.off : ''}`}>
       <div className={`${cssBriefStatistic.stringContainer} ${cssBriefStatistic.spaceBetween}`}>
         <h3 className={cssBriefStatistic.stringContainer}>
           <div className={cssBriefStatistic.text + ' color2'}>words rep:</div>

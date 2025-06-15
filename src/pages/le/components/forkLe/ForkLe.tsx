@@ -5,6 +5,8 @@ import { useUiState, zustandData, zustandOrderListEdit } from '../../../../zusta
 import { addWord, wordRefreshLSAfterDB } from '../../../../business/word/addWord';
 import { putNewWord } from '../../../../axios/words';
 import PopInput from '../../../../components/popInput/PopInput';
+import { patchAddWordDays } from '../../../../axios/statistic';
+import dateToLocalUtcOffset from '../../../../handlers/dateToLocalUtcOffset';
 
 import cssForkLe from './ForkLe.module.css';
 //TODO find property place for css for 2 pages
@@ -12,7 +14,7 @@ import cssForkLoL from '../../../lol/components/forkLol/ForkLoL.module.css';
 
 type Props = {};
 
-export default function ForkLoL({}: Props) {
+export default function ForkLoL({ setWordAddedUpdated }: Props) {
   const { page } = useUiState();
   const { dataZus, setDataZus } = zustandData();
   const { orderListEditZus } = zustandOrderListEdit();
@@ -46,6 +48,18 @@ export default function ForkLoL({}: Props) {
     const listId = dataZus[orderListEditZus].listId;
     // LS
     const [newWordObj, newListWords, otherWords] = addWord(listId, newWord, inputRef.current.value);
+    //* -------------------- start
+    const toDay = dateToLocalUtcOffset(new Date());
+    let wordAdded: object[] = JSON.parse(localStorage.getItem('card-swiper:wordAdded'));
+    if (!wordAdded) {
+      wordAdded = [{ date: toDay, wordAdded: 1 }];
+      localStorage.setItem('card-swiper:wordAdded', JSON.stringify(wordAdded));
+    } else {
+      if (toDay === wordAdded[wordAdded.length - 1].date) wordAdded[wordAdded.length - 1].wordAdded += 1;
+      else wordAdded.push({ date: toDay, wordAdded: 1 });
+      localStorage.setItem('card-swiper:wordAdded', JSON.stringify(wordAdded));
+    }
+    //* -------------------- end
     // DZ
     const dataZusCopy: any = [...dataZus];
     dataZusCopy[orderListEditZus].words = [newWordObj, ...dataZus[orderListEditZus].words];
@@ -59,6 +73,16 @@ export default function ForkLoL({}: Props) {
         console.error('Error:', error);
       });
 
+    const updateWordAdd = async () => {
+      const update = await patchAddWordDays(wordAdded);
+      if (update.days != null) {
+        setWordAddedUpdated(new Date());
+        localStorage.removeItem('card-swiper:wordAdded');
+      }
+    };
+    updateWordAdd();
+
+    //Clear
     setIsOpen(false);
     setTrySubmitEmpty(false);
     inputRef.current?.setSelectionRange(0, 0);
@@ -69,12 +93,8 @@ export default function ForkLoL({}: Props) {
     <>
       <Fork
         isOn={page == 'le' ? true : false}
-        leftChild={
-          <div className={cssForkLoL.search + (actionStatus.l ? ' ' + cssForkLoL.imgOff : '')}> </div>
-        }
-        rightChild={
-          <div className={cssForkLoL.add + (actionStatus.r ? ' ' + cssForkLoL.imgOff : '')}></div>
-        }
+        leftChild={<div className={cssForkLoL.search + (actionStatus.l ? ' ' + cssForkLoL.imgOff : '')}> </div>}
+        rightChild={<div className={cssForkLoL.add + (actionStatus.r ? ' ' + cssForkLoL.imgOff : '')}></div>}
         actionStatus={actionStatus}
         setActionStatus={setActionStatus}
         addLogic={addLogicWord}
