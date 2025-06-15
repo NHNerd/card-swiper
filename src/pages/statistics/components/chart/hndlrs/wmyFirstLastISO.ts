@@ -1,4 +1,13 @@
-const wmyFirstLastISO = (lastDate) => {
+type OutputDates = {
+  weekStart: string;
+  weekEnd: string;
+  monthStart: string;
+  monthEnd: string;
+  yearStart: string;
+  yearEnd: string;
+};
+
+const wmyFirstLastISO = (lastDate: string): OutputDates => {
   const date = new Date(lastDate);
   const year = date.getFullYear();
   const month = date.getMonth(); // 0-11
@@ -30,7 +39,7 @@ const wmyFirstLastISO = (lastDate) => {
   const yearEnd = new Date(year, 11, 31);
   yearEnd.setHours(0, 0, 0, 0);
 
-  const toISO = (d) => d.toLocaleDateString('sv-SE'); // format: YYYY-MM-DD
+  const toISO = (d: Date) => d.toLocaleDateString('sv-SE'); // format: YYYY-MM-DD
 
   return {
     weekStart: toISO(weekStart),

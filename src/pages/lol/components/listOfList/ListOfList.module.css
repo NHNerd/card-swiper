@@ -28,6 +28,10 @@
   flex-direction: row;
 }
 
+.h1Empty {
+  opacity: 0.4;
+}
+
 .h2Text,
 .h3Text {
   margin-right: 8px;
@@ -75,4 +79,27 @@
   border-radius: 50%;
   /* border: solid 1px red;
   box-sizing: border-box; */
+}
+
+.line {
+  margin-bottom: -2.4dvh;
+  position: absolute;
+  bottom: 0;
+  height: 1px;
+  width: 56dvw;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-radius: 50%;
+  transition: opacity 0.2s ease;
+}
+/*! Don't work transition */
+.lineOn {
+  opacity: 0.1;
+}
+.lineOff {
+  opacity: 0;
 }

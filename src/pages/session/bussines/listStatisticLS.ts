@@ -5,7 +5,6 @@ export const listStatisticLS = () => {
 
   localStorage.setItem('card-swiper:allLists', JSON.stringify(allLists));
 
-  console.log(allLists[0].sessionCount);
   // DTO for DB
   const listDTO = { _id: allLists[0]._id, sessionCount: allLists[0].sessionCount };
 

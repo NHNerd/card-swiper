@@ -9,20 +9,25 @@ import { wordStatisticLS } from './bussines/wordStatisticLS.ts';
 import { listStatisticLS } from './bussines/listStatisticLS.ts';
 import { patchWordFielCorrectWrongdMany } from '../../axios/words.ts';
 import { patchListSessionCount } from '../../axios/list.ts';
+import { patchSessionDays } from '../../axios/statistic.ts';
+import { sessionAddStatistic } from '../../business/statistic/session.ts';
 
 import sotByRatio from '../../business/word/sotByRatio.ts';
 
 import cssSession from './Session.module.css';
 
-type Props = {};
+type Props = {
+  endSession: boolean;
+  setEndSession: React.Dispatch<React.SetStateAction<boolean>>;
+  setStatistic: React.Dispatch<React.SetStateAction<any>>;
+};
 
-export default function Session({}: Props) {
+export default function Session({ endSession, setEndSession, setStatistic }: Props) {
   const { page, setPage } = useUiState();
   const { dataZus, setDataZus } = zustandData((state) => state); // Получаем состояние zustandData
   const { orderListEditZus } = zustandOrderListEdit();
 
   const [time, setTime] = React.useState<number>(0);
-  const [end, setEnd] = React.useState<boolean>(false);
 
   const [know, setKnow] = React.useState<boolean>(false);
   const [dontKnow, setDontKnow] = React.useState<boolean>(false);
@@ -43,7 +48,7 @@ export default function Session({}: Props) {
     if (page === 'menu' && (time !== 0 || gameWordsPrev.length !== 0)) {
       //* clear
       setTime(0);
-      setEnd(false);
+      setEndSession(false);
       setKnow(false);
       setDontKnow(false);
       setTranslate(false);
@@ -54,7 +59,7 @@ export default function Session({}: Props) {
       setGameWords(dataZus[0].words);
       setGameWordsPrev([]);
 
-      console.log('clear in time exite before session ended');
+      // console.log('clear in time exite before session ended');
     }
   }, [page]);
 
@@ -68,14 +73,19 @@ export default function Session({}: Props) {
   React.useEffect(() => {
     //* end of  session
 
-    if (gameWords?.length === 0 && page == 'session' && !end) {
+    if (gameWords?.length === 0 && page == 'session' && !endSession) {
+      let correct = 0;
+      let wrong = 0;
+
       wordStatus.map((item) => {
         if (item.know) {
+          correct += 1;
           setStatusEnd((prev) => ({
             ...prev,
             know: prev.know + 1,
           }));
         } else {
+          wrong += 1;
           setStatusEnd((prev) => ({
             ...prev,
             dontKnow: prev.dontKnow + 1,
@@ -88,6 +98,7 @@ export default function Session({}: Props) {
       // LS
       const [listWordsNewDTO] = wordStatisticLS(wordStatus);
       const [listNewDTO] = listStatisticLS();
+      const sessionStatistic: any[] = sessionAddStatistic(time, maxCombo, correct, wrong);
       // DZ
       const dataZusCopy: any = [...dataZus];
       dataZusCopy[orderListEditZus].words.sort((a, b) => ('' + a._id).localeCompare(b._id));
@@ -102,7 +113,14 @@ export default function Session({}: Props) {
       patchWordFielCorrectWrongdMany(listWordsNewDTO);
       patchListSessionCount(listNewDTO);
 
-      setEnd(true);
+      const asyncGetStatistic = async () => {
+        const FreshStatistic = await patchSessionDays(sessionStatistic);
+
+        setStatistic(FreshStatistic);
+      };
+      asyncGetStatistic();
+
+      setEndSession(true);
     }
   }, [gameWords]);
 
@@ -116,9 +134,9 @@ export default function Session({}: Props) {
       className={page === 'session' ? cssSession.on : cssSession.off}
     >
       <Bar gameWords={gameWords} />
-      <DataSession gameWords={gameWords} time={time} setTime={setTime} end={end} combo={combo} />
+      <DataSession gameWords={gameWords} time={time} setTime={setTime} end={endSession} combo={combo} />
 
-      <LastCard wordStatus={wordStatus} statusEnd={statusEnd} maxCombo={maxCombo} end={end} />
+      <LastCard wordStatus={wordStatus} statusEnd={statusEnd} maxCombo={maxCombo} end={endSession} />
       <Card
         ContainerSessionRef={ContainerSessionRef}
         gameWords={gameWords}
@@ -145,8 +163,8 @@ export default function Session({}: Props) {
         setCombo={setCombo}
         maxCombo={maxCombo}
         setMaxCombo={setMaxCombo}
-        end={end}
-        setEnd={setEnd}
+        end={endSession}
+        setEnd={setEndSession}
       />
     </div>
   );

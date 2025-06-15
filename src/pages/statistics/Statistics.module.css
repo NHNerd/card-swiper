@@ -1,8 +1,10 @@
 .container {
   position: absolute;
   width: 100dvw;
-  height: fit-content;
+  /* height: fit-content; */
+  height: 46dvh;
   transition: transform 0.25s;
+  /* background-color: rgba(255, 105, 180, 0.461); */
 }
 
 .saturate {
@@ -26,6 +28,8 @@
 }
 .opacityOff {
   opacity: 0;
+  user-select: none;
+  pointer-events: none;
 }
 
 .BtnArrowContainerOff {

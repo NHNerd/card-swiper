@@ -1,7 +1,7 @@
 .container {
   position: absolute;
-  margin-top: -10dvh;
-  width: 58dvw;
+  top: 72%;
+  width: 54dvw;
   min-width: 190px;
   left: 50%;
 
@@ -35,4 +35,6 @@
 
 .off {
   width: calc(100dvw + 220px);
+  user-select: none;
+  pointer-events: none;
 }

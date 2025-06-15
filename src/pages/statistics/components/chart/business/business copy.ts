@@ -45,10 +45,6 @@ export const daysForEach = (
   wordsRep12month: Record<string, number[]>,
   sessionInput12month: Record<string, number[]>,
   time12month: Record<string, number[]>,
-  wordsAddAll100: number[],
-  wordsRepAll100: number[],
-  sessionAll100: number[],
-  timeAll100: number[],
   days: object[],
   firstDate: string,
   daysCount: number,
@@ -56,8 +52,7 @@ export const daysForEach = (
   monthStart: string,
   yearStart: string,
   lastdate: string,
-  crntScrollrange: { w: string[]; m: string[]; y: string[] },
-  rangeAll: number
+  crntScrollrange: { w: string[]; m: string[]; y: string[] }
 ) => {
   type RangeKey = keyof ClcData;
 
@@ -74,26 +69,12 @@ export const daysForEach = (
   const sessionAvgClc: ClcData = createClcData();
   const comboAvgClc: ClcData = createClcData();
 
-  // For all
-  const baseChunkSize = Math.floor(daysCount / rangeAll); // 16
-  let remainder = daysCount % rangeAll; // 26
-
   const dateStep = new Date(firstDate);
+
   let userDaysI = 0;
   const daysActiveCount = { w: 0, m: 0, y: 0 };
 
-  for (let i = 0, j = 0; daysCount - 1 >= i; i++) {
-    //* for All100 ---------------------- start
-    if (!(i % (baseChunkSize + 1)) && remainder > 0) remainder -= 1;
-    if (!(i % (baseChunkSize + (remainder ? 1 : 0)))) {
-      wordsAddAll100[j] = 0;
-      wordsRepAll100[j] = 0;
-      sessionAll100[j] = 0;
-      timeAll100[j] = 0;
-      j += 1;
-    }
-    //* for All100 ---------------------- end
-
+  for (let i = 0; daysCount - 1 >= i; i++) {
     //For debug
     // forConsole(i, userDaysI, dateToLocalUtcOffset(dateStep), days);
 
@@ -104,11 +85,6 @@ export const daysForEach = (
       wordsRep[i] = correct + wrong;
       sessionInput[i] = session;
       time[i] = timeSec;
-
-      wordsAddAll100[j - 1] += wordAdd;
-      wordsRepAll100[j - 1] += correct + wrong;
-      sessionAll100[j - 1] += session;
-      timeAll100[j - 1] += timeSec;
 
       //Calc Statistic📜
 
@@ -125,22 +101,20 @@ export const daysForEach = (
       //all
       toCalcData('all');
 
-      // console.log(weekStart);
+      // console.log('🍷🍷🍷', crntScrollrange);
       //week
       const crrntDayForComparison = new Date(days[userDaysI].date).getTime();
-      const comparRange = (start: string, end: string) =>
-        new Date(start).getTime() <= crrntDayForComparison && new Date(end).getTime() >= crrntDayForComparison;
-      if (comparRange(crntScrollrange.w[0], crntScrollrange.w[1])) {
+      if (new Date(weekStart).getTime() <= crrntDayForComparison) {
         toCalcData('w');
         daysActiveCount.w++;
       }
       //month
-      if (comparRange(crntScrollrange.m[0], crntScrollrange.m[1])) {
+      if (new Date(monthStart).getTime() <= crrntDayForComparison) {
         toCalcData('m');
         daysActiveCount.m++;
       }
       //year
-      if (comparRange(crntScrollrange.y[0], crntScrollrange.y[1])) {
+      if (new Date(yearStart).getTime() <= crrntDayForComparison) {
         toCalcData('y');
         daysActiveCount.y++;
       }
@@ -163,10 +137,9 @@ export const daysForEach = (
     comboAvgClc[range] = Math.round(comboClc[range] / daysCount);
   };
 
-  if (daysActiveCount.w) calcAvgData('w', daysActiveCount.w);
-  if (daysActiveCount.m) calcAvgData('m', daysActiveCount.m);
-  if (daysActiveCount.y) calcAvgData('y', daysActiveCount.y);
-
+  calcAvgData('w', daysActiveCount.w);
+  calcAvgData('m', daysActiveCount.m);
+  calcAvgData('y', daysActiveCount.y);
   calcAvgData('all', Array.isArray(days) ? days.length : 0);
 
   calcYearRange12Month(

@@ -65,12 +65,13 @@ export default function ListOfList({ scrollSectionLolRef, children, parrent, hnd
           <Btn parrent='lol' type='edit' hndlr={() => toEdit(list.order)} />
           <div
             onClick={() => {
-              if (page === 'lol')
-                changeOrderHndlr({ dataZus, setDataZus, order: list.order }), setPage('menu');
+              if (page === 'lol') changeOrderHndlr({ dataZus, setDataZus, order: list.order }), setPage('menu');
             }}
             className={cssListOfList.flopWrap + ' ' + (page !== 'le' ? 'flopOn' : 'flopOff')}
           >
-            <h1 className={cssListOfList.h1 + ' ' + attention}>
+            <h1
+              className={cssListOfList.h1 + ' ' + attention + ' ' + (list.wordCount ? '' : cssListOfList.h1Empty)}
+            >
               {list.listName}
               {/* arrow buttons */}
               {index === 0 ? children : null}
@@ -83,11 +84,12 @@ export default function ListOfList({ scrollSectionLolRef, children, parrent, hnd
               <div className={cssListOfList.h3Text + ' color2'}>game count:</div>
               <div className={cssListOfList.h3Value}>{list.gameCount}</div>
             </h3>
-            {/* <div
-          className={
-            cssListOfList.line + ' bg-color3' + (parrent === 'menu' ? ' ' + cssList.lineMenu : '')
-          }
-        ></div> */}
+            {/* bg-color3 ${parrent === 'menu' ? cssListOfList.lineMenu : ''} */}
+            <div
+              className={`${cssListOfList.line} ${
+                page !== 'menu' && index !== dataZus.length - 1 ? cssListOfList.lineOn : cssListOfList.lineOff
+              }`}
+            ></div>
           </div>
         </section>
       ))}
