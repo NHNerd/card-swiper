@@ -10,8 +10,12 @@
   font-size: 24px;
 }
 
-.contacts {
+.contacts,
+.donate {
+  padding: 1dvh;
   position: relative;
+  width: fit-content;
+  height: fit-content;
 }
 
 .line {
@@ -21,10 +25,6 @@
   background: linear-gradient(to bottom, transparent 0%, white 20%, white 80%, transparent 100%);
   border-radius: 50%;
   opacity: 0.2;
-}
-
-.donate {
-  position: relative;
 }
 
 .drawerBG {
@@ -48,7 +48,7 @@
   align-items: center;
   gap: 2dvh;
   position: absolute;
-  bottom: 134%;
+  bottom: 120%;
   height: 30dvh;
   width: fit-content;
   left: 50%;

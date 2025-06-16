@@ -2,7 +2,7 @@ import React from 'react';
 import { useUiState } from '../../zustand.ts';
 import About from './components/about/About.tsx';
 import Options from './components/options/Options.tsx';
-import ForkSettings from './components/forkSettings/forkSettings.tsx';
+import ForkSettings from './components/forkSettings/ForkSettings.tsx';
 
 import cssSettings from './Settings.module.css';
 
