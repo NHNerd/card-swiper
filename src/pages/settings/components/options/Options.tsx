@@ -106,7 +106,7 @@ export default function Options({ page, setAllDateLoaded, setPage, expandedOptn,
 
         // Refresh random for fan🎲🎲🎲
         randBtnSwing.current = btnsOptions.current.map(() => 10 + Math.random() * 100);
-      }, 400);
+      }, 410);
     }
 
     prevPageRef.current = page;
@@ -149,7 +149,7 @@ export default function Options({ page, setAllDateLoaded, setPage, expandedOptn,
           setExpandedOptn(false);
           setTimeout(() => {
             setActiveIndex(null);
-          }, 199);
+          }, 300);
         }}
         isOnSetting={expandedOptn}
       />
@@ -163,7 +163,8 @@ export default function Options({ page, setAllDateLoaded, setPage, expandedOptn,
             height: origin.height,
           }}
         >
-          {activeIndex === 0 && <ImprtExprtList />}
+          {/*//* CSS All daughter edemnt here must use % for correct open-transition  */}
+          {activeIndex === 0 && <ImprtExprtList expandedOptn={expandedOptn} />}
           {activeIndex === 1 && <div> {btnsOptions.current[activeIndex].text} </div>}
           {activeIndex === 2 && <div> {btnsOptions.current[activeIndex].text} </div>}
           {activeIndex === 3 && <div> {btnsOptions.current[activeIndex].text} </div>}
