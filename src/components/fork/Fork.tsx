@@ -11,14 +11,7 @@ type Props = {
   addLogic;
 };
 
-export default function Fork({
-  isOn,
-  leftChild,
-  rightChild,
-  actionStatus,
-  setActionStatus,
-  addLogic,
-}: Props) {
+export default function Fork({ isOn, leftChild, rightChild, actionStatus, setActionStatus, addLogic }: Props) {
   const pevButton = React.useRef<'non' | 'r' | 'l'>('non');
 
   const buttonRightRef = React.useRef<HTMLButtonElement>(null);
@@ -28,13 +21,6 @@ export default function Fork({
 
   const [inputValueL, setInputValueL] = React.useState('');
   const [inputValueR, setInputValueR] = React.useState('');
-
-  const hndlrSetInpurL = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValueL(event.target.value);
-  };
-  const hndlrSetInpurR = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValueR(event.target.value);
-  };
 
   const clickHndlr = (e: Event) => {
     if (buttonRightRef.current?.contains(e.target)) {
@@ -97,19 +83,13 @@ export default function Fork({
         className={
           cssFork.left +
           ' + ' +
-          (actionStatus.l || actionStatus.r
-            ? actionStatus.l
-              ? cssFork.focus
-              : cssFork.defocus
-            : cssFork.blur)
+          (actionStatus.l || actionStatus.r ? (actionStatus.l ? cssFork.focus : cssFork.defocus) : cssFork.blur)
         }
       >
         {/* child inage with wraper  */}
         <div
           className={
-            inputValueR && actionStatus.r
-              ? cssFork.imgRotStart + ' ' + cssFork.imgOpacityOff
-              : cssFork.imgRotEnd
+            inputValueR && actionStatus.r ? cssFork.imgRotStart + ' ' + cssFork.imgOpacityOff : cssFork.imgRotEnd
           }
         >
           {leftChild}
@@ -128,7 +108,7 @@ export default function Fork({
           ref={inputLeftRef}
           type='text'
           value={inputValueL}
-          onChange={hndlrSetInpurL}
+          onChange={(e) => setInputValueL(e.target.value)}
           className={actionStatus.l ? cssFork.inputButton : cssFork.inputButtonOff}
           maxLength={20}
         />
@@ -151,19 +131,13 @@ export default function Fork({
         className={
           cssFork.right +
           ' + ' +
-          (actionStatus.l || actionStatus.r
-            ? actionStatus.r
-              ? cssFork.focus
-              : cssFork.defocus
-            : cssFork.blur)
+          (actionStatus.l || actionStatus.r ? (actionStatus.r ? cssFork.focus : cssFork.defocus) : cssFork.blur)
         }
       >
         {/* child inage with wraper  */}
         <div
           className={
-            inputValueL && actionStatus.l
-              ? cssFork.imgRotStart + ' ' + cssFork.imgOpacityOff
-              : cssFork.imgRotEnd
+            inputValueL && actionStatus.l ? cssFork.imgRotStart + ' ' + cssFork.imgOpacityOff : cssFork.imgRotEnd
           }
         >
           {rightChild}
@@ -182,7 +156,7 @@ export default function Fork({
           ref={inputRightRef}
           type='text'
           value={inputValueR}
-          onChange={hndlrSetInpurR}
+          onChange={(e) => setInputValueR(e.target.value)}
           className={actionStatus.r ? cssFork.inputButton : cssFork.inputButtonOff}
           maxLength={20}
         />

@@ -64,7 +64,7 @@
   position: fixed;
   background-color: rgb(0, 0, 0, 0.9);
   border-radius: 20px;
-  transition: 0.2s;
+  transition: 0.4s;
 
   backdrop-filter: blur(21px);
 }
@@ -74,6 +74,10 @@
   height: 100% !important;
   width: 100dvw !important;
   border-radius: 0;
+}
+
+.optionPage:not(.optionPageOn) {
+  font-size: 0;
 }
 /* 
 @keyframes expand {
