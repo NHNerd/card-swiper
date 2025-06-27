@@ -11,6 +11,7 @@ export const useUiState = create((set) => ({
 
 export const zustandData = create((set) => ({
   dataZus: noData, // Изначально данные отсутствуют
+  // dataZus: null,
   setDataZus: (value: any) => set({ dataZus: value }), // Функция для установки данных
 }));
 

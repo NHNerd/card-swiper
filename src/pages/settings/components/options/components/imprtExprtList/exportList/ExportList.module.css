@@ -1,0 +1,173 @@
+/**  Couse parrent growing from btn(in random place) all div here must use % for correct open-transition */
+
+.exportContainer {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+}
+
+.lineList {
+  position: relative;
+  height: 1px;
+  width: 60%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  border-radius: 50%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  opacity: 0.2;
+}
+
+.wordCountContainer {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  font-size: 78%;
+}
+
+.search {
+  position: absolute;
+  height: 8%;
+
+  width: 50%;
+  left: 50%;
+  transform: translate(-50%);
+
+  border-left: 1px solid rgb(129, 129, 129);
+  border-right: 1px solid rgb(129, 129, 129);
+
+  border-radius: 8px;
+  text-align: center;
+}
+
+.sort {
+  position: absolute;
+  left: -4%;
+  top: 50%;
+  height: 60%;
+  aspect-ratio: 1 / 0.5;
+  transform: translate(-100%, -50%);
+
+  border-left: 1px solid rgb(129, 129, 129);
+  border-right: 1px solid rgb(129, 129, 129);
+  border-radius: 8px;
+}
+.sortList {
+  position: absolute;
+  height: fit-content;
+  width: 100%;
+}
+
+.searchImg {
+  position: absolute;
+  right: -4%;
+  top: 50%;
+  height: 60%;
+  aspect-ratio: 1 / 0.5;
+  transform: translate(100%, -50%);
+
+  border-left: 1px solid rgb(129, 129, 129);
+  border-right: 1px solid rgb(129, 129, 129);
+  border-radius: 8px;
+
+  background-image: url('/buttons/search.svg');
+  background-repeat: no-repeat;
+  background-size: 100% 70%;
+  background-position: left;
+  transition: opacity 0.2s;
+  opacity: 0.6;
+}
+.searchImgBlur {
+  opacity: 1;
+}
+
+.searchInput {
+  position: absolute;
+  inset: 0;
+}
+
+.lists {
+  position: absolute;
+  top: 12%;
+  width: 100%;
+  bottom: 0;
+
+  overflow-y: auto;
+}
+
+.list {
+  margin-bottom: 1%;
+  position: relative;
+  height: fit-content;
+
+  width: 90%;
+
+  left: 50%;
+  transform: translateX(-50%);
+  /* font-size: 24px; */
+  font-size: 140%;
+  /* border: dotted 2px RED;
+  box-sizing: border-box; */
+  text-align: center;
+}
+
+.exportBtn {
+  position: absolute;
+
+  top: 50%;
+  right: 0;
+  width: 9%;
+  max-width: 40px;
+  height: 100%;
+  transform: translate(0, -50%);
+  background-image: url('/buttons/export.svg');
+  background-repeat: no-repeat;
+  background-size: 100% 70%;
+  background-position: left;
+  /* background-color: red; */
+  opacity: 0.7;
+}
+
+.exportBtnEmpty {
+  opacity: 0.3;
+}
+
+.emptyWarning {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 140%;
+
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(16, 16, 16, 0.8) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+
+  width: 80%;
+  height: 90%;
+
+  transition: opacity 0.4s;
+}
+
+.emptyWarningOff {
+  opacity: 0;
+  user-select: none;
+  pointer-events: none;
+  cursor: none;
+}
+
+.emptyWarning::before {
+  content: attr(text-data);
+  position: absolute;
+  text-shadow: 0 0 32px white;
+}

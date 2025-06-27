@@ -19,17 +19,18 @@
   height: 18dvh;
   width: 100dvw;
   bottom: 0;
-  /* background-color: rgba(89, 255, 0, 0.155); */
   transition: opacity 0.2s;
 }
 .footerOff {
   opacity: 0;
+  cursor: none;
+  pointer-events: none;
 }
 
 .settingsBg {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(8, 8, 8, 0.8);
   backdrop-filter: blur(12px);
   transition: 0.5s;
 }

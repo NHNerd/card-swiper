@@ -1,0 +1,60 @@
+.blurBG {
+  position: fixed;
+  inset: 0;
+  backdrop-filter: blur(4px);
+  transition: opacity 0.5s;
+}
+
+.containerOn {
+  transition: opacity 0.5s;
+}
+.on {
+  opacity: 1;
+}
+.off {
+  opacity: 0;
+  user-select: none;
+  pointer-events: none;
+}
+
+.container {
+  padding: 2% 8%;
+  position: fixed;
+  height: fit-content;
+  max-height: 72dvh;
+  /* width: fit-content; */
+  width: 66%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(
+    to right,
+    rgba(20, 20, 20, 0.1) 0%,
+    rgba(44, 44, 44, 0.9) 50%,
+    rgba(20, 20, 20, 0.1) 100%
+  );
+
+  border-left: 1px solid rgb(129, 129, 129);
+  border-right: 1px solid rgb(129, 129, 129);
+
+  border-radius: 8px;
+  user-select: text;
+  overflow-y: auto;
+}
+
+.exite {
+  margin-right: -10%;
+  padding: 0 12px;
+  position: sticky;
+  top: 0;
+  margin-left: auto;
+  width: 8%;
+  height: 16%;
+  transform: translateY(-22%);
+
+  font-size: 200%;
+  /* background-color: pink; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
