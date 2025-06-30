@@ -24,7 +24,7 @@ type Props = {
 
 export default function Session({ endSession, setEndSession, setStatistic }: Props) {
   const { page, setPage } = useUiState();
-  const { dataZus, setDataZus } = zustandData((state) => state); // Получаем состояние zustandData
+  const { dataZus, setDataZus } = zustandData();
   const { orderListEditZus } = zustandOrderListEdit();
 
   const [time, setTime] = React.useState<number>(0);
@@ -125,7 +125,7 @@ export default function Session({ endSession, setEndSession, setStatistic }: Pro
   }, [gameWords]);
 
   //!
-  if ((!gameWords || !dataZus[0]?.words || gameWords?.length === 0) && page !== 'session') return null;
+  if ((!dataZus?.[0]?.words || !gameWords || gameWords?.length === 0) && page !== 'session') return null;
 
   return (
     <div

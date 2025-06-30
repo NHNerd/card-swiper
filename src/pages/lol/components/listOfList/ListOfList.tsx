@@ -28,9 +28,9 @@ export default function ListOfList({ scrollSectionLolRef, children, parrent, hnd
     setOrderListEditZus(order);
   };
 
-  // ckick on "go" makes attention to empty list
+  // click on "go" makes attention to empty list
   //TODO change to shaking
-  const clickHndlr = (event: React.MouseEvent) => {
+  const clickHndlr = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
     const textContent = target.textContent;
     if (textContent === '!go') {
@@ -48,6 +48,8 @@ export default function ListOfList({ scrollSectionLolRef, children, parrent, hnd
       document.removeEventListener('mousedown', clickHndlr);
     };
   }, []);
+
+  if (!dataZus) return <div>EMPTY</div>;
 
   return (
     <>

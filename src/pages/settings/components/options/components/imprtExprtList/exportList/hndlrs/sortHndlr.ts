@@ -17,10 +17,10 @@ export const sortHndlr = (
     setListSorted(freshList.sort((a, b) => b.listName.toLowerCase().localeCompare(a.listName.toLowerCase())));
   } else if (sortText === 'z-a ↑') {
     setSortText('time ↓');
-    console.log('⌚ need to add time create in the listModel');
+    setListSorted(freshList.sort((a, b) => b?.createDate?.utcMS - a?.createDate?.utcMS));
   } else if (sortText === 'time ↓') {
     setSortText('time ↑');
-    console.log('⌚ need to add time create in the listModel');
+    setListSorted(freshList.sort((a, b) => a?.createDate?.utcMS - b?.createDate?.utcMS));
   } else if (sortText === 'time ↑') {
     setSortText('X ⇅');
     setListSorted(listNoSorted);

@@ -3,6 +3,7 @@ import React from 'react';
 import { zustandData } from '../../../../../../../zustand.ts';
 import { sortHndlr, SortType } from './hndlrs/sortHndlr.ts';
 import { exportTxt, exportCSV } from './hndlrs/exportHndlrs.ts';
+import inputValidation from '../../../../../../../handlers/inputValidation';
 import cssExportList from './ExportList.module.css';
 
 type Props = {};
@@ -68,7 +69,7 @@ export default function ExportList({}: Props) {
           {sortText}
         </button>
         <input
-          onChange={(e) => setInputVal(e.target.value)}
+          onChange={(e) => setInputVal(inputValidation(e.target.value))}
           onFocus={() => setInputFocus(true)}
           onBlur={() => setInputFocus(false)}
           ref={inputRef}

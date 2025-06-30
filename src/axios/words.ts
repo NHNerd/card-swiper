@@ -30,12 +30,17 @@ export const getAllWords = async (userId) => {
     });
 };
 
-export const putNewWord = async (listId, word: string, translate: string) => {
+export const putNewWord = async (
+  listId: any,
+  createDate: { utcMS: number; utcOffsetMS: number },
+  word: string,
+  translate: string
+) => {
   const src = '/add';
   const userId = localStorage.getItem('card-swiper:userId');
 
   return axiosWord
-    .post(src, { userId, listId, word, translate })
+    .post(src, { userId, createDate, listId, word, translate })
     .then((response) => {
       console.log(response.data.message);
       return response.data.newWord;

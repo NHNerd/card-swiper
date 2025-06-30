@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { noData } from '../src/hardCodeDateObj/hardCodeDateObj.js';
 
 const email = localStorage.getItem('card-swiper:email');
 const userId = localStorage.getItem('card-swiper:userId');
@@ -10,9 +9,8 @@ export const useUiState = create((set) => ({
 }));
 
 export const zustandData = create((set) => ({
-  dataZus: noData, // Изначально данные отсутствуют
-  // dataZus: null,
-  setDataZus: (value: any) => set({ dataZus: value }), // Функция для установки данных
+  dataZus: null,
+  setDataZus: (value: any) => set((state) => ({ dataZus: value })),
 }));
 
 export const zustandOrderListEdit = create((set) => ({
