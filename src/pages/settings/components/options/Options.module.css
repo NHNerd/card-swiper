@@ -4,9 +4,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-
   inset: 0;
-  z-index: 100012012120;
 }
 
 .exportBtn {
@@ -30,7 +28,6 @@
   text-shadow: 0 0 50px rgb(0, 0, 0);
 
   animation-name: swing;
-  /* animation-duration: 2s; */
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
@@ -62,10 +59,10 @@
 
 .optionPage {
   position: fixed;
-  background-color: rgb(0, 0, 0, 0.9);
+  background-color: rgba(18, 18, 18, 0.7);
   border-radius: 20px;
   transition: 0.4s;
-
+  /* ! */
   backdrop-filter: blur(21px);
 }
 
@@ -79,16 +76,3 @@
 .optionPage:not(.optionPageOn) {
   font-size: 0;
 }
-/* 
-@keyframes expand {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    transform: scale(10);
-  }
-} */

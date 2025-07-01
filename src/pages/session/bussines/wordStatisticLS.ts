@@ -21,7 +21,7 @@ export const wordStatisticLS = (wordStatus) => {
       listWords.push(word);
 
       // DTO for DB
-      delete word.createdDate;
+      delete word.createDate;
       delete word.know;
       delete word.translate;
       delete word.updateKnow;

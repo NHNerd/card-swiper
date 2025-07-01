@@ -49,7 +49,16 @@ export const daysForEach = (
   wordsRepAll100: number[],
   sessionAll100: number[],
   timeAll100: number[],
-  days: object[],
+  days: {
+    date: string;
+    wordAdd: number;
+    correct: number;
+    wrong: number;
+    session: number;
+    timeSec: number;
+    comboMax: number;
+    _id: string;
+  }[],
   firstDate: string,
   daysCount: number,
   weekStart: string,
@@ -125,7 +134,6 @@ export const daysForEach = (
       //all
       toCalcData('all');
 
-      // console.log(weekStart);
       //week
       const crrntDayForComparison = new Date(days[userDaysI].date).getTime();
       const comparRange = (start: string, end: string) =>

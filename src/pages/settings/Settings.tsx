@@ -3,6 +3,7 @@ import { useUiState } from '../../zustand.ts';
 import About from './components/about/About.tsx';
 import Options from './components/options/Options.tsx';
 import ForkSettings from './components/forkSettings/ForkSettings.tsx';
+import Popup from '../../components/popup/Popup.tsx';
 
 import cssSettings from './Settings.module.css';
 
@@ -14,6 +15,9 @@ export default function Settings({ setAllDateLoaded }: Props) {
   const { page, setPage } = useUiState();
   const [expandedOptn, setExpandedOptn] = React.useState<boolean>(false);
 
+  const [popupChild, setPopupChild] = React.useState<JSX.Element>(<div>child!!!!!!!!!!!!!!!!</div>);
+  const [popupIsOpen, setPopupIsOpen] = React.useState(false);
+
   // const hndlrLogout = () => {
   //   //* Хорошо было бы оставлять то что не смогло отправится на сервер
   //   //* Но тогда нужно переделывать логику сохранения этих врменных данных на LS добавляя туда userId,
@@ -23,6 +27,7 @@ export default function Settings({ setAllDateLoaded }: Props) {
 
   //   setPage('auth');
   // };
+
   return (
     <>
       <section className={`${cssSettings.settingsBg} ${page === 'settings' ? '' : cssSettings.off}`}>
@@ -37,12 +42,16 @@ export default function Settings({ setAllDateLoaded }: Props) {
             setPage={setPage}
             expandedOptn={expandedOptn}
             setExpandedOptn={setExpandedOptn}
+            setPopupIsOpen={setPopupIsOpen}
+            setPopupChild={setPopupChild}
           />
         </main>
+
         <footer className={`${cssSettings.footer} ${expandedOptn ? cssSettings.footerOff : ''}`}>
           <ForkSettings page={page} expandedOptn={expandedOptn} />
         </footer>
       </section>
+      <Popup isOpen={popupIsOpen} setPopupIsOpen={setPopupIsOpen} child={popupChild} />
     </>
   );
 }

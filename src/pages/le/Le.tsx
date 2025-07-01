@@ -151,6 +151,8 @@ export default function Le({ scrollSectionLeRef, setWordAddedUpdated }: Props) {
     remove(currentWord._id);
   };
 
+  if (!dataZus) return null;
+
   return (
     <>
       {/* <div className={cssLe.warpLe}> */}

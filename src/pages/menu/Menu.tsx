@@ -69,7 +69,7 @@ export default function Menu({}: Props) {
     <>
       {/* <div id='figmaMenuRef'></div> */}
       <Sync />
-      <Go isWords={Array.isArray(dataZus[0]?.words) && dataZus[0].words.length > 0} />
+      <Go isWords={Array.isArray(dataZus?.[0]?.words) && dataZus?.[0].words.length > 0} />
       <div
         className={
           cssMenu.footer +

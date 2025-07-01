@@ -1,5 +1,6 @@
 import React from 'react';
 import Btn from '../../components/btn/Btn';
+import inputValidation from '../../handlers/inputValidation';
 import cssPopInput from './PopInput.module.css';
 // import TextArea from '../../pages/le/components/textArea/TextArea';
 
@@ -47,13 +48,13 @@ export default function PopInput({
   const hndlrSetInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (placeholderText === 'Enter the game count') {
       if (/^\d*$/.test(e.target.value)) {
-        setNewInputVal(Number(e.target.value));
+        Number(e.target.value);
       } else {
         console.log('Enter Number!');
         return;
       }
     }
-    setNewInputVal(e.target.value);
+    setNewInputVal(inputValidation(e.target.value));
   };
 
   React.useEffect(() => {

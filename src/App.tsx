@@ -50,8 +50,10 @@ function App() {
       <Session endSession={endSession} setEndSession={setEndSession} setStatistic={setStatistic} />
       <LoL scrollSectionLolRef={scrollSectionLolRef} />
       <Le scrollSectionLeRef={scrollSectionLeRef} setWordAddedUpdated={setWordAddedUpdated} />
-      <Menu />
-      <Settings setAllDateLoaded={setAllDateLoaded} />
+      {page === 'menu' && <Menu />}
+      {/* <Menu /> */}
+      {page === 'settings' && <Settings setAllDateLoaded={setAllDateLoaded} />}
+      {/* <Settings setAllDateLoaded={setAllDateLoaded} /> */}
       <Burger />
     </>
   );

@@ -10,9 +10,19 @@ type Props = {
   setPage: React.Dispatch<React.SetStateAction<string>>;
   expandedOptn: boolean;
   setExpandedOptn: React.Dispatch<React.SetStateAction<boolean>>;
+  setPopupIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setPopupChild: React.Dispatch<React.SetStateAction<JSX.Element>>;
 };
 
-export default function Options({ page, setAllDateLoaded, setPage, expandedOptn, setExpandedOptn }: Props) {
+export default function Options({
+  page,
+  setAllDateLoaded,
+  setPage,
+  expandedOptn,
+  setExpandedOptn,
+  setPopupIsOpen,
+  setPopupChild,
+}: Props) {
   const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
   const [origin, setOrigin] = React.useState<{
     top: number;
@@ -27,7 +37,6 @@ export default function Options({ page, setAllDateLoaded, setPage, expandedOptn,
     {
       text: 'export / import - list',
       onClick: (i: number) => {
-        console.log('export/import - list');
         handleClick(i);
       },
     },
@@ -127,52 +136,57 @@ export default function Options({ page, setAllDateLoaded, setPage, expandedOptn,
   };
 
   return (
-    <div className={cssOptions.container}>
-      {btnsOptions.current.map((opt, i) => {
-        return (
-          <React.Fragment key={opt.text}>
-            <button
-              ref={(item) => (btnRefs.current[i] = item)}
-              onClick={() => opt.onClick(i)}
-              className={cssOptions.exportBtn}
-              style={{ animationDuration: `${randBtnSwing.current[i]}s` }}
-            >
-              {opt.text}
-            </button>
-            {i < btnsOptions.current.length - 1 && <div className={cssOptions.line}></div>}
-          </React.Fragment>
-        );
-      })}
+    <>
+      <div className={cssOptions.container}>
+        {btnsOptions.current.map((opt, i) => {
+          return (
+            <React.Fragment key={opt.text}>
+              <button
+                ref={(item) => (btnRefs.current[i] = item)}
+                onClick={() => opt.onClick(i)}
+                className={cssOptions.exportBtn}
+                style={{ animationDuration: `${randBtnSwing.current[i]}s` }}
+              >
+                {opt.text}
+              </button>
+              {i < btnsOptions.current.length - 1 && <div className={cssOptions.line}></div>}
+            </React.Fragment>
+          );
+        })}
 
-      <Btnback
-        hndlr={() => {
-          setExpandedOptn(false);
-          setTimeout(() => {
-            setActiveIndex(null);
-          }, 300);
-        }}
-        isOnSetting={expandedOptn}
-      />
-      {activeIndex !== null && origin && (
-        <section
-          className={`${cssOptions.optionPage} ${expandedOptn ? cssOptions.optionPageOn : ''}`}
-          style={{
-            top: origin.top,
-            left: origin.left,
-            width: origin.width,
-            height: origin.height,
+        <Btnback
+          hndlr={() => {
+            setExpandedOptn(false);
+            setTimeout(() => {
+              setActiveIndex(null);
+            }, 300);
           }}
-        >
-          {/*//* CSS All daughter edemnt here must use % for correct open-transition  */}
-          {activeIndex === 0 && <ImprtExprtList expandedOptn={expandedOptn} />}
-          {activeIndex === 1 && <div> {btnsOptions.current[activeIndex].text} </div>}
-          {activeIndex === 2 && <div> {btnsOptions.current[activeIndex].text} </div>}
-          {activeIndex === 3 && <div> {btnsOptions.current[activeIndex].text} </div>}
-          {activeIndex === 4 && <div> {btnsOptions.current[activeIndex].text} </div>}
-          {activeIndex === 5 && <div> {btnsOptions.current[activeIndex].text} </div>}
-          {activeIndex === 6 && <div> {btnsOptions.current[activeIndex].text} </div>}
-        </section>
-      )}
-    </div>
+          isOnSetting={expandedOptn}
+        />
+        {activeIndex !== null && origin && (
+          <section
+            className={`${cssOptions.optionPage} ${expandedOptn ? cssOptions.optionPageOn : ''}`}
+            style={{
+              top: origin.top,
+              left: origin.left,
+              width: origin.width,
+              height: origin.height,
+            }}
+          >
+            {/*//* CSS All daughter edemnt here must use % for correct open-transition  */}
+            {activeIndex === 0 && (
+              <ImprtExprtList setPopupIsOpen={setPopupIsOpen} setPopupChild={setPopupChild} />
+            )}
+
+            {activeIndex === 1 && <div> {btnsOptions.current[activeIndex].text} </div>}
+            {activeIndex === 2 && <div> {btnsOptions.current[activeIndex].text} </div>}
+            {activeIndex === 3 && <div> {btnsOptions.current[activeIndex].text} </div>}
+            {activeIndex === 4 && <div> {btnsOptions.current[activeIndex].text} </div>}
+            {activeIndex === 5 && <div> {btnsOptions.current[activeIndex].text} </div>}
+            {activeIndex === 6 && <div> {btnsOptions.current[activeIndex].text} </div>}
+          </section>
+        )}
+      </div>
+    </>
   );
 }

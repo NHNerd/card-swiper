@@ -103,11 +103,13 @@ export default function LoL({ scrollSectionLolRef }: Props) {
           </section>
           {/* <section className={cssLoL.footer + ' footerColor'}></section> */}
 
-          <DeletePopUp
-            isDeletePopUp={isDeletePopUp}
-            setIsDeletePopUp={setIsDeletePopUp}
-            deletedListOrder={deletedListOrder}
-          />
+          {dataZus && (
+            <DeletePopUp
+              isDeletePopUp={isDeletePopUp}
+              setIsDeletePopUp={setIsDeletePopUp}
+              deletedListOrder={deletedListOrder}
+            />
+          )}
         </div>
       </>
     );

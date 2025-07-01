@@ -1,4 +1,5 @@
 import React from 'react';
+import inputValidation from '../../handlers/inputValidation';
 
 import cssFork from './Fork.module.css';
 
@@ -22,6 +23,12 @@ export default function Fork({ isOn, leftChild, rightChild, actionStatus, setAct
   const [inputValueL, setInputValueL] = React.useState('');
   const [inputValueR, setInputValueR] = React.useState('');
 
+  const addLogicRef = React.useRef(addLogic);
+  //* Check refresh data in addLogicRef (dataZus)
+  React.useEffect(() => {
+    addLogicRef.current = addLogic;
+  }, [addLogic]);
+
   const clickHndlr = (e: Event) => {
     if (buttonRightRef.current?.contains(e.target)) {
       if (pevButton.current === 'r') return;
@@ -40,8 +47,9 @@ export default function Fork({ isOn, leftChild, rightChild, actionStatus, setAct
     } else if (buttonLeftRef.current?.contains(e.target)) {
       if (pevButton.current === 'l') return;
       if (inputRightRef.current?.value && pevButton.current !== 'non') {
-        //* Logic Add from child
-        addLogic(inputRightRef?.current);
+        //* In addLogicRef происходит Clousure in first mount time (addEventListener)
+        //* Поэтому обновляем func через отслеживание ее изменнеий помместив ее в useRef
+        addLogicRef.current(inputRightRef.current?.value.trim(), setInputValueR);
         return;
       }
 
@@ -60,21 +68,21 @@ export default function Fork({ isOn, leftChild, rightChild, actionStatus, setAct
       setTimeout(() => {
         inputLeftRef.current?.blur();
         inputRightRef.current?.blur();
+
+        setInputValueL('');
+        setInputValueR('');
       }, 200);
     }
   };
 
+  // dataZus тут замыкается в самом начале (null) внутри addLogic
   React.useEffect(() => {
-    document.addEventListener('mousedown', clickHndlr);
+    document.addEventListener('pointerup', clickHndlr);
 
     return () => {
-      document.removeEventListener('mousedown', clickHndlr);
+      document.removeEventListener('pointerup', clickHndlr);
     };
   }, []);
-
-  // React.useEffect(() => {
-  //   // console.log(actionStatus);
-  // }, [actionStatus]);
 
   return (
     <section className={cssFork.container + ' ' + (isOn ? cssFork.on : cssFork.off)}>
@@ -108,7 +116,7 @@ export default function Fork({ isOn, leftChild, rightChild, actionStatus, setAct
           ref={inputLeftRef}
           type='text'
           value={inputValueL}
-          onChange={(e) => setInputValueL(e.target.value)}
+          onChange={(e) => setInputValueL(inputValidation(e.target.value))}
           className={actionStatus.l ? cssFork.inputButton : cssFork.inputButtonOff}
           maxLength={20}
         />
@@ -128,6 +136,7 @@ export default function Fork({ isOn, leftChild, rightChild, actionStatus, setAct
 
       <button
         ref={buttonRightRef}
+        // onClick={() => addLogic(11)} //TODO
         className={
           cssFork.right +
           ' + ' +
@@ -156,7 +165,7 @@ export default function Fork({ isOn, leftChild, rightChild, actionStatus, setAct
           ref={inputRightRef}
           type='text'
           value={inputValueR}
-          onChange={(e) => setInputValueR(e.target.value)}
+          onChange={(e) => setInputValueR(inputValidation(e.target.value))}
           className={actionStatus.r ? cssFork.inputButton : cssFork.inputButtonOff}
           maxLength={20}
         />

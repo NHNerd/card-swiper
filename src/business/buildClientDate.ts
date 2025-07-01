@@ -10,6 +10,7 @@ import buildClientDateFirstTime from './buildClientDateFirstTime.ts';
 
 type ListData = {
   listId: string;
+  createDate: { utcMS: number; utcOffsetMS: number };
   listName: string;
   order: number;
   wordCount: number;
@@ -49,6 +50,7 @@ async function buildClientDate(email: string): Promise<ListData[]> {
   const allListsId: [] = [];
   allLists.map((list) => {
     const listId = list._id;
+    const createDate = list.createDate;
     const listName: '' = list.listName;
     const order: number = list.order;
     const wordCount: number = 0;
@@ -56,7 +58,7 @@ async function buildClientDate(email: string): Promise<ListData[]> {
     const sessionCount: number = list?.sessionCount ? list.sessionCount : 0;
     const words: [] = [];
 
-    data.push({ listId, listName, order, wordCount, gameCount, sessionCount, words });
+    data.push({ listId, createDate, listName, order, wordCount, gameCount, sessionCount, words });
 
     //collect all lists id for get all users words
     allListsId.push(listId);

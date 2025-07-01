@@ -140,7 +140,7 @@ export default function Chart({
   setAllDateLoaded,
 }: Props) {
   const { page } = useUiState();
-  const { dataZus } = zustandData((state) => state); // Получаем состояние zustandData
+  const { dataZus } = zustandData(); // Получаем состояние zustandData
 
   const [statisticFromDB, setStatisticFromDB] = React.useState(null);
   const [dayLettersTSX, setDayLettersTSX] = React.useState<any[]>([]);

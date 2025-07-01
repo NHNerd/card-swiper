@@ -5,8 +5,8 @@ const API_URL = import.meta.env.VITE_API_URL;
 interface List {
   _id: string;
   userId: string;
+  createDate: { utcMS: number; utcOffsetMS: number };
   listName: string;
-  createdDate: string;
   order: number;
   gameCount: number;
   __v: number;
@@ -114,12 +114,12 @@ export const patchListSessionCount = async (listNewDTO: { _id: any; sessionCount
     });
 };
 
-export const putNewList = async (listName: string) => {
+export const putNewList = async (listName: string, createDate: { utcMS: number; utcOffsetMS: number }) => {
   const src = '/add';
   const userId = localStorage.getItem('card-swiper:userId');
 
   return axiosList
-    .post(src, { userId, listName })
+    .post(src, { userId, createDate, listName })
     .then((response) => {
       //TODO user can to change lsits order after crating new lsit,
       //TODO it's will throw an error, couse now I put list in start of array

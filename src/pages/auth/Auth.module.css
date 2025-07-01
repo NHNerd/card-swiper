@@ -80,7 +80,7 @@
   position: absolute;
   height: fit-content;
   width: fit-content;
-  color: pink;
+  color: var(--color-error);
   left: 50%;
   transform: translate(-50%);
   font-size: clamp(12px, 1.6dvh, 20px);
