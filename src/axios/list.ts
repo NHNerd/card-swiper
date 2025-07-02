@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ListDataZus } from '../types/types';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -86,7 +87,7 @@ export const refreshOrdersSync = async (DTOupdateDB_allOrder: any) => {
       return false;
     });
 };
-export const refreshFieldsSync = async (lists: any) => {
+export const refreshFieldsSync = async (lists: ListDataZus[]) => {
   const src = '/refreshFieldsSync';
 
   return axiosList
@@ -100,7 +101,7 @@ export const refreshFieldsSync = async (lists: any) => {
       return false;
     });
 };
-export const patchListSessionCount = async (listNewDTO: { _id: any; sessionCount: number }) => {
+export const patchListSessionCount = async (listNewDTO: { _id: string; sessionCount: number }) => {
   const src = '/patchListSessionCount';
 
   return axiosList
@@ -136,7 +137,7 @@ export const putNewList = async (listName: string, createDate: { utcMS: number; 
       console.error('Error fetching data (postRefresh):', error);
     });
 };
-export const addSync = async (lists: any[]) => {
+export const addSync = async (lists: ListDataZus[]) => {
   const src = '/addSync';
   const userId = localStorage.getItem('card-swiper:userId');
 

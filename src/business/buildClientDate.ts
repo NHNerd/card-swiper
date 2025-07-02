@@ -2,25 +2,16 @@ import { getUserId, emailById } from '../axios/user.ts';
 import { getAllLists } from '../axios/list.ts';
 import { getAllWords } from '../axios/words.ts';
 import sotByRatio from './word/sotByRatio.ts';
+import { wordSortRightRatioDate } from '../pages/session/hndlrs/algorithm.ts';
+import { ListDataZus, WordDataZus } from '../types/types.ts';
 
 import buildClientDateFirstTime from './buildClientDateFirstTime.ts';
 
 // structured data is collected here Every time the page is reloaded
 // data is taken from localstorage if localstorage  exists otherwise from mongodb
 
-type ListData = {
-  listId: string;
-  createDate: { utcMS: number; utcOffsetMS: number };
-  listName: string;
-  order: number;
-  wordCount: number;
-  gameCount: number;
-  sessionCount: number;
-  words: any[];
-};
-
-async function buildClientDate(email: string): Promise<ListData[]> {
-  const data: ListData[] = [];
+async function buildClientDate(email: string): Promise<ListDataZus[]> {
+  const data: ListDataZus[] = [];
   const dateStart = Date.now();
 
   //email is delited
@@ -47,21 +38,21 @@ async function buildClientDate(email: string): Promise<ListData[]> {
   }
 
   // Creating structured data
-  const allListsId: [] = [];
-  allLists.map((list) => {
-    const listId = list._id;
-    const createDate = list.createDate;
-    const listName: '' = list.listName;
+  const allListsId: string[] = [];
+  allLists.map((list: ListDataZus) => {
+    const _id: string = list._id;
+    const createDate: { utcMS: number; utcOffsetMS: number } = list.createDate;
+    const listName: string = list.listName;
     const order: number = list.order;
     const wordCount: number = 0;
     const gameCount: number = list.gameCount;
     const sessionCount: number = list?.sessionCount ? list.sessionCount : 0;
     const words: [] = [];
 
-    data.push({ listId, createDate, listName, order, wordCount, gameCount, sessionCount, words });
+    data.push({ _id, createDate, listName, order, wordCount, gameCount, sessionCount, words });
 
     //collect all lists id for get all users words
-    allListsId.push(listId);
+    allListsId.push(_id);
   });
 
   // Write words and gameCount in lists
@@ -79,9 +70,9 @@ async function buildClientDate(email: string): Promise<ListData[]> {
   }
 
   // craate map
-  const words = {};
+  const words: Record<string, WordDataZus[]> = {};
   // only one iteration for all words
-  Allwords.forEach((word) => {
+  Allwords.forEach((word: WordDataZus) => {
     // Если массив для данного listId уже существует, добавляем в него слово
     if (words[word.listId]) words[word.listId].push(word);
     // Если массива для данного listId еще нет, создаем его и добавляем слово
@@ -90,17 +81,20 @@ async function buildClientDate(email: string): Promise<ListData[]> {
 
   // only one iteration for all list - create fild wordCount
   data.forEach((list) => {
-    const listWord = words[list.listId];
+    const listWord = words[list._id];
 
     if (!listWord || listWord?.length === 0) {
       list.words = [];
+      listWord;
       list.wordCount = 0;
     } else {
-      sotByRatio(listWord);
-      list.words = listWord;
-      list.wordCount = listWord?.length;
+      const listWordSorted = wordSortRightRatioDate(listWord);
+
+      list.words = listWordSorted;
+      list.wordCount = listWordSorted?.length;
     }
   });
+
   //? O = "order of growth" (Big-O Notation)
   //? n = Allwords
   //? m = AllLists
@@ -114,6 +108,8 @@ async function buildClientDate(email: string): Promise<ListData[]> {
     (dateEnd - dateStart) / 1000,
     's.'
   );
+  // console.log(data[0]);
+  // console.log(data[0].words[0]);
   return data;
 }
 

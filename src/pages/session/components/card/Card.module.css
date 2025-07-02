@@ -1,7 +1,8 @@
 .card {
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
+
   transform: perspective(1000px) translate(-50%, -50%);
   height: 54dvh;
   aspect-ratio: 0.64;
@@ -14,26 +15,8 @@
   border-right: solid 2px rgb(255, 255, 255);
   transform-origin: 0% 0%;
   white-space: pre-line;
-}
-
-/*TODO Надо сшить нормально перход из go в card и обратно */
-.on {
-  transition: 0.2s;
-}
-
-/*? For avoid freeze in draging time  */
-.card:active {
-  transition: transform 0s, top 0s, left 0s;
-}
-
-.off {
-  border-radius: 50%;
-  opacity: 0;
-  filter: blur(3px);
-  transition: 0.2s;
-  scale: 0.9;
-  cursor: default;
-  user-select: none;
+  transition: 0.5s;
+  letter-spacing: -1.4px;
 }
 
 .know {
@@ -45,36 +28,4 @@
   translate: -100dvw;
   rotate: -30deg;
   transition: 0.5s;
-}
-
-.translate {
-  /* transform: perspective(1000px) rotateX(180deg) translate(-50%, -50%); */
-  animation: translate 0.5s 1 ease-in-out;
-  /* transition: 0.5s; */
-}
-
-.translateOff {
-  animation: translateOff 0.5s 1 ease-in-out;
-}
-@keyframes translate {
-  0% {
-    scale: 1 1;
-  }
-  50% {
-    scale: 1 0;
-  }
-  100% {
-    scale: 1 1;
-  }
-}
-@keyframes translateOff {
-  0% {
-    scale: 1 1;
-  }
-  50% {
-    scale: 1 0;
-  }
-  100% {
-    scale: 1 1;
-  }
 }

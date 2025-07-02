@@ -1,0 +1,11 @@
+.dnd {
+  position: fixed;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  left: 50%;
+  top: 50%;
+  /* filter: drop-shadow(10px, 10px red); */
+  /* background-color: fuchsia; */
+  transition: scale 0.2s;
+  will-change: transform;
+}

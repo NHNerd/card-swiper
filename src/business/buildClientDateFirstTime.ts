@@ -1,48 +1,71 @@
 import { putNewList } from '../axios/list.ts';
 import { putNewBulkWord } from '../axios/words.ts';
+import nowDateUTCandOffset from '../handlers/nowDateUTCandOffset.ts';
+import {
+  fruits_vegetables,
+  phrasalVerbs_words,
+  idioms_words,
+  test,
+  NewWordType,
+} from '../hardcode/startListsWords.ts';
+import { ListDataZus } from '../types/types.ts';
 
-//TODO Надо тут номально сделать без хардкода лютого
-async function buildClientDateFirstTime(data: []) {
-  const phrasalVerbs_words = [
-    { word: 'break into', translate: 'врываться' },
-    { word: 'break out', translate: 'сбежать' },
-    { word: 'bring down', translate: 'расстроить' },
+async function buildClientDateFirstTime(data: ListDataZus[]): Promise<ListDataZus[]> {
+  const date = nowDateUTCandOffset();
+  // Words don't have order field like List, sort by correctRatio && Date
+  const addDate = (
+    words: NewWordType[],
+    dateIndex: number,
+    date: { utcMS: number; utcOffsetMS: number }
+  ): number => {
+    for (const word of words) {
+      word.createDate = {
+        utcMS: date.utcMS + dateIndex,
+        utcOffsetMS: date.utcOffsetMS,
+      };
+      dateIndex += 1;
+    }
+    return dateIndex;
+  };
+
+  const lists: [string, NewWordType[]][] = [
+    ['Fruits🍏 & Vegetables🍆', fruits_vegetables],
+    ['Phrasal verbs', phrasalVerbs_words],
+    ['Idioms', idioms_words],
+    ['test', test],
   ];
-  const idioms_words = [
-    { word: 'A piece of cake', translate: 'Проще простого' },
-    { word: 'Rain or shine', translate: 'Что бы не произошло' },
-  ];
 
-  // Add list
+  // For set ofset +1 for ALL words ( it's need for order in list of all words )
+  let dateIndex: number = 0;
+  let i: number = 0;
+  const responseListsArr = [];
+  const responseWordsArr = [];
+  for (const [listName, words] of lists) {
+    dateIndex = addDate(words, dateIndex, date);
 
-  const phrasalVerbs = await putNewList('phrasalVerbs');
-  phrasalVerbs.order = 1;
-  phrasalVerbs.wordCount = phrasalVerbs_words.length;
+    // Add list
+    date.utcMS += i;
+    const responseList = await putNewList(listName, date);
+    responseList.order = lists.length - i;
+    responseList.wordCount = words.length;
+    responseListsArr.push(responseList);
 
-  // Add list 2
-  const idioms = await putNewList('idioms');
-  idioms.wordCount = idioms.length;
+    // Add word bulk
+    const responseWord = await putNewBulkWord(responseList._id, words);
+    responseList.words = responseWord;
+    responseWordsArr.push(responseWord);
 
-  data.push(idioms);
-  data.push(phrasalVerbs);
-  console.log(data);
-  //TODO order change work only aftere delete LS and refresh
-  //TODO I gues it's backand problem
-  localStorage.setItem('card-swiper:allLists', JSON.stringify([idioms, phrasalVerbs]));
+    data.push(responseList);
 
-  // Add word
-  const newBulkWord1 = await putNewBulkWord(phrasalVerbs._id, phrasalVerbs_words);
-  data[1].words = newBulkWord1;
-  localStorage.setItem('card-swiper:allWords', JSON.stringify(newBulkWord1));
-  console.log(data);
+    // Clean
+    localStorage.removeItem('card-swiper:registration');
 
-  // Add word 2
-  const newBulkWord2 = await putNewBulkWord(idioms._id, idioms_words);
-  data[0].words = newBulkWord2;
-  localStorage.setItem('card-swiper:allWords', JSON.stringify(newBulkWord2));
-  console.log(data);
-  // Clean
-  localStorage.removeItem('card-swiper:registration');
+    i++;
+  }
+
+  localStorage.setItem('card-swiper:allLists', JSON.stringify(responseListsArr));
+  localStorage.setItem('card-swiper:allWords', JSON.stringify(responseWordsArr));
+  console.log('🍆🍆🍆', data);
   console.log('bild client registration date 100%: _id, list, word :)');
   return data;
 }

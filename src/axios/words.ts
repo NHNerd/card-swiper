@@ -39,6 +39,8 @@ export const putNewWord = async (
   const src = '/add';
   const userId = localStorage.getItem('card-swiper:userId');
 
+  console.log('🍉🍉🍉', listId, createDate, word, translate);
+
   return axiosWord
     .post(src, { userId, createDate, listId, word, translate })
     .then((response) => {
@@ -58,8 +60,8 @@ export const patchWordField = async (
   _id: any,
   word: string,
   translate: string,
-  updateWord: any,
-  updateTranslate: any
+  updateWord: string,
+  updateTranslate: string
 ) => {
   const src = '/patchWordField';
 

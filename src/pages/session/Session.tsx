@@ -11,6 +11,7 @@ import { patchWordFielCorrectWrongdMany } from '../../axios/words.ts';
 import { patchListSessionCount } from '../../axios/list.ts';
 import { patchSessionDays } from '../../axios/statistic.ts';
 import { sessionAddStatistic } from '../../business/statistic/session.ts';
+import { wordSortRightRatioDate } from './hndlrs/algorithm.ts';
 
 import sotByRatio from '../../business/word/sotByRatio.ts';
 
@@ -27,7 +28,8 @@ export default function Session({ endSession, setEndSession, setStatistic }: Pro
   const { dataZus, setDataZus } = zustandData();
   const { orderListEditZus } = zustandOrderListEdit();
 
-  const [time, setTime] = React.useState<number>(0);
+  // const [time, setTime] = React.useState<number>(0);
+  const time = React.useRef(0);
 
   const [know, setKnow] = React.useState<boolean>(false);
   const [dontKnow, setDontKnow] = React.useState<boolean>(false);
@@ -45,9 +47,10 @@ export default function Session({ endSession, setEndSession, setStatistic }: Pro
   const ContainerSessionRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    if (page === 'menu' && (time !== 0 || gameWordsPrev.length !== 0)) {
+    if (page === 'menu' && (time.current !== 0 || gameWordsPrev.length !== 0)) {
       //* clear
-      setTime(0);
+      //* setTime(0);
+      time.current = 0;
       setEndSession(false);
       setKnow(false);
       setDontKnow(false);
@@ -56,7 +59,8 @@ export default function Session({ endSession, setEndSession, setStatistic }: Pro
       setStatusEnd({ know: 0, dontKnow: 0 });
       setCombo(0);
       setMaxCombo(0);
-      setGameWords(dataZus[0].words);
+      //! setGameWords([...dataZus[0].words]);
+      setGameWords(wordSortRightRatioDate([...dataZus[0].words].slice(0, dataZus[0].gameCount)));
       setGameWordsPrev([]);
 
       // console.log('clear in time exite before session ended');
@@ -66,7 +70,8 @@ export default function Session({ endSession, setEndSession, setStatistic }: Pro
   React.useEffect(() => {
     // refresh game words
     if (dataZus && dataZus.length > 0 && dataZus[0].words && gameWordsPrev.length === 0) {
-      setGameWords([...dataZus[0].words]);
+      setGameWords(wordSortRightRatioDate([...dataZus[0].words].slice(0, dataZus[0].gameCount)));
+      //! setGameWords([...dataZus[0].words]);
     }
   }, [dataZus]);
 
@@ -98,7 +103,7 @@ export default function Session({ endSession, setEndSession, setStatistic }: Pro
       // LS
       const [listWordsNewDTO] = wordStatisticLS(wordStatus);
       const [listNewDTO] = listStatisticLS();
-      const sessionStatistic: any[] = sessionAddStatistic(time, maxCombo, correct, wrong);
+      const sessionStatistic: any[] = sessionAddStatistic(time.current, maxCombo, correct, wrong);
       // DZ
       const dataZusCopy: any = [...dataZus];
       dataZusCopy[orderListEditZus].words.sort((a, b) => ('' + a._id).localeCompare(b._id));
@@ -134,17 +139,17 @@ export default function Session({ endSession, setEndSession, setStatistic }: Pro
       className={page === 'session' ? cssSession.on : cssSession.off}
     >
       <Bar gameWords={gameWords} />
-      <DataSession gameWords={gameWords} time={time} setTime={setTime} end={endSession} combo={combo} />
+      {/* setTime={setTime}  */}
+      <DataSession gameWords={gameWords} timeRef={time} end={endSession} combo={combo} />
 
       <LastCard wordStatus={wordStatus} statusEnd={statusEnd} maxCombo={maxCombo} end={endSession} />
       <Card
         ContainerSessionRef={ContainerSessionRef}
         gameWords={gameWords}
-        setGameWords={setGameWords}
-        time={time}
         know={know}
         dontKnow={dontKnow}
         translate={translate}
+        gameCount={dataZus[0].gameCount}
       />
       <Footer
         gameWords={gameWords}
