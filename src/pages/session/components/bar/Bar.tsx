@@ -8,15 +8,16 @@ type Props = {
   gameWords: any;
 };
 
-export default function Bar({ gameWords }: Props) {
+const Bar = React.memo(({ gameWords }: Props) => {
   const { page, setPage } = useUiState();
   const { dataZus } = zustandData();
   const barFillRef = React.useRef<HTMLDivElement | null>(null);
   const [barProcent, setBarProcent] = React.useState<number>(0);
-
+  console.log('BAR');
   React.useEffect(() => {
     // setBarProcent();
-    barFillRef.current.style.right = `${(100 / dataZus[0].words?.length) * gameWords.length}%`;
+    barFillRef.current.style.right = `${(100 / dataZus[0].gameCount) * gameWords.length}%`;
+    // barFillRef.current.style.right = `${(100 / dataZus[0].words?.length) * gameWords.length}%`;
   }, [gameWords]);
 
   // console.log(dataZus[0].words.length);
@@ -25,7 +26,7 @@ export default function Bar({ gameWords }: Props) {
     <>
       <div className={cssBar.bar + ' ' + (page === 'session' ? cssBar.on : cssBar.off)}>
         <div className={cssBar.percent}>
-          {dataZus[0]?.words?.length - gameWords?.length + '/' + dataZus[0]?.words?.length}
+          {dataZus[0]?.gameCount - gameWords?.length + '/' + dataZus[0]?.gameCount}
         </div>
         <div ref={barFillRef} className={cssBar.fill}>
           <div className={cssBar.point}></div>
@@ -33,4 +34,6 @@ export default function Bar({ gameWords }: Props) {
       </div>
     </>
   );
-}
+});
+
+export default Bar;

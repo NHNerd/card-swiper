@@ -1,7 +1,7 @@
 import React from 'react';
 import { useUiState, zustandData } from '../../../../zustand';
 import { useScreenSize } from './hooks/screenSize';
-import DnD from './hooks/dnd/dnd';
+import DnD from '../../dnd/dnd';
 
 import cssCard from './Card.module.css';
 
@@ -9,32 +9,30 @@ type Props = {
   //! надо задать точнее (may be...)
   ContainerSessionRef: HTMLDivElement;
   gameWords: [];
-  setGameWords: any;
+  know: any;
   time: number;
+  dontKnow: number;
+  translate: string;
+  gameCount: number;
 };
-
-export default function Card({
-  ContainerSessionRef,
-  gameWords,
-  setGameWords,
-  time,
-  know,
-  dontKnow,
-  translate,
-}: Props) {
+//
+const Card = React.memo(({ ContainerSessionRef, gameWords, know, dontKnow, translate, gameCount }: Props) => {
   const { page, setPage } = useUiState();
+
+  const answer = (index: number): 'know' | 'dontKnow' | '' => {
+    if (index !== gameWords.length - 1) return '';
+    if (know) return 'know';
+    if (dontKnow) return 'dontKnow';
+    return '';
+  };
 
   // refresh screen size
   const screenSize = useScreenSize(ContainerSessionRef);
-  return gameWords.map((item: object, index: number) => (
-    <button
-      key={index}
-      className={`${cssCard.card} ${page === 'session' ? cssCard.on : cssCard.off} ${
-        know && gameWords.length - 1 === index ? cssCard.know : ''
-      } ${dontKnow && gameWords.length - 1 === index ? cssCard.dontKnow : ''}
-      ${translate ? cssCard.translate : cssCard.translateOff}`}
-    >
-      {translate ? gameWords[index].translate : gameWords[index].word}
-    </button>
+  return gameWords.map((card: object, index: number) => (
+    <DnD key={index} screenSize={screenSize}>
+      <button className={`${cssCard.card} ${cssCard[answer(index)]}`}>{card.word}</button>
+    </DnD>
   ));
-}
+});
+
+export default Card;

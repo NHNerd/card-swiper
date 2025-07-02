@@ -7,7 +7,7 @@ import buildClientDate from '../../business/buildClientDate';
 
 export default function Sync() {
   const { dataZus, setDataZus } = zustandData();
-  const { page, setPage } = useUiState();
+  const { page } = useUiState();
   const email: string = localStorage.getItem('card-swiper:email');
 
   const [status, setStatus] = React.useState<'not' | 'sync' | 'loading'>('not');

@@ -7,16 +7,16 @@ import cssData from './Data.module.css';
 
 type Props = {
   gameWords: any;
-  time: number;
-  setTime: (time: number) => void;
+  timeRef: React.MutableRefObject<number>;
   end: boolean;
   combo: number;
 };
 
-export default function DataSession({ gameWords, time, setTime, end, combo }: Props) {
-  const { page, setPage } = useUiState();
+export default function DataSession({ gameWords, timeRef, end, combo }: Props) {
+  const { page } = useUiState();
   const [comboAnime, setComboAnime] = React.useState<string>('comboAnimeOff');
-  const [timeAnime, setTimeAnime] = React.useState<string>('timeAnimeOff');
+  const timeAnime = React.useRef<string>('timeAnimeOff');
+  const [time, setTime] = React.useState<number>(0);
 
   React.useEffect(() => {
     if (end) return;
@@ -25,16 +25,16 @@ export default function DataSession({ gameWords, time, setTime, end, combo }: Pr
 
     if (page === 'session' && !end) {
       const intervalId = setInterval(() => {
-        setTime(Math.round((Date.now() - timeStart) / 1000));
-
-        setTimeAnime('timeAnime');
+        timeRef.current = Math.round((Date.now() - timeStart) / 1000);
+        timeAnime.current = 'timeAnime';
+        setTime(timeRef.current);
         setTimeout(() => {
-          setTimeAnime('timeAnimeOff');
+          timeAnime.current = 'timeAnimeOff';
         }, 250);
       }, 1000);
       return () => clearInterval(intervalId);
     } else if (page === 'menu') {
-      setTime(0);
+      timeRef.current = 0;
     }
   }, [page, end]);
 
@@ -54,7 +54,7 @@ export default function DataSession({ gameWords, time, setTime, end, combo }: Pr
       <div className={cssData.dataContainer}>
         <div className={cssData.comboWrap}>
           time:
-          <div className={cssData.time + ' ' + cssData[timeAnime]}>{time}</div>s
+          <div className={cssData.time + ' ' + cssData[timeAnime.current]}>{timeRef.current}</div>s
         </div>
 
         <div className={cssData.comboWrap}>

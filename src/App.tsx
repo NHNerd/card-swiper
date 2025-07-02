@@ -50,8 +50,9 @@ function App() {
       <Session endSession={endSession} setEndSession={setEndSession} setStatistic={setStatistic} />
       <LoL scrollSectionLolRef={scrollSectionLolRef} />
       <Le scrollSectionLeRef={scrollSectionLeRef} setWordAddedUpdated={setWordAddedUpdated} />
-      {page === 'menu' && <Menu />}
-      {/* <Menu /> */}
+      {/* {page === 'menu' && <Menu />} */}
+      {/* // mount onli one time!!! couse in menu the SYNC */}
+      <Menu />
       {page === 'settings' && <Settings setAllDateLoaded={setAllDateLoaded} />}
       {/* <Settings setAllDateLoaded={setAllDateLoaded} /> */}
       <Burger />

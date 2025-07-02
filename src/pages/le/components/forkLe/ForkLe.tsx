@@ -55,7 +55,7 @@ export default function ForkLoL({ setWordAddedUpdated }: Props) {
         return;
       }
 
-      const listId = dataZus[orderListEditZus].listId;
+      const listId = dataZus[orderListEditZus]._id;
       const createDate = nowDateUTCandOffset();
 
       // LS
