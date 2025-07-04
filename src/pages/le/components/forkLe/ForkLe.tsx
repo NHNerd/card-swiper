@@ -31,12 +31,13 @@ export default function ForkLoL({ setWordAddedUpdated }: Props) {
   const [newWord, setNewWord] = React.useState<string>('');
   const [trySubmitEmpty, setTrySubmitEmpty] = React.useState<boolean>(false);
 
-  const addLogicWord = (inputRightRef: string) => {
+  const addLogicWord = (inputRightRef: string): void => {
     const allWords = JSON.parse(localStorage.getItem('card-swiper:allWords'));
     const listWords = allWords.filter((item: any) => item.listId === dataZus[orderListEditZus].listId);
     if (listWords && listWords.some((item) => item.word === inputRightRef)) {
       console.log('Word: "' + inputRightRef + '" already exists!');
-      return null;
+      //! return null;
+      return;
     }
 
     setIsOpen(true);

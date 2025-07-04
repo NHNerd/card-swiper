@@ -13,11 +13,27 @@ export default function Footer({}: Props) {
   const { orderListEditZus } = zustandOrderListEdit();
 
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
-  const [newInputVal, setNewInputVal] = React.useState<number>(10);
+  const [newInputVal, setNewInputVal] = React.useState<number | ''>(10);
   const [trySubmitEmpty, setTrySubmitEmpty] = React.useState<boolean>(false);
+
+  const gameCountAlertText = React.useRef('');
 
   const hndlrGameCountEdit = async () => {
     setIsOpen(true);
+  };
+
+  const GCAlert = (text: string): void => {
+    gameCountAlertText.current = text;
+    setTimeout(() => {
+      gameCountAlertText.current = '';
+    }, 1500);
+  };
+
+  const sbmtEmptyHndlr = (setTrySubmitEmpty: React.Dispatch<React.SetStateAction<boolean>>): void => {
+    setTrySubmitEmpty(true);
+    setTimeout(() => {
+      setTrySubmitEmpty(false);
+    }, 1000);
   };
 
   const hndlrSubmit = (inputRef: any) => {
@@ -25,26 +41,19 @@ export default function Footer({}: Props) {
       console.log('Enter Number, not Text!');
       return;
     }
-
     if (newInputVal > dataZus[orderListEditZus]?.words.length) {
       setNewInputVal(dataZus[orderListEditZus]?.words.length);
+      GCAlert('max game count <= words count');
 
-      //TODO Warning animation DON'T WORK couse placeholder opacity 0
-      //TODO need another way
-      setTrySubmitEmpty(true);
-      setTimeout(() => {
-        setTrySubmitEmpty(false);
-      }, 1000);
       return;
-    } else if (newInputVal > 10) {
-      setNewInputVal(10);
+    } else if (newInputVal === '') {
+      sbmtEmptyHndlr(setTrySubmitEmpty);
+      return;
+    } else if (newInputVal == 0) {
+      setNewInputVal(1);
+      GCAlert('min game count >= 1');
 
-      //TODO Warning animation DON'T WORK couse placeholder opacity 0
-      //TODO need another way
-      setTrySubmitEmpty(true);
-      setTimeout(() => {
-        setTrySubmitEmpty(false);
-      }, 1000);
+      sbmtEmptyHndlr(setTrySubmitEmpty);
       return;
     }
 
@@ -55,16 +64,17 @@ export default function Footer({}: Props) {
       const newTime = new Date().toISOString();
 
       //DZ
-      dataZus[orderListEditZus].gameCount = newInputVal;
+      dataZus[orderListEditZus].gameCount = +newInputVal;
       setDataZus(dataZus);
       // LS
-      listsLS[orderListEditZus].gameCount = newInputVal;
+      listsLS[orderListEditZus].gameCount = +newInputVal;
       listsLS[orderListEditZus].updateGameCount = newTime;
       localStorage.setItem('card-swiper:allLists', JSON.stringify(listsLS));
       // DB
-      patchListField(listsLS[orderListEditZus]._id, newInputVal, newTime);
+      patchListField(listsLS[orderListEditZus]._id, +newInputVal, newTime);
     }
 
+    gameCountAlertText.current = '';
     setIsOpen(false);
     setTrySubmitEmpty(false);
     inputRef.current?.setSelectionRange(0, 0);
@@ -84,8 +94,8 @@ export default function Footer({}: Props) {
           <button className={cssFooter.gameCountButton} onClick={hndlrGameCountEdit}></button>
         </div>
       </div>
-
       <PopInput
+        parrent={'gameCount'}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         oldInputVal={dataZus[orderListEditZus].gameCount}
@@ -95,7 +105,16 @@ export default function Footer({}: Props) {
         trySubmitEmpty={trySubmitEmpty}
         setTrySubmitEmpty={setTrySubmitEmpty}
         placeholderText='Enter the game count'
-      />
+        gameCountAlertText={gameCountAlertText.current}
+      >
+        <div
+          className={`${cssFooter.gameCountAlert} ${
+            gameCountAlertText.current === '' ? cssFooter.gameCountAlertOff : ''
+          }`}
+        >
+          {gameCountAlertText.current}
+        </div>
+      </PopInput>
     </>
   );
 }

@@ -6,6 +6,7 @@
 .translate,
 .exitSession,
 .tickSession {
+  pointer-events: auto;
   position: absolute;
   /* top: 50%; */
   width: 6dvh;

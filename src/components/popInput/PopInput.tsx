@@ -6,7 +6,7 @@ import cssPopInput from './PopInput.module.css';
 
 // import { putNewList } from '../../axios/list';
 // import { addList, refreshLSAterDB } from '../../business/list/addList.ts';
-// import { zustandData } from '../../zustand.ts';
+//
 
 export default function PopInput({
   isOpen,
@@ -24,6 +24,7 @@ export default function PopInput({
   setNewTextareaVal,
   currentTranslate,
   textareaRef,
+  children,
 }) {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const containerRef = React.useRef<HTMLInputElement>(null);
@@ -94,6 +95,9 @@ export default function PopInput({
             ref={inputRef}
             type='text'
             value={newInputVal}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') hndlrSubmit(inputRef);
+            }}
             onChange={hndlrSetInput}
             className={`${cssPopInput.input} ${
               trySubmitEmpty ? cssPopInput.emptyInputWarning : cssPopInput.emptyInputWarningOff
@@ -105,6 +109,7 @@ export default function PopInput({
           <section className={`${cssPopInput.btnContainer}`}>
             <Btn parrent='le' type='tick' hndlr={() => hndlrSubmit(inputRef)} />
           </section>
+          {children}
         </div>
       </section>
     </>

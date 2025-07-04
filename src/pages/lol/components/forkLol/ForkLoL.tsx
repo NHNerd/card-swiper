@@ -19,7 +19,7 @@ export default function ForkLoL({}: Props) {
     r: false,
   });
 
-  const addLogicList = (inputRightRef: string, setInputValueR: any) => {
+  const addLogicList = (inputRightRef: string, setInputValueR?: React.Dispatch<React.SetStateAction<string>>) => {
     // LS
     const addLs = addList(inputRightRef);
     if (!addLs) return;

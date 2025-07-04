@@ -41,20 +41,24 @@ function App() {
   if (page === 'auth') return <Auth />;
   return (
     <>
-      <Statistics
-        statistic={statistic}
-        wordAddedUpdated={wordAddedUpdated}
-        allDateLoaded={allDateLoaded}
-        setAllDateLoaded={setAllDateLoaded}
-      />
+      {page !== 'session' && (
+        <Statistics
+          statistic={statistic}
+          wordAddedUpdated={wordAddedUpdated}
+          allDateLoaded={allDateLoaded}
+          setAllDateLoaded={setAllDateLoaded}
+        />
+      )}
       <Session endSession={endSession} setEndSession={setEndSession} setStatistic={setStatistic} />
       <LoL scrollSectionLolRef={scrollSectionLolRef} />
-      <Le scrollSectionLeRef={scrollSectionLeRef} setWordAddedUpdated={setWordAddedUpdated} />
+      {page != 'session' && (
+        <Le scrollSectionLeRef={scrollSectionLeRef} setWordAddedUpdated={setWordAddedUpdated} />
+      )}
       {/* {page === 'menu' && <Menu />} */}
       {/* // mount onli one time!!! couse in menu the SYNC */}
       <Menu />
       {page === 'settings' && <Settings setAllDateLoaded={setAllDateLoaded} />}
-      {/* <Settings setAllDateLoaded={setAllDateLoaded} /> */}
+
       <Burger />
     </>
   );

@@ -46,6 +46,56 @@ export default function Session({ endSession, setEndSession, setStatistic }: Pro
 
   const ContainerSessionRef = React.useRef<HTMLDivElement>(null);
 
+  const hndlrWordStatus = (status: boolean) => {
+    setWordStatus((prev) => {
+      // Проверяем, есть ли уже объект с таким word_id в массиве
+      const isWordExists = prev.some((item) => item.word_id === gameWords[gameWords.length - 1]._id);
+      if (isWordExists) return prev;
+
+      const current = [...prev, { word_id: gameWords[gameWords.length - 1]._id, know: status }];
+      return current;
+    });
+  };
+
+  const hndlrKnow = (timeOut: number): void => {
+    if (know || dontKnow || endSession) return;
+    console.log('know');
+    hndlrWordStatus(true);
+    setCombo((prev) => {
+      if (prev + 1 > maxCombo) setMaxCombo(prev + 1);
+      return prev + 1;
+    });
+
+    setKnow(true);
+    setTimeout(() => {
+      const gameWordsNew = [...gameWords];
+      const old = gameWordsNew.splice(gameWordsNew.length - 1, 1);
+      setGameWordsPrev((prev) => [...prev, ...old]);
+      setGameWords(gameWordsNew);
+
+      setKnow(false);
+      setTranslate(false);
+    }, timeOut);
+  };
+
+  const hndlrDontKnow = (timeOut: number, translateTO: number): void => {
+    if (know || dontKnow || endSession) return;
+    console.log(`don't know`);
+    hndlrWordStatus(false);
+    setCombo(0);
+
+    setDontKnow(true);
+    setTimeout(() => {
+      const gameWordsNew = [...gameWords];
+      const old = gameWordsNew.splice(gameWordsNew.length - 1, 1);
+      setGameWordsPrev((prev) => [...prev, ...old]);
+      setGameWords(gameWordsNew);
+
+      setDontKnow(false);
+      setTranslate(false);
+    }, timeOut);
+  };
+
   React.useEffect(() => {
     if (page === 'menu' && (time.current !== 0 || gameWordsPrev.length !== 0)) {
       //* clear
@@ -59,7 +109,6 @@ export default function Session({ endSession, setEndSession, setStatistic }: Pro
       setStatusEnd({ know: 0, dontKnow: 0 });
       setCombo(0);
       setMaxCombo(0);
-      //! setGameWords([...dataZus[0].words]);
       setGameWords(wordSortRightRatioDate([...dataZus[0].words].slice(0, dataZus[0].gameCount)));
       setGameWordsPrev([]);
 
@@ -71,7 +120,6 @@ export default function Session({ endSession, setEndSession, setStatistic }: Pro
     // refresh game words
     if (dataZus && dataZus.length > 0 && dataZus[0].words && gameWordsPrev.length === 0) {
       setGameWords(wordSortRightRatioDate([...dataZus[0].words].slice(0, dataZus[0].gameCount)));
-      //! setGameWords([...dataZus[0].words]);
     }
   }, [dataZus]);
 
@@ -148,8 +196,13 @@ export default function Session({ endSession, setEndSession, setStatistic }: Pro
         gameWords={gameWords}
         know={know}
         dontKnow={dontKnow}
+        setKnow={setKnow}
+        setDontKnow={setDontKnow}
         translate={translate}
+        setTranslate={setTranslate}
         gameCount={dataZus[0].gameCount}
+        hndlrKnow={hndlrKnow}
+        hndlrDontKnow={hndlrDontKnow}
       />
       <Footer
         gameWords={gameWords}
@@ -170,6 +223,8 @@ export default function Session({ endSession, setEndSession, setStatistic }: Pro
         setMaxCombo={setMaxCombo}
         end={endSession}
         setEnd={setEndSession}
+        hndlrKnow={hndlrKnow}
+        hndlrDontKnow={hndlrDontKnow}
       />
     </div>
   );

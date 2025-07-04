@@ -68,3 +68,17 @@
 .wordText {
   opacity: 0.7;
 }
+
+.gameCountAlert {
+  position: relative;
+
+  width: 100%;
+  height: fit-content;
+  text-align: center;
+  color: var(--color-error);
+  transition: opacity 1s;
+  /* background-color: orange; */
+}
+.gameCountAlertOff {
+  opacity: 0;
+}

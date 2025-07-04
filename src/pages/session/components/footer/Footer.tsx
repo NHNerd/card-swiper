@@ -5,6 +5,29 @@ import { useUiState } from '../../../../zustand.ts';
 
 import cssFooter from './Footer.module.css';
 
+type Props = {
+  gameWords: any[];
+  setGameWords: any;
+  know: boolean;
+  setKnow: React.Dispatch<React.SetStateAction<boolean>>;
+  dontKnow: boolean;
+  setDontKnow: React.Dispatch<React.SetStateAction<boolean>>;
+  translate: boolean;
+  setTranslate: React.Dispatch<React.SetStateAction<boolean>>;
+  gameWordsPrev;
+  setGameWordsPrev;
+  wordStatus;
+  setWordStatus;
+  combo;
+  setCombo;
+  maxCombo;
+  setMaxCombo;
+  end;
+  setEnd;
+  hndlrKnow: (timeOut: number) => void;
+  hndlrDontKnow: (timeOut: number) => void;
+};
+
 export default function Footer({
   gameWords,
   setGameWords,
@@ -24,10 +47,12 @@ export default function Footer({
   setMaxCombo,
   end,
   setEnd,
-}) {
+  hndlrKnow,
+  hndlrDontKnow,
+}: Props) {
   const { page, setPage } = useUiState();
 
-  const hndlrWordStatus = (status) => {
+  const hndlrWordStatus = (status: boolean) => {
     setWordStatus((prev) => {
       // Проверяем, есть ли уже объект с таким word_id в массиве
       const isWordExists = prev.some((item) => item.word_id === gameWords[gameWords.length - 1]._id);
@@ -36,45 +61,6 @@ export default function Footer({
       const current = [...prev, { word_id: gameWords[gameWords.length - 1]._id, know: status }];
       return current;
     });
-  };
-
-  const hndlrDontKnow = () => {
-    if (know || dontKnow || end) return;
-    console.log(`don't know`);
-    hndlrWordStatus(false);
-    setCombo(0);
-
-    setDontKnow(true);
-    setTimeout(() => {
-      const gameWordsNew = [...gameWords];
-      const old = gameWordsNew.splice(gameWordsNew.length - 1, 1);
-      setGameWordsPrev((prev) => [...prev, ...old]);
-      setGameWords(gameWordsNew);
-
-      setDontKnow(false);
-      setTranslate(false);
-    }, 300);
-  };
-
-  const hndlrKnow = () => {
-    if (know || dontKnow || end) return;
-    console.log('know');
-    hndlrWordStatus(true);
-    setCombo((prev) => {
-      if (prev + 1 > maxCombo) setMaxCombo(prev + 1);
-      return prev + 1;
-    });
-
-    setKnow(true);
-    setTimeout(() => {
-      const gameWordsNew = [...gameWords];
-      const old = gameWordsNew.splice(gameWordsNew.length - 1, 1);
-      setGameWordsPrev((prev) => [...prev, ...old]);
-      setGameWords(gameWordsNew);
-
-      setKnow(false);
-      setTranslate(false);
-    }, 300);
   };
 
   const hndlrPrevious = () => {
@@ -86,11 +72,15 @@ export default function Footer({
     const OtherPrev = gameWordsPrev.slice(0, gameWordsPrev.length - 1);
 
     //TODO need check if (prev word === lastPrev word) return
-    setGameWords((prev) => [...prev, ...lastPrev]);
+    setGameWords((prev) => {
+      // console.log(prev[prev.length - 1]?.word, '|', lastPrev[0]?.word);
+      return [...prev, ...lastPrev];
+    });
     setGameWordsPrev(OtherPrev);
 
-    setTranslate(false);
+    if (translate) setTranslate(false);
   };
+
   const hndlrTranslate = () => {
     if (end) return;
     console.log('Translate ');
@@ -119,8 +109,8 @@ export default function Footer({
     <section className={cssFooter.footer}>
       <div className={cssFooter.wrapBtn}>
         <div className={`${cssFooter.swipeBtn} ${end ? cssFooter.swipeBtnOff : ''}`}>
-          <Btn parrent='session' type='exitSession' hndlr={hndlrDontKnow} />
-          <Btn parrent='session' type='tickSession' hndlr={hndlrKnow} />
+          <Btn parrent='session' type='exitSession' hndlr={() => hndlrDontKnow(350)} />
+          <Btn parrent='session' type='tickSession' hndlr={() => hndlrKnow(350)} />
         </div>
 
         <button
