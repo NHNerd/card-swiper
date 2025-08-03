@@ -19,6 +19,45 @@
   letter-spacing: -1.4px;
 }
 
+.container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+  height: 54.6dvh;
+
+  aspect-ratio: 0.646;
+
+  border-radius: 20px;
+
+  clip-path: inset(0 round 20px);
+}
+
+.container::before {
+  content: '';
+  position: absolute;
+  left: 60%;
+  right: 0%;
+  top: -30%;
+  bottom: -30%;
+  background-color: rgb(255, 255, 255);
+  border-radius: inherit;
+  filter: blur(14px);
+
+  animation: rot 4s infinite linear;
+}
+
+@keyframes rot {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .know {
   translate: 160dvw;
   rotate: 30deg;

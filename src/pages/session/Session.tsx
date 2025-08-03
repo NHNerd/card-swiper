@@ -125,8 +125,8 @@ export default function Session({ endSession, setEndSession, setStatistic }: Pro
 
   React.useEffect(() => {
     //* end of  session
-
-    if (gameWords?.length === 0 && page == 'session' && !endSession) {
+    //TODO
+    if (gameWords?.length === 0 && page == 'session' && !endSession && false) {
       let correct = 0;
       let wrong = 0;
 

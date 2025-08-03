@@ -59,6 +59,7 @@ const Card = React.memo(
           hndlrDontKnow={hndlrDontKnow}
           isTop={isTop}
         >
+          {/* <div className={isTop ? cssCard.container : ''}> */}
           <button
             onClick={() => {
               const now = new Date().getTime();
@@ -74,6 +75,7 @@ const Card = React.memo(
           >
             {translate && isTop ? card.translate : card.word}
           </button>
+          {/* </div> */}
         </DnD>
       );
     });

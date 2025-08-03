@@ -1,38 +1,85 @@
 import React from 'react';
 import { useUiState, zustandData } from '../../../../zustand';
 import { useScreenSize } from './hooks/screenSize';
-import DnD from './hooks/dnd/dnd';
+import DnD from '../../dnd/dnd';
 
 import cssCard from './Card.module.css';
 
 type Props = {
   //! надо задать точнее (may be...)
   ContainerSessionRef: HTMLDivElement;
-  gameWords: [];
+  gameWords: any[];
   know: any;
   time: number;
   dontKnow: number;
-  translate: string;
+  setKnow: React.Dispatch<React.SetStateAction<boolean>>;
+  setDontKnow: React.Dispatch<React.SetStateAction<boolean>>;
+  translate: boolean;
+  setTranslate: React.Dispatch<React.SetStateAction<boolean>>;
   gameCount: number;
+  hndlrKnow: (timeOut: number) => void;
+  hndlrDontKnow: (timeOut: number) => void;
 };
 
-export default function Card({ ContainerSessionRef, gameWords, know, dontKnow, translate, gameCount }: Props) {
-  const { page, setPage } = useUiState();
-  console.log(gameCount);
-  // refresh screen size
-  const screenSize = useScreenSize(ContainerSessionRef);
-  return gameWords.map((item: object, index: number) => (
-    <button
-      key={index}
-      className={`${cssCard.card} ${page === 'session' ? cssCard.on : cssCard.off} ${
-        know && gameWords.length - 1 === index ? cssCard.know : ''
-      } ${dontKnow && gameWords.length - 1 === index ? cssCard.dontKnow : ''}
-      ${translate ? cssCard.translate : cssCard.translateOff}`}
-      style={{ rotate: '30px' }}
-    >
-      {/* //TODO нужно либо сортировать для игры в другом порядке, либо менять логику удаления карт */}
-      {translate ? gameWords[index].translate : gameWords[index].word} , {index} - {gameCount} =
-      {gameCount - index - 1}
-    </button>
-  ));
-}
+const Card = React.memo(
+  ({
+    ContainerSessionRef,
+    gameWords,
+    know,
+    dontKnow,
+    setKnow,
+    setDontKnow,
+    translate,
+    setTranslate,
+    gameCount,
+    hndlrKnow,
+    hndlrDontKnow,
+  }: Props) => {
+    const { page, setPage } = useUiState();
+
+    const clickDate = React.useRef(new Date().getTime());
+
+    const answer = (index: number): 'know' | 'dontKnow' | '' => {
+      if (index !== gameWords.length - 1) return '';
+      if (know) return 'know';
+      if (dontKnow) return 'dontKnow';
+      return '';
+    };
+
+    const screenSize = useScreenSize(ContainerSessionRef);
+
+    return gameWords.map((card: object, index: number) => {
+      const isTop = index === gameWords.length - 1;
+
+      return (
+        <DnD
+          key={index}
+          screenSize={screenSize}
+          hndlrKnow={hndlrKnow}
+          hndlrDontKnow={hndlrDontKnow}
+          isTop={isTop}
+        >
+          <div className={isTop ? cssCard.burn : ''}>
+            <button
+              onClick={() => {
+                const now = new Date().getTime();
+                if (now - clickDate.current < 230 && isTop) {
+                  setTranslate(!translate);
+                }
+                clickDate.current = now;
+              }}
+              className={`${cssCard.card} ${cssCard[answer(index)]} ${
+                isTop && translate ? cssCard.transtale : cssCard.transtaleOff
+              }`}
+              style={{ '--rotateY': `${(Math.random() - 0.5) * 180}deg` }}
+            >
+              {translate && isTop ? card.translate : card.word}
+            </button>
+          </div>
+        </DnD>
+      );
+    });
+  }
+);
+
+export default Card;

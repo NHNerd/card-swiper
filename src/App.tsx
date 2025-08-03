@@ -49,7 +49,9 @@ function App() {
           setAllDateLoaded={setAllDateLoaded}
         />
       )}
-      <Session endSession={endSession} setEndSession={setEndSession} setStatistic={setStatistic} />
+      {page === 'session' && (
+        <Session endSession={endSession} setEndSession={setEndSession} setStatistic={setStatistic} />
+      )}
       <LoL scrollSectionLolRef={scrollSectionLolRef} />
       {page != 'session' && (
         <Le scrollSectionLeRef={scrollSectionLeRef} setWordAddedUpdated={setWordAddedUpdated} />
